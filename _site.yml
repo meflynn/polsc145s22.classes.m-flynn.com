@@ -1,0 +1,22 @@
+name: "Intro to World Politics"
+title: "Intro to World Politics"
+description: |
+  This class focuses on understanding how.
+base_url: https://polsc145s22.classes.m-flynn.com
+output_dir: "docs"
+theme: sitetheme.css
+navbar:
+  right:
+    - text: "Home"
+      href: index.html
+    - text: "Instructor"
+      href: about.html
+    - text: "Blog"
+      href: gallery.html
+    - text: "Syllabus"
+      href: syllabus.html
+    - text: "Lectures"
+      menu:
+        - text: "Lecture Archive"
+          href: lectures.html
+output: distill::distill_article
