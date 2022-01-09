@@ -1,19 +1,23 @@
 ---
-title: "US Foreign Policy"
-description: "POLSC 343 Fall 2021 course page"
+title: "World Politics"
+description: "POLSC 145 Spring 2022 course page"
 site: distill::distill_website
 ---
 
 Welcome, this page will serve as the homepage for POLSC 343 US foreign policy (Fall 2021).
 
+
 ## Course Summary
  
-This course focuses on the development of US foreign policy over the
-course of the twentieth and twenty-first centuries. It will provide a brief background
-on the history of US foreign policy before 1900, but will focus primarily on the developments and issues
-occurring from 1900 through the present. The historical content of the course will be supplemented by
-introducing students to political science literature that can help to identify and explain key events and trends
-in US foreign policy during this time period. 
+This course is designed to give undergraduate students an introduction to the topics and methods associated
+with the study of world politics. As one of the three main subfields in political science, international
+relations evolved as the study of nation-states and their interactions in the global sphere. Over the past
+several centuries the type and frequency of these interactions, along with the range of actors involved, have
+increased exponentially. Given that global political and economic events are increasingly relevant for individuals
+around the world, it is imperative that we develop a solid foundation for understanding the actors,
+incentives, and processes that drive these events. Accordingly, this course will focus on basic facts and key
+concepts related to the study of international relations. We will also focus on how to analyze the casual
+processes underpinning events of interest.
 
 ## Course Objectives
 
