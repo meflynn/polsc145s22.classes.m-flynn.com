@@ -4,8 +4,6 @@ description: "POLSC 145 Spring 2022 course page"
 site: distill::distill_website
 ---
 
-Welcome, this page will serve as the homepage for POLSC 145 World Politics (Spring 2022).
-
 
 ## Course Summary
  
