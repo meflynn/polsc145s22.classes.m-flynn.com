@@ -42,21 +42,18 @@ processes underpinning events of interest.
 
 ## Course Objectives
 
-1. The overarching goal is to develop an understanding
-of the systematic forces that shape US foreign policymaking. Please note that this is different than
-prescribing what policy *should* be (though this is also an important consideration when considering our motivations for studying the topic and reading course materials.
-2. Identify the key actors that influence foreign policy.
-3. Understand how and when the influence of actors varies (e.g. across time, issue area, etc.).
-4. Identify the key issues confronting policymakers and society. 
-5. Identify general trends in US foreign policy over time. 
-    - What's changed? 
-    - What stays the same?
-    - When and why do we see changes in behavior or policies?
-6. Students should develop a familiarity with social science research processes, practices. Specifically, students should have:
-    - A basic understanding of how to read social scientific research articles. 
-    - A basic understanding of research design considerations
-    - A basic understanding of what the scope and limitations of research articles
-
+1. Develop an understanding of some of the key issues in world politics.
+2. Identify some of the most important actors as they relate to these key issues.
+3. Develop an understanding of evidence-based research as it relates to these issues and actors:
+   - Develop an understanding of the relationship between observation, theory, evidence, and analysis.
+   - Identify questions, problems, or puzzles in world politics.
+   - Think about how we can develop theoretical models to help us analyze these issues.
+   - Think about how we can structure research to analyze these questions.
+   - Think about how we can collect different types of data to help us answer these questions.
+   - Think about how we can evaluate evidence to draw conclusions and generate insights.
+4. Learn to think about issues in world politics in terms of correlation, causation, and evidence.
+  
+  
 
 ## Course Format 
 
@@ -65,7 +62,7 @@ The course will be part lecture and part student participation. I encourage stud
 
 ## Covid-19 Planning and Contingencies 
 
-As you may have noticed, we're still in the middle of a pandemic. The Delta variant spreads much easier and more quickly than earlier variants of the virus and poses a real risk to our ability to continue in-person instruction this year. We have three primary tools to help us continue in-person instruction, because, frankly, online learning isn't fun for anyone:
+As you may have noticed, we're still in the middle of a pandemic. The Omicron variant spreads much easier and more quickly than earlier variants. We have three primary tools to help us continue in-person instruction, because, frankly, online learning isn't fun for anyone:
 
 1. Vaccination
 2. Masking
@@ -116,9 +113,31 @@ Students should also make an effort to stay informed on current events. Below ar
 ## Course Requirements
 
 
+1. **Exams: 60%**:
+Your grade will largely be determined by a series of four tests. These are designed to assess your
+knowledge of basic ideas and concepts that we will cover throughout the course. All tests will be
+open book/note, and will be administered online. They will cover material from the text book, in-class
+lectures, discussions, podcasts, and additional assigned readings. For each test you will have 75
+minutes to answer $\approx$35 questions. There is no separate mid-term or final exams.
 
-  
-  
+2. **Homework: 20%**:
+You will have routine homework assignments that are designed to provide you with exposure to the
+course material prior to lectures. These assignments correspond to each chapter/subject found in the
+textbook. Students can continue to work on each assignment after they initially complete it in order to
+maximize their grade and better familiarize themselves with the subject matter. However, grades are
+only updated until the due date posted on Canvas. After this date students can continue working on a
+given exercise after the due date, but the grades will be locked in at their values at the time of the due
+date.
+
+3. **Quizzes: 20%**
+In addition to the InQuizitive homework assignments there will be a series of quizzes administered
+online. These quizzes will be based on a selection of readings covering current events and in-class
+concepts. The purpose of these short quizzes is to apply the lessons learned in class to contemporary
+issues in world politics. Hyperlinks or PDF files for the readings will be available on Canvas for each
+assignment.
+
+
+
 ## Classroom Policies
 
 1. Be kind. This might seem like an odd thing to list first, but I want to emphasize that this is not a normal class environment---this is a time of unparalleled stress for many of us. We're still in the middle of a global pandemic, many of us are still very much worried about our own health and safety, and many of us are very much worried about the health and safety of our coworkers, friends, and families. Zoom fatigue is also a thing, so please be patient with one another. Let's try to be cognizant of the fact that many of us (if not all) are going to be struggling at various points, and let's work together to make this semester as educational and enjoyable as possible. 
@@ -281,34 +300,24 @@ F: 0–59.99
 ```{r course calendar, dpi = 400, warning = FALSE, echo = FALSE, message = FALSE, fig.height=9, fig.width=7, fig.pos="center"}
 
 library(ggplot2)
+library(tidyverse)
 # Create base data frame
-dfr <- data.frame(date=seq(as.Date('2022-01-17'), as.Date('2022-05-31'), by = 1))
-dfr$day <- factor(strftime(dfr$date,format="%a"), levels=c("Sun","Mon","Tue","Wed","Thu","Fri","Sat"))
-dfr$week <- factor(strftime(dfr$date,format="%U"))
-dfr$month <- factor(strftime(dfr$date,format="%B"),levels=c("January","February","March", "April", "May"))
-dfr$ddate <- factor(strftime(dfr$date,format="%d"))
-
-# Label dates
-dfr$comment <- "Available"
-dfr$comment[dfr$date < as.Date("2021-08-23") | dfr$date>as.Date("2021-12-10")] <- NA
-dfr$comment[dfr$date==as.Date("2021-09-10")] <- "Song/album choice due"
-dfr$comment[dfr$date==as.Date("2021-09-24")] <- "Final song/album choice due"
-dfr$comment[dfr$date==as.Date("2021-10-29")] <- "Annotated bibliography due"
-dfr$comment[dfr$date==as.Date("2021-11-19")] <- "Wiki draft due"
-dfr$comment[dfr$date==as.Date("2021-12-10")] <- "Final Wiki due"
-
-# Photo blogs
-dfr$comment[dfr$date==as.Date("2021-09-03")] <- "Blog post due"
-dfr$comment[dfr$date==as.Date("2021-09-17")] <- "Blog post due"
-dfr$comment[dfr$date==as.Date("2021-10-08")] <- "Blog post due"
-dfr$comment[dfr$date==as.Date("2021-11-12")] <- "Blog post due"
+dfr <- data.frame(date=seq(as.Date('2022-01-17'), as.Date('2022-05-31'), by = 1)) %>% 
+  mutate(day = factor(strftime(date, format="%a"), levels=c("Sun","Mon","Tue","Wed","Thu","Fri","Sat")),
+         week = factor(strftime(date, format="%U")),
+         month = factor(strftime(date, format="%B"),levels=c("January","February","March", "April", "May")),
+         ddate = factor(strftime(date, format="%d")),
+         comment = case_when(
+           date == as.Date("2022-02-10") ~ "Exam 1",
+           date == as.Date("2022-03-28") ~ "Exam 2",
+           date == as.Date("2022-04-10") ~ "Exam 3",
+           date == as.Date("2022-05-28") ~ "Exam 4",
+           date == as.Date("2022-05-10") ~ "Exam 5",
+           date >= as.Date("2022-03-14") & date <= as.Date("2022-03-18") ~ "Spring Break"
+         ),
+         week - as.numeric(week) - as.numeric(week) - 1)
 
 
-# Thanksgiving
-dfr$comment[dfr$date >= as.Date("2021-11-22") & dfr$date <= as.Date("2021-11-26")] <- "Thanksgiving Break"
-
-dfr$week <- as.numeric(dfr$week) - min(as.numeric(dfr$week) - 1)
-dfr$comment <- factor(dfr$comment, levels=c("Blog post due", "Song/album choice due", "Final song/album choice due", "Annotated bibliography due", "Wiki draft due", "Thanksgiving Break", "Final Wiki due"))
 
 ggplot(dfr, aes(x = day, y = reorder(week, -week), fill = comment)) +
   geom_tile(color = "black", size = 0.1) +
@@ -320,9 +329,10 @@ ggplot(dfr, aes(x = day, y = reorder(week, -week), fill = comment)) +
         legend.justification = "right",
         axis.text.x = element_text(size = 10, color = "black"),
         axis.text.y = element_text(size = 10, color = "white"),
-        strip.text.x = element_text(size = 13, face = "bold", hjust = 0),
-        title = element_text(face = "bold")) +
-  guides(fill=guide_legend(ncol=2)) +
+        strip.text.x = element_text(size = 14, face = "bold", hjust = 0, margin = margin(b = 0.2, unit = "cm")),
+        title = element_text(face = "bold"),
+        panel.spacing = unit(0.8, "cm")) +
+  guides(fill=guide_legend(ncol=1)) +
   scale_fill_brewer(palette = "Set2", na.translate = FALSE) +
   labs(x = "Weekday",
        y = "Week #",
@@ -336,130 +346,131 @@ ggplot(dfr, aes(x = day, y = reorder(week, -week), fill = comment)) +
 
 ## `r advdate(mon, 1)`: Course Introduction
 
-1. Watch video on [how to read a social science research paper](https://www.youtube.com/watch?v=pZq6c_shco0)
-2. Set up your blog!
+### Topics:
 
-## `r advdate(mon, 2)`: Historical background
-
-### Readings and Assignments: 
-
-- Read @fordham2019
+ - Tuesday: Review the Syllabus. Discuss motivations for the course.
+ - Thursday: The state in the modern era I
 
 
-## `r advdate(mon, 3)`: The Cold War and US Hegemony
+## `r advdate(mon, 2)`: Background and Approach
 
-### Readings and Assignments:
+### Topics: 
 
-- Read @NSC68
-
-
-
-## `r advdate(mon, 4)`: The Cold War and Domestic Politics
-
-### Readings and Assignments:
-
-- Read @dudziak2004
-- Read @Fordham2007
+  - Tuesday: State and the modern era II
+  - Thursday: Social scientific theories and methods I
 
 
-## `r advdate(mon, 5)`: The Presidency and Congress
+## `r advdate(mon, 3)`: Background and Approach
 
-### Readings and Assignments:
+### Topics: 
 
-- Read @bryan2021
-- Read @lupton2017
+  - Tuesday: Social scientific theories and methods II
+  - Thursday: Slack day
 
 
 
-## `r advdate(mon, 6)`: The Policymaking Process
+## `r advdate(mon, 4)`: International Conflict
 
-### Readings and Assignments:
+### Topics: 
 
-- Read @marsh2014
-- Read @miller2016
-
-
-
-## `r advdate(mon, 7)`: The Bureaucracy / The State Department
-
-### Readings and Assignments:
-
-- Read @keane2015
-- Read @zegart2011
+  - Tuesday: War as an empirical phenomenon
+  - Thursday: War as a bargaining process
 
 
+## `r advdate(mon, 5)`: International Conflict
 
-## `r advdate(mon, 8)`: The Defense Department and the Military
+### Topics: 
 
-### Readings and Assignments:
-
-- Read @brooks2016
-
+  - Tuesday: 
+  - Thursday: 
 
 
-## `r advdate(mon, 9)`: The Use of Military Force
+## `r advdate(mon, 6)`: Alliances
 
-### Readings and Assignments:
+### Topics: 
 
-- Watch [Restrepo](https://watchdocumentaries.com/restrepo/)
-- Read @sigar2019
+  - Tuesday: 
+  - Thursday: 
 
 
 
-## `r advdate(mon, 10)`: Alliance Relationships
+## `r advdate(mon, 7)`: Military Intervention and Peacekeeping
 
-### Readings and Assignments:
+### Topics: 
 
-1. Read @beckley2015
-2. Read [Flynn, Allen, and Martinez Machain (2019)](https://theconversation.com/why-does-the-us-pay-so-much-for-the-defense-of-its-allies-5-questions-answered-127683)
-
-
-## `r advdate(mon, 11)`: Military Deployments
-
-### Readings and Assignments:
-
-- Read @Allenetal2020
-- Read @moon2009
+  - Tuesday: 
+  - Thursday: 
 
 
-## `r advdate(mon, 12)`: Trade, Immigration, Finance, and Monetary Policy
+## `r advdate(mon, 8)`: Civil War and non-state actors
 
-### Readings and Assignments:
+### Topics: 
 
-- Read @goldstein2014
-
-
-
-## `r advdate(mon, 13)`: Trade, Immigration, Finance, and Monetary Policy (cont.)
+  - Tuesday: 
+  - Thursday: 
 
 
+## `r advdate(mon, 9)`: Spring Break
 
-## `r advdate(mon, 14)`: Thanksgiving Break (No Class)
+### Topics: 
 
-### Readings and Assignments:
+  - Tuesday: No class
+  - Thursday: No class
 
-1. Get some rest
-2. Enjoy yourselves
-3. Eat good food
-4. Take a good nap
+
+## `r advdate(mon, 10)`: Terrorism
+
+### Topics: 
+
+  - Tuesday: 
+  - Thursday: 
+
+## `r advdate(mon, 11)`: International Trade
+
+### Topics: 
+
+  - Tuesday:
+  - Thursday:
+
+## `r advdate(mon, 12)`: International Financial Relations
+
+### Topics: 
+
+  - Tuesday:
+  - Thursday:
+
+
+
+## `r advdate(mon, 13)`: International Monetary Relations
+
+### Topics: 
+
+  - Tuesday:
+  - Thursday:
+
+
+## `r advdate(mon, 14)`: International Development
+
+### Topics: 
+
+  - Tuesday:
+  - Thursday:
 
 
 ## `r advdate(mon, 15)`: Human Rights Issues
 
-### Readings and Assignments:
+### Topics: 
 
-- Read @Power2001 
-
-
-## `r advdate(mon, 16)`: Multilateralism and global governance
-
-### Readings and Assignments:
-
-- Read @milner2013
-- Read @schultz2017
-- Read @busby2020 
+  - Tuesday:
+  - Thursday:
 
 
+## `r advdate(mon, 16)`: Global Environmental Politics
+
+### Topics: 
+
+  - Tuesday:
+  - Thursday:
 
 
 

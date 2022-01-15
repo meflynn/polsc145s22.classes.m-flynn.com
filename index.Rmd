@@ -21,4 +21,14 @@ processes underpinning events of interest.
 
 ## Course Objectives
 
-Test
+1. Develop an understanding of some of the key issues in world politics.
+2. Identify some of the most important actors as they relate to these key issues.
+3. Develop an understanding of evidence-based research as it relates to these issues and actors:
+   - Develop an understanding of the relationship between observation, theory, evidence, and analysis.
+   - Identify questions, problems, or puzzles in world politics.
+   - Think about how we can develop theoretical models to help us analyze these issues.
+   - Think about how we can structure research to analyze these questions.
+   - Think about how we can collect different types of data to help us answer these questions.
+   - Think about how we can evaluate evidence to draw conclusions and generate insights.
+4. Learn to think about issues in world politics in terms of correlation, causation, and evidence.
+  

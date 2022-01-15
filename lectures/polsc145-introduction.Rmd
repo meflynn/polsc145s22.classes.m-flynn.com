@@ -1,0 +1,46 @@
+---
+title: "World Politics"
+subtitle: "Class Introduction"
+author: "Michael E. Flynn"
+institute: "Kansas State University"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: ["default", "lecture_theme.css"]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      ratio: 16:9
+      countIncrementalSlides: false
+      titleSlideClass: [middle, left, inverse]
+---
+
+# ADAM SMITH!! 
+
+
+.pull-left[
+
+He did stuff
+
+- Bullet points!
+
+- Bullet points again!
+]
+
+.pull-right[
+
+![](../../../media/AdamSmith.png)
+]
+
+
+
+---
+class: inverse, center, middle
+
+# What to Expect
+
+
+---
+class: center, middle
+
+<iframe src="https://embed.polleverywhere.com/free_text_polls/XgtaEAPQQA3sVpJ9qicjv?controls=none&short_poll=true" width="800px" height="600px"></iframe>
