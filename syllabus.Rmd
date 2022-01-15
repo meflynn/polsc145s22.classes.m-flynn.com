@@ -308,14 +308,14 @@ dfr <- data.frame(date=seq(as.Date('2022-01-17'), as.Date('2022-05-31'), by = 1)
          month = factor(strftime(date, format="%B"),levels=c("January","February","March", "April", "May")),
          ddate = factor(strftime(date, format="%d")),
          comment = case_when(
-           date == as.Date("2022-02-10") ~ "Exam 1",
-           date == as.Date("2022-03-28") ~ "Exam 2",
+           date == as.Date("2022-02-04") ~ "Exam 1",
+           date == as.Date("2022-03-11") ~ "Exam 2",
            date == as.Date("2022-04-10") ~ "Exam 3",
            date == as.Date("2022-05-28") ~ "Exam 4",
            date == as.Date("2022-05-10") ~ "Exam 5",
            date >= as.Date("2022-03-14") & date <= as.Date("2022-03-18") ~ "Spring Break"
          ),
-         week - as.numeric(week) - as.numeric(week) - 1)
+         week = as.numeric(week))
 
 
 
@@ -381,11 +381,20 @@ ggplot(dfr, aes(x = day, y = reorder(week, -week), fill = comment)) +
 
 ### Topics: 
 
-  - Tuesday: 
-  - Thursday: 
+  - Tuesday: Domestic politics and war
+  - Thursday: Domestic politics and war
 
 
-## `r advdate(mon, 6)`: Alliances
+## `r advdate(mon, 6)`: International Institutions and Conflict
+
+### Topics: 
+
+  - Tuesday: Alliances
+  - Thursday: Collective security
+
+
+
+## `r advdate(mon, 7)`: Civil War and non-state actors
 
 ### Topics: 
 
@@ -393,16 +402,7 @@ ggplot(dfr, aes(x = day, y = reorder(week, -week), fill = comment)) +
   - Thursday: 
 
 
-
-## `r advdate(mon, 7)`: Military Intervention and Peacekeeping
-
-### Topics: 
-
-  - Tuesday: 
-  - Thursday: 
-
-
-## `r advdate(mon, 8)`: Civil War and non-state actors
+## `r advdate(mon, 8)`: Terrorism
 
 ### Topics: 
 
@@ -418,30 +418,21 @@ ggplot(dfr, aes(x = day, y = reorder(week, -week), fill = comment)) +
   - Thursday: No class
 
 
-## `r advdate(mon, 10)`: Terrorism
+## `r advdate(mon, 10)`: International Trade
 
 ### Topics: 
 
   - Tuesday: 
   - Thursday: 
 
-## `r advdate(mon, 11)`: International Trade
+## `r advdate(mon, 11)`: International Financial Relations
 
 ### Topics: 
 
   - Tuesday:
   - Thursday:
 
-## `r advdate(mon, 12)`: International Financial Relations
-
-### Topics: 
-
-  - Tuesday:
-  - Thursday:
-
-
-
-## `r advdate(mon, 13)`: International Monetary Relations
+## `r advdate(mon, 12)`: International Monetary Relations
 
 ### Topics: 
 
@@ -449,7 +440,8 @@ ggplot(dfr, aes(x = day, y = reorder(week, -week), fill = comment)) +
   - Thursday:
 
 
-## `r advdate(mon, 14)`: International Development
+
+## `r advdate(mon, 13)`: International Development
 
 ### Topics: 
 
@@ -457,7 +449,7 @@ ggplot(dfr, aes(x = day, y = reorder(week, -week), fill = comment)) +
   - Thursday:
 
 
-## `r advdate(mon, 15)`: Human Rights Issues
+## `r advdate(mon, 14)`: Human Rights
 
 ### Topics: 
 
@@ -465,7 +457,15 @@ ggplot(dfr, aes(x = day, y = reorder(week, -week), fill = comment)) +
   - Thursday:
 
 
-## `r advdate(mon, 16)`: Global Environmental Politics
+## `r advdate(mon, 15)`: Global Environmental Politics
+
+### Topics: 
+
+  - Tuesday:
+  - Thursday:
+
+
+## `r advdate(mon, 16)`: Challenges to the Global Order
 
 ### Topics: 
 
