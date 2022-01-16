@@ -7,3 +7,4 @@ output: distill::distill_article
 
 ## Lecture Slides
 
+Lectures will be archived here *after* they are given.

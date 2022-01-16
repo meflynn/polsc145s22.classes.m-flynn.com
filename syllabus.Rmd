@@ -57,7 +57,7 @@ processes underpinning events of interest.
 
 ## Course Format 
 
-The course will be part lecture and part student participation. I encourage students to ask questions if the readings of lecture materials are unclear. In addition to class lectures students will be responsible for keeping up with readings and other class-related material as the semester progresses.
+The course will be primarily lecture, thought students are encouraged to participate and ask questions where appropriate. I encourage students to ask questions if the readings of lecture materials are unclear and to reach out if they need help. In addition to class lectures students will be responsible for keeping up with readings and other class-related material as the semester progresses.
 
 
 ## Covid-19 Planning and Contingencies 
@@ -70,7 +70,7 @@ As you may have noticed, we're still in the middle of a pandemic. The Omicron va
 
 **Vaccines**: Vaccination remains our best option to help prevent the spread of, and mitigate the worst effects of, COVID-19. I will not ask your vaccination status at any point, but I strongly urge students who are not currently vaccinated and who are able to talk to your physicians about getting vaccinated. It's safe, effective, and free. You can find information and/or make an appointment at [Lafene Health Center](https://www.k-state.edu/covid-19/vaccine/), [The Riley County Health Department](https://www.rileycountyks.gov/1916/Vaccine-Information), local pharmacies, or your primary care physician.  
 
-**Masks**: All students are expected to comply with K-State’s face mask policy. As of August 2, 2021, everyone must wear face masks over their mouths and noses in all indoor spaces on university property, including while attending in-person classes. This policy is subject to change at the university’s discretion.
+**Masks**: All students are expected to comply with K-State’s face mask policy. As of August 2, 2021, everyone must wear face masks over their mouths and noses in all indoor spaces on university property, including while attending in-person classes. This policy is subject to change at the university’s discretion. This also means no eating or drinking in class.
 
 To state the obvious, this includes students attending lectures. Also please note that some masks are better than others---N95, KN95, FFP2, and similar types of masks offer strong protection against transmission (for example, see [here](https://www.sciencedirect.com/science/article/pii/S0196655320310439?casa_token=3QaMU4BJHh0AAAAA:luVTg-SgOeHvQl3F7_vj54R8RvbEWIwVjLLbs4L6JG7QkbCHfYVRPRiQmfHcRzZDfzOcm5-br4o) and [here](https://www.tandfonline.com/doi/full/10.1080/02786826.2020.1862409)). Gaiters also don't offer as much protection as higher quality masks. Face shields do effectively nothing on their own. You can find more information [here on Emergency Use Authorizations](https://www.fda.gov/medical-devices/coronavirus-disease-2019-covid-19-emergency-use-authorizations-medical-devices/personal-protective-equipment-euas) for various mask types,
 
@@ -113,14 +113,14 @@ Students should also make an effort to stay informed on current events. Below ar
 ## Course Requirements
 
 
-1. **Exams: 60%**:
+1. **Exams: 70%**:
 Your grade will largely be determined by a series of four tests. These are designed to assess your
 knowledge of basic ideas and concepts that we will cover throughout the course. All tests will be
 open book/note, and will be administered online. They will cover material from the text book, in-class
 lectures, discussions, podcasts, and additional assigned readings. For each test you will have 75
 minutes to answer $\approx$35 questions. There is no separate mid-term or final exams.
 
-2. **Homework: 20%**:
+2. **Weekly Homework: 30%**:
 You will have routine homework assignments that are designed to provide you with exposure to the
 course material prior to lectures. These assignments correspond to each chapter/subject found in the
 textbook. Students can continue to work on each assignment after they initially complete it in order to
@@ -129,12 +129,6 @@ only updated until the due date posted on Canvas. After this date students can c
 given exercise after the due date, but the grades will be locked in at their values at the time of the due
 date.
 
-3. **Quizzes: 20%**
-In addition to the InQuizitive homework assignments there will be a series of quizzes administered
-online. These quizzes will be based on a selection of readings covering current events and in-class
-concepts. The purpose of these short quizzes is to apply the lessons learned in class to contemporary
-issues in world politics. Hyperlinks or PDF files for the readings will be available on Canvas for each
-assignment.
 
 
 
