@@ -15,22 +15,59 @@ output:
       titleSlideClass: [middle, left, inverse]
 ---
 
-# ADAM SMITH!! 
+```{r setup, include = FALSE, echo=FALSE, warning=FALSE}
+library(ggplot2)
+library(data.table)
+library(peacesciencer)
+library(tidyverse)
+library(janitor)
 
+knitr::opts_chunk$set(comment = '', dpi = 400, fig.width = 8, fig.height = 5, warning = FALSE, echo = FALSE)
 
-.pull-left[
+sysfonts::font_add_google("Oswald", family = "oswald")
+showtext::showtext_auto()
 
-He did stuff
+# Windows and Mac seem to process the fotn differently
+if (Sys.info()[[1]] == "Windows"){
 
-- Bullet points!
+basesize <- 35
 
-- Bullet points again!
-]
+} else {
+  
+basesize <-  11
+  
+}
 
-.pull-right[
+# Regular plot theme
+theme_flynn <- function(){ 
+  
+      theme_linedraw(base_size = basesize, base_family = "oswald") %+replace% 
+        
+        theme(plot.title = element_text(face = "bold", size = basesize * 1.3, hjust = 0, margin = margin(t = 0, b = 0.2, l = 0, r = 0, unit = "cm")),
+              plot.subtitle = element_text(size = basesize, hjust = 0, margin = margin(t = 0.0, b = 0.2, unit = "cm")),
+              plot.caption = element_text(face = "italic", size = basesize * 0.6, hjust = 1, lineheight = 0.3, margin = margin(t = 0.2, unit = "cm")),
+              panel.border = element_rect(fill = NA, size = 0.2),
+              strip.background = element_rect(fill = "gray80", color = "black", size = 0.2),
+              strip.text = element_text(size = basesize, color = "black", face = "bold", margin = margin(t = 0.2, b = 0.2, l = 0.2, r = 0.2, unit = "cm")),
+              panel.background = element_rect(size = 0.2),
+              panel.grid.major = element_line(color = "gray70", size = 0.15),
+              panel.grid.minor = element_line(color = "gray90", size = 0.1),
+              axis.title = element_text(face = "bold", size = basesize),
+              axis.title.y = element_text(angle = 90, margin = margin(t = 0, r = 0.2, b = 0, l = 0, unit = "cm")),
+              axis.title.x = element_text(margin = margin(t = 0.2, r = 0, b = 0, l = 0, unit = "cm")),
+              axis.ticks = element_line(size = 0.1),
+              axis.ticks.length = unit(0.1, "cm"),
+              legend.title = element_text(size = basesize, face = "bold", hjust = 0, margin = margin(t = 0, b = 0, l = 0, r = 0, unit = "cm")),
+              plot.margin = margin(0.5, 0.5, 0.5, 0.5, unit = "cm"),
+              legend.margin = margin(t=0, b=0, r=0, l=0),
+              legend.box.margin = margin(-10,-10,-10,-10))
+  }
 
-![](../../../media/AdamSmith.png)
-]
+```
+
+# Welcome!
+
+Welcome!
 
 
 
@@ -44,3 +81,229 @@ class: inverse, center, middle
 class: center, middle
 
 <iframe src="https://embed.polleverywhere.com/free_text_polls/XgtaEAPQQA3sVpJ9qicjv?controls=none&short_poll=true" width="800px" height="600px"></iframe>
+
+
+???
+
+What word best describes the world as you see it?
+
+
+
+
+
+---
+class: center, middle
+
+<iframe src="https://embed.polleverywhere.com/multiple_choice_polls/dbe1n265orgLxlzK2rgSJ?controls=none&short_poll=true" width="800px" height="600px"></iframe>
+
+???
+
+US Economic aid as percent of GDP
+
+
+---
+class: center, middle
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+gdp <- fread(here::here("../../../Data Files/expgdpv6.0/gdpv6.txt")) %>% 
+  filter(statenum == 2) %>% 
+  mutate(year = as.numeric(year))
+
+aid <- data.table::fread(here::here("../../../Data Files/US Government Files/US AID/Total_Economic_and_Military_Assistance_1946-2013.csv")) %>% 
+  janitor::row_to_names(row_number = 7) %>% 
+  dplyr::slice(-c(1:7)) %>% 
+  dplyr::mutate(`Fiscal Year` = as.numeric(`Fiscal Year`),
+                `Obligations (Constant Dollars)` = as.numeric(gsub(",", "", `Obligations (Constant Dollars)`))) %>% 
+  dplyr::mutate(`Fiscal Year` = ifelse(`Fiscal Year` == 1976.9, 1976, `Fiscal Year`)) %>% 
+  dplyr::group_by(`Fiscal Year`, `Assistance Category`) %>% 
+  dplyr::summarise(aid = sum(`Obligations (Constant Dollars)`)) %>% 
+  dplyr::rename(c("type" = "Assistance Category", "year" = "Fiscal Year")) %>% 
+  mutate(year = as.numeric(year),
+         aid = as.numeric(aid))
+
+combined <- aid %>% 
+  left_join(gdp) %>% 
+  mutate(aid.gdp = aid / (realgdp*1000000))
+
+
+extrafont::loadfonts(device = "win")
+# economic aid over gdp
+ggplot(data = subset(combined, type == "Economic"), aes(x = year, y = aid.gdp, group = type)) +
+  geom_area() + 
+  theme_flynn() +
+  scale_x_continuous(breaks = seq(1950, 2015, 5)) +
+  scale_y_continuous(breaks = seq(0, 0.02, 0.005), limits = c(0,0.02), labels = scales::percent_format()) +
+  labs(x = "Year",
+       y = "",
+       title = "US economic aid as a percent of GDP, 1950-2011",
+       subtitle = "What is the appropriate waey to measure aid ''effort''?",
+       caption = "Aid data obtained from the State Department's Overseas Loans and Grants Green Book.\nGDP data obtained from Gleditsch's Expanded Trade and GDP Data (v6.0)")
+```
+
+
+---
+class: center, middle
+
+<iframe src="https://embed.polleverywhere.com/multiple_choice_polls/EjXtK6kGhNaNGlby4aXQ8?controls=none&short_poll=true" width="800px" height="600px"></iframe>
+
+???
+
+How long do most wars last?
+
+
+---
+class: center, middle
+
+```{r, echo = FALSE}
+
+wardata <- fread("../../../Data Files/COW Data/Inter-StateWarData_v4.0.csv") %>% 
+  group_by(WarNum) %>%
+  rowwise() %>% 
+  mutate(year = list(seq(StartYear1, EndYear1)),
+         startdate = paste(StartYear1, StartMonth1, StartDay1, sep = "-"),
+         startdate = as.Date(startdate, format = "%Y-%m-%d"),
+         enddate = paste(EndYear1, EndMonth1, EndDay1, sep = "-"),
+         enddate = as.Date(enddate, format = "%Y-%m-%d"),
+         durationdays = enddate - startdate
+         ) %>%
+  ungroup() %>% 
+  unnest() %>% 
+  group_by(year)
+
+wardata <- wardata %>% 
+  ungroup() %>% 
+  group_by(WarNum)  %>% 
+  summarise(duration = max(durationdays)) %>% 
+  mutate(duration = as.numeric(duration))
+
+# Note that the parentheses around the "..count.." stuff needs to wrap the entire expression.
+# Otherwise it will kick back some really weird percentage figures. 
+# Also note that this is including all entries in the data, not just distinct wars as identified by WarNum
+ggplot(data = wardata, aes(x = duration/365, y = (((..count..)/sum(..count..)))*100)) +
+  geom_histogram(position = "dodge", binwidth = 1, boundary = 0, closed = "left") +
+  annotate("text", x = 6, y = 40, label = "Mean = 1.12 Years") +
+  annotate("text", x = 6, y = 35, label = "Median = 0.38 Years") +
+  theme_flynn() +
+  labs(x = "Years",
+       y = "Percent",
+       title = "Duration of Interstate Wars",
+       subtitle = "Contrary to popular perceptions most wars are very short",
+       caption = "Data obtained from the Correlates of War Project: http://www.correlatesofwar.org/") +
+  scale_x_continuous(breaks = seq(0,11,1)) +
+  scale_y_continuous(breaks = seq(0,80,10)) 
+
+```
+
+
+---
+class: center, middle
+
+<iframe src="https://embed.polleverywhere.com/multiple_choice_polls/o9YS3NJer5MPCOjp2mEAE?controls=none&short_poll=true" width="800px" height="600px"></iframe>
+
+???
+
+Which group has carried out the most suicide terror attacks?
+
+
+
+
+---
+class: center, middle
+
+<iframe src="https://embed.polleverywhere.com/multiple_choice_polls/AlOpJVs8z4MVUqAbebF1l?controls=none&short_poll=true" width="800px" height="600px"></iframe>
+
+???
+
+Percent of the world's population living in poverty?
+
+
+---
+class: center, middle
+
+```{r poverty}
+
+
+poverty <- fread("../Data/world-population-in-extreme-poverty-absolute.csv") 
+colnames(poverty)[4] <- "poverty"
+colnames(poverty)[5] <- "not.poverty"
+
+
+# Percent of world pop living in extreme poverty
+ggplot(poverty, aes(x = Year, y = poverty / (poverty + not.poverty))) +
+  geom_line() +
+  theme_flynn() +
+  scale_x_continuous(breaks = seq(1820, 2020, 20)) +
+  scale_y_continuous(breaks = seq(0, 1, 0.2), limits = c(0, 1), labels = scales::percent_format()) +
+  labs(y = "",
+       title = "Percent of the world's population living in extreme poverty, 1820-2015",
+       subtitle = "Notice that the rate of decline changes over time",
+       caption = "Data obtained from https://ourworldindata.org/world-poverty/
+       Extreme poverty is defined as living at a consumption (or income) level below 1.90 `international $' per day. 
+       International $ are adjusted for price differences between countries and for price changes over time (inflation).
+       Original data note: All poverty estimates 1981 and later are taken from the World Bank's Povcal Net: iresearch.worldbank.org/PovcalNet/ (downloaded May 23, 2016)
+       All data from 1970 and earlier is taken from Bourguignon and Morrisson (2002) – Inequality Among World Citizens: 1820–1992. In American Economic Review, 92, 4, 727–748")
+
+```
+
+
+
+
+---
+class: center, middle
+
+<iframe src="https://embed.polleverywhere.com/multiple_choice_polls/m3ChraXfsoHVUuARKlEG9?controls=none&short_poll=true" width="800px" height="600px"></iframe>
+
+???
+
+What percentage of US federal debt does China own?
+
+
+
+
+
+---
+class: center, middle
+
+<iframe src="https://embed.polleverywhere.com/multiple_choice_polls/dpieiQ3PAnWTHD8dhoVij?controls=none&short_poll=true" width="800px" height="600px"></iframe>
+
+???
+
+Approximately what percentage of Americans currently serve in the military?
+
+
+
+
+---
+class: center, middle
+
+<iframe src="https://embed.polleverywhere.com/multiple_choice_polls/Rd94IY3DIUbOJc4InDTuc?controls=none&short_poll=true" width="800px" height="600px"></iframe>
+
+???
+
+The US manufactures less now than it did 50 years ago.
+
+
+
+
+---
+class: center, middle
+
+<iframe src="https://embed.polleverywhere.com/multiple_choice_polls/W3XON7I0CD1Kz2n2fvfQK?controls=none&short_poll=true" width="800px" height="600px"></iframe>
+
+???
+
+Have you used or consumed any products made using slave labor today?
+
+
+
+
+---
+class: center, middle
+
+<iframe src="https://embed.polleverywhere.com/free_text_polls/xw9PsnOLqnwxzmyTozNST?controls=none&short_poll=true" width="800px" height="600px"></iframe>
+
+
+???
+
+Have you used or consumed any products made using slave labor today?
