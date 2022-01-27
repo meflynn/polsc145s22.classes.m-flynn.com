@@ -1,0 +1,1163 @@
+---
+title: "World Politics"
+subtitle: "Historical Background"
+author: "Michael E. Flynn"
+institute: "Kansas State University"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: ["default", "lecture_theme.css"]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      ratio: 16:9
+      countIncrementalSlides: false
+      titleSlideClass: [middle, left, inverse]
+---
+
+```{r setup, include = FALSE, echo=FALSE, warning=FALSE}
+library(ggplot2)
+library(data.table)
+library(peacesciencer)
+library(tidyverse)
+library(janitor)
+library(here)
+library(ghibli)
+
+knitr::opts_chunk$set(comment = '', dpi = 400, fig.width = 8, fig.height = 5, warning = FALSE, echo = FALSE, message = FALSE)
+
+sysfonts::font_add_google("Oswald", family = "oswald")
+showtext::showtext_auto()
+
+# Windows and Mac seem to process the fotn differently
+if (Sys.info()[[1]] == "Windows"){
+
+basesize <- 35
+
+} else {
+  
+basesize <-  11
+  
+}
+
+# Regular plot theme
+theme_flynn <- function(){ 
+  
+      theme_linedraw(base_size = basesize, base_family = "oswald") %+replace% 
+        
+        theme(plot.title = element_text(face = "bold", size = basesize * 1.3, hjust = 0, margin = margin(t = 0, b = 0.2, l = 0, r = 0, unit = "cm")),
+              plot.subtitle = element_text(size = basesize, hjust = 0, margin = margin(t = 0.0, b = 0.2, unit = "cm")),
+              plot.caption = element_text(face = "italic", size = basesize * 0.6, hjust = 1, lineheight = 1, margin = margin(t = 0.2, unit = "cm")),
+              panel.border = element_rect(fill = NA, size = 0.2),
+              strip.background = element_rect(fill = "gray80", color = "black", size = 0.2),
+              strip.text = element_text(size = basesize, color = "black", face = "bold", margin = margin(t = 0.2, b = 0.2, l = 0.2, r = 0.2, unit = "cm")),
+              panel.background = element_rect(size = 0.2),
+              panel.grid.major = element_line(color = "gray70", size = 0.15),
+              panel.grid.minor = element_line(color = "gray90", size = 0.1),
+              axis.title = element_text(face = "bold", size = basesize),
+              axis.title.y = element_text(angle = 90, margin = margin(t = 0, r = 0.2, b = 0, l = 0, unit = "cm")),
+              axis.title.x = element_text(margin = margin(t = 0.2, r = 0, b = 0, l = 0, unit = "cm")),
+              axis.ticks = element_line(size = 0.1),
+              axis.ticks.length = unit(0.1, "cm"),
+              legend.title = element_text(size = basesize, face = "bold", hjust = 0, margin = margin(t = 0, b = 0, l = 0, r = 0, unit = "cm")),
+              plot.margin = margin(0.5, 0.5, 0.5, 0.5, unit = "cm"),
+              legend.margin = margin(t=0, b=0, r=0, l=0),
+              legend.box.margin = margin())
+  }
+
+```
+
+
+# Lecture Overview
+
+1. Origins of the modern state
+
+2. Mercantilist Era
+
+3. Pax Britannica
+
+4. Thirty Years' Crisis
+
+5. Cold War
+
+6. Post-Cold War
+
+
+
+
+---
+class: left, top
+
+# Key Questions and Goals
+
+1. What is a "state" and where did the modern state come from?
+
+2. Identify factors that contributed to the growth of human settlements and uneven development across space and time.
+
+3. Be able to define some of the key events that define each time period.
+
+4. Identify the major actors driving events during each time period. 
+
+5. How did finance, monetary policy, and conflict all relate to one another during these time periods?
+
+
+
+
+---
+class: inverse, center, middle
+
+# Origins of the  Modern State
+
+
+
+
+---
+class: center, middle
+
+```{r Global Population}
+
+pop <- fread(here("../../../Data Files/our-world-in-data/population/population.csv")) %>% 
+  dplyr::filter(Entity == "World") %>% 
+  group_by(Year) %>% 
+  summarise(total = as.numeric(sum(`Population (historical estimates)`, na.rm = TRUE)))
+
+#ghibli::ghibli_palettes$PonyoMedium
+
+ggplot(pop, aes(x = Year, y = total)) +
+  geom_area(fill = "#5A6F80FF", color = "black", size = 0.2) +
+  theme_flynn() +
+  scale_y_continuous(labels = scales::comma_format()) +
+  scale_x_continuous(limits = c(-10001, 2100)) +
+  labs(x = "Time",
+       y = "Total",
+       title = "Global Population, –10,000–2021",
+       subtitle = "The number of people on Earth has increased exponentially over time")
+
+```
+
+---
+class: left, top
+
+# Origins of the Modern State
+
+Lots of people, how to organize?
+
+- Individual
+- Nuclear family
+- Bands and extended family
+- Chiefdoms, tribes, and clans
+- Cities
+- City-states and Kingdoms
+- Empires
+- Nation-states
+
+
+
+
+
+---
+class: left, top
+
+# Origins of the Modern State
+
+So what defines a nation-state? A few key characteristics:
+
+- Functional differentiation
+  - State consists of offices and emphasizes specializations
+  - More efficient when someone specializes in something
+  - Office is more important than a single person and persists beyond the current occupant
+- State enjoys a monopoly on the use of violence within its territory (i.e. violence is public, not private)
+- Territorial sovereignty 
+
+--
+
+Lots of different ways to arrange and organize
+
+- Democracies
+- Autocracies
+- Presidential systems
+- Parliamentary systems
+- Imperialist/non-imperial
+
+
+
+---
+class: top, left
+
+# Origins of the Modern State
+
+So what determines how and why people organize?
+
+Lots of things:
+
+- Biology (e.g. family relations, kin groups)
+- Basic incentives for cooperation (Protection, division of labor, etc.)
+- Technological adaptations (domestication of animals, agriculture, etc.)
+- Force and violence 
+- Geography
+
+
+
+
+
+
+---
+class: left, top
+
+# Origins of the Modern State
+
+Agricultural Revolution:
+
+- Domestication of plants happens ~12,000 years ago
+- Different peoples and regions begin developing agricultural systems at different times
+- Hunter/gatherer and agriculture two strategies and develop alongside one another
+
+
+---
+class: left, top
+
+# Origins of the Modern State
+
+Domestication of Animals
+
+- Begins around the same time with dogs (then sheep, goats, pigs, cows, and horses)
+- Increases food supply (and it's renewable)
+- Facilitates greater diversification and specialization of labor
+- Food surpluses mean populations can grow more quickly
+- Population can also congregate in one place
+- Larger populations require more animals means more disease (e.g. flu, tuberculosis, malaria, plague, etc.)
+
+
+
+---
+class: left, middle
+
+```{r Domesticable Animals, message=FALSE, warning=FALSE}
+library(kableExtra)
+
+animals <- tibble::tribble(~Category, ~Eurasia, ~`Sub-Saharan Africa`, ~Americas, ~Australia,
+                           "Candidates", "72", "51", "24", "1",
+                           "Domesticated Species", "13", "0", "1", "0",
+                           "Percent Domesticated",  "18%", "0%", "4%", "0%")
+
+kableExtra::kable(animals, booktabs = TRUE, caption = "Percent of Large Animals Domesticated", align = "lcccc") %>% 
+  kable_styling(bootstrap_options = "striped", full_width = FALSE) %>% 
+  row_spec(0, background = "#512888", color = "#FFFFFF") %>% 
+  footnote(number = c("Candidates are defined as species of terrestrial, herbivorous, or omnivorous, wild mammals weighing on average over 100lbs. See Diamond (1997, 162"),
+           threeparttable = TRUE)
+
+```
+
+---
+class: center, middle
+
+
+<blockquote class="twitter-tweet tw-align-center"><p lang="en" dir="ltr">This is Atlas. The headband he ordered arrived today. Has no plans of ever taking it off so he hopes you like it. 14/10 would pet-al day long <a href="https://t.co/FGw08ayjmP">pic.twitter.com/FGw08ayjmP</a></p>&mdash; WeRateDogs® (@dog_rates) <a href="https://twitter.com/dog_rates/status/1031320795774103553?ref_src=twsrc%5Etfw">August 19, 2018</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+This is Atlas. The wondrous culmination of millennia of domestication efforts.
+
+
+---
+class: left, top
+
+# Origins of the Modern State
+
+Geography also matters
+
+- Determines where people travel, hunt, settle, farm, etc.
+- Determines the availability of flora and fauna
+- Determines how plentiful supporting infrastructure can be
+- Also determines the supply of diseases
+
+
+
+---
+class: center, middle
+
+```{r Acemoglu and Robinson, message=FALSE, warning=FALSE}
+
+# Change the geom_text font family and size
+update_geom_defaults("text", list(size = 10, family = "oswald", fontface = "plain"))
+
+data <- fread(here("../../../Data Files/Replication Files/Acemoglu Johnson and Robinson/maketable1.csv")) %>% 
+  mutate(countryname = countrycode::countrycode(shortnam, "iso3c", "country.name"))
+
+ggplot(data = subset(data, excolony==1), aes(x = logem4, y = logpgp95, label = countryname)) +
+  geom_text() +
+  geom_smooth(method = lm, alpha = .3) +
+  theme_flynn() +
+  labs(x = "Log of settler mortality",
+       y = "Log of GDP per capita (1995 Dollars)",
+       title = "Effect of environment on long-run institutional development",
+       subtitle = "Difficulty of establishing settlments has effects on institutional development still felt today",
+       caption = "Data obtained from https://economics.mit.edu/faculty/acemoglu/data/ajr2001") 
+```
+
+
+
+---
+class: center, middle, inverse
+
+# The Mercantilist Era
+
+
+
+---
+class: top, left
+
+# The Mercantilist Era
+
+Overview
+
+- The modern nation-state system is often traced to the **Peace of Westphalia in 1648**
+
+> Peace of Westphalia: The settlement that ended the Thirty Years' War in 1648: Often said to have created the modern state system because it included a general recognition of the principles of sovereignty and nonintervention (FLS, 8).
+
+- Focused mainly on Western Europe
+
+- Intra-European competition preceeds this point in time, and persists long after
+
+- Polities are scrambling to establish overseas colonies
+
+
+
+
+---
+class: top, left
+
+# The Mercantilist Era
+
+Who are the major players during this period?
+
+- England
+
+- France
+
+- Spain
+
+- Portugal
+
+- The Netherlands (the Dutch)
+
+
+???
+# Notes
+
+Note that most of these powers are all major sea powers. France is primarily known for its land army. 
+
+
+---
+class: left, top
+
+# The Mercantilist Era
+
+But what **IS** Mercantilism?
+
+> Mercantilism: An economic doctrine based on a belief that military power and economic influence were complements. Applied especially to colonial empires int he 16th through 18th centuries. Monopolies at the center of mercantilist trade policies favored the mother country over its colonies and over its competitors (FLS, 5)
+
+
+
+---
+class: left, top
+
+# The Mercantilist Era
+
+.pull-left[
+Examples of mercantilist policies:
+
+- Colonialism
+
+- Monopolies
+
+- Restrictions on trade
+
+  - Tariffs
+  
+  - Quotas
+
+]
+  
+  .pull-right[
+```{r, out.width="80%"}
+  
+  knitr::include_graphics(here("../../media/AdamSmith.png"), error = FALSE)
+  
+```
+]
+  
+???
+  
+# Notes
+  
+The writings of Adam Smith are a direct response to this time period.
+  
+  
+  
+  
+---
+class: left, top
+
+# The Mercantilist Era
+
+End of the Mercantilist Era
+
+- United States emerges as an independent nation in 1783
+
+- French Revolution begins in 1789
+
+- Napoleon rises to power, then defeated in 1815 at Waterloo
+
+- Great Britain rises to hegemonic status
+
+> Hegemony: The predominance of one nation-state over others (FLS, 8).
+
+
+
+
+---
+class: center, middle, inverse
+
+# The Pax Britannica
+
+
+
+
+---
+class: left, top
+
+# The Pax Britannica
+
+What is the *Pax Britannica*?
+
+- Literally, the "British Peace"
+
+- Approximately 1815–1914, from the end of the Napoleonic Wars to the beginning of World War I
+
+- Congress of Vienna:
+
+  - Creates a post-war order in Europe
+  
+  - Emphasizes balance of power on the continent
+  
+  - France remains a continental power
+  
+  - Creates a system of consultation among European leaders
+  
+  - Partly rooted in fears of democratic revolutionaries 
+  
+  
+  
+---
+class: middle, center
+
+
+```{r interstate wars}
+
+wardata <- fread(here("../../../Data Files/COW Data/Inter-StateWarData_v4.0.csv")) %>% 
+  group_by(WarNum) %>%
+  rowwise() %>% 
+  mutate(year = list(seq(StartYear1, EndYear1)),
+         startdate = paste(StartYear1, StartMonth1, StartDay1, sep = "-"),
+         startdate = as.Date(startdate, format = "%Y-%m-%d"),
+         enddate = paste(EndYear1, EndMonth1, EndDay1, sep = "-"),
+         enddate = as.Date(enddate, format = "%Y-%m-%d"),
+         durationdays = enddate - startdate
+         ) %>%
+  ungroup() %>% 
+  unnest() %>% 
+  group_by(year)
+
+combined <- tibble(year = seq(1815, 2015)) %>% 
+  left_join(., wardata) %>% 
+  group_by(year)  %>% 
+  mutate(warringcountries = ifelse(!is.na(WarNum), n_distinct(ccode), 0),
+         warcount = ifelse(!is.na(WarNum), n_distinct(WarNum), 0)) %>% 
+  summarise(warringcountries = max(warringcountries),
+            warcount = max(warcount))
+
+
+#ghibli::ghibli_palettes$MarnieMedium1
+
+# Number of Wars
+ggplot(data = combined, aes(x = year, y = warcount)) +
+  geom_bar(stat = "identity", fill = "#C5A387FF") +
+  theme_flynn() +
+  labs(x = "Year",
+       y = "Count",
+       title = "Number of interstate wars per year",
+       subtitle = "Note that wars are defined here as occurring between pairs of states",
+       caption = "Data obtained from the Correlates of War Project: http://www.correlatesofwar.org/") +
+  scale_x_continuous(breaks = seq(1815, 2015, 15))
+```
+
+
+
+
+
+---
+class: left, top
+
+# The Pax Britannica
+
+British egemony has two pillars
+
+- Naval power
+
+- Economic power
+
+British government also worked to maintain a balance of power among continental European powers
+
+
+
+
+---
+class: center, middle
+
+```{r industrial metrics}
+
+industry <- peacesciencer::create_stateyears(system = "cow") %>% 
+  add_nmc() %>% 
+  dplyr::filter(ccode %in% c(2, 200, 210, 220, 230, 255, 300, 365)) %>% 
+  dplyr::filter(year<= 1850)
+
+ggplot(industry, aes(x = year, y = irst, color = statenme)) +
+  geom_line(aes(size = statenme)) +
+  geom_line(data = industry %>% filter(ccode == 200), aes(size = statenme)) +
+  theme_flynn() +
+  theme(legend.title = element_text(margin = margin(b = -0.4, unit = "cm")),
+        legend.text = element_text(margin = margin(l = -0.4, unit = "cm"))) +
+  viridis::scale_color_viridis(discrete = TRUE, option = "magma") +
+  scale_x_continuous(breaks = seq(1815, 1850, 5)) +
+  scale_size_manual(values = c(1, 1, 1, 1, 1, 1, 3, 1)) + 
+  labs(x = "Year",
+       y = "Index",
+       color = "Country",
+       size = "Country",
+       title = "Iron and steel production of select countries, 1815-1850",
+       subtitle = "Even among other great powers England's industrial production was enormous")
+  
+
+```
+
+
+---
+class: center, middle
+
+```{r military personnel metrics}
+
+milper <- peacesciencer::create_stateyears(system = "cow") %>% 
+  add_nmc() %>% 
+  dplyr::filter(ccode %in% c(2, 200, 210, 220, 230, 255, 300, 365)) %>% 
+  dplyr::filter(year<= 1850)
+
+ggplot(industry, aes(x = year, y = milper, color = statenme)) +
+  geom_line(aes(size = statenme)) +
+  geom_line(data = industry %>% filter(ccode == 200), aes(size = statenme)) +
+  theme_flynn() +
+  theme(legend.title = element_text(margin = margin(b = -0.4, unit = "cm")),
+        legend.text = element_text(margin = margin(l = -0.4, unit = "cm"))) +
+  viridis::scale_color_viridis(discrete = TRUE, option = "magma") +
+  scale_x_continuous(breaks = seq(1815, 1850, 5)) +
+  scale_size_manual(values = c(1, 1, 1, 1, 1, 1, 3, 1)) + 
+  labs(x = "Year",
+       y = "Count (in thousands)",
+       color = "Country",
+       size = "Country",
+       title = "Military personnel of select countries, 1815-1850",
+       subtitle = "But at the same time Britain's military was smaller")
+  
+
+```
+
+
+
+---
+class: left, top
+
+# The Pax Britannica
+
+Global Economic Relations
+
+- Technological innovations increase efficiency and productivity
+
+- Britain leads other nations in move to free trade by relaxing protectionist/mercantilist restrictions
+
+  - Allow imports from other countries
+  
+  - Increasingly search for markets to which they can export their own goods
+  
+  - Tariff reductions throughout the 1800s
+  
+  
+
+---
+class: left, top
+
+# The Pax Britannica
+
+Wait, what are these words you keep using?
+
+> **Protectionism**: Policies aimed at protecting domestic industries, often by blocking competing imports from other countries or using subsidies to prop up domestic industries.
+
+
+> **Tariff**: A tax on imported goods. A major tool used to advance protectionist policies.
+
+
+> **Subsidies**: Spending by governments to help businesses defray the costs of operating.
+
+
+
+
+---
+class: left, top
+
+# The Pax Britannica
+
+.pull-left[
+Example: The "Corn Laws"
+
+- Impelemented in England in 1815
+
+- Protects domestic agricultural production by taxing imported agricultural goods
+
+- Raises the costs of imports, making domestic goods more attractive
+
+- Repealed in the 1840s
+]
+
+.pull-right[
+```{r, out.width="200%", fig.cap="Object: Object: The Blessings of peace or, the curse of the Corn Bill. Wealthy landowners reject wheat, saying they don't care how cheap it is and that the poor can starve if they can't afford it. Poorer people in the picture comment that they'll quit their native country. Print made by: George Cruikshank Published by: S W Fores. https://www.britishmuseum.org/collection/object/P_1868-0612-1281"}
+
+knitr::include_graphics("../../../media/corn-law-cartoon.png", error = FALSE)
+```
+]
+
+
+
+
+---
+class: left, top
+
+# The Pax Britannica
+
+The/A Gold Standard
+
+- Britain returned to a gold standard in 1819 to help reduce inflationary pressures following the Napoleonic Wars
+
+- Facilitated the move to free trade
+
+- Essentially acted as a common currency
+
+- This becomes more "global" around the 1870s. Many states bi-metallic before this.
+
+
+---
+class: left, top
+
+# The Pax Britannica
+
+Stop—what are these terms again?
+
+> **Monetary Policy**: Pertains to how a country manages the production, supply, and valuation of their currency/money. Not the same as spending and budgets (that's fiscal policy)
+
+> **Gold Standard**: A system where a country's currency (money) is backed by gold and is convertable at a certain rate.
+
+> **Free Trade**: The relaxation or elimination of protectionist policies (it's a matter of degree, not a binary condition).
+
+> **Bi-Metalism**: A monetary systen in which countries use multiple metals to back their currency (e.g. gold *and* silver)
+
+
+
+
+---
+class: center, middle
+
+```{r}
+
+data <- fread(here::here("../../media/Our World In Data/EuropeanTradeBefore1913_CambridgeEconHistory.csv")) %>% 
+  melt(id.vars = "year", measure.vars = 2:18) %>% 
+  plyr::rename(c("variable" = "country"))
+
+
+# Pre-WWI trade for select countries
+ggplot(data = data %>% filter(country == "United.Kingdom" 
+                     | country == "Germany"
+                     | country == "Netherlands"
+                     | country == "Russia"
+                     | country == "France"
+                     | country == "Portugal"
+                     | country == "Spain"), 
+       aes(x = year, y = value, group = country, colour = country)) +
+  geom_point() +
+  geom_line() +
+  theme_flynn() +
+  theme(plot.caption = element_text(lineheight = 0.6)) +
+  scale_x_continuous(breaks = seq(1650, 1920, 50)) +
+  scale_y_continuous(breaks = seq(0, 1.75, 0.25), labels = scales::percent_format()) +
+  viridis::scale_color_viridis(discrete = TRUE, option = "magma") +
+  labs(x = "Year",
+       y = "",
+       colour = "Country",
+       title = "Exports and imports as a percent of GDP",
+       caption = "Data obtained from: https://ourworldindata.org/international-trade")
+
+
+```
+
+
+???
+
+# Notes
+
+How can trade be more than 100% of GDP?!
+
+It's all in how we count: 
+
+$$   GDP = \text{Private Consumption}_{it} + \text{Investment}_{it} + \text{Government Spending}_{it} + (\text{Exports}_{it} - \text{Imports}_{it})    $$
+
+So if total trade (i.e. imports plus exports) is very large then it can exceed overall GDP. In the following example exports are huge, but so are imports, and together they total to 175 (i.e. total trade). 
+
+Example: $$     100 = 25 + 25 + 25 + (100 - 75)      $$
+
+
+
+
+---
+class: left, top
+
+# The Pax Britannica
+
+Except the Pax Britannica isn't so peaceful for everyone
+
+- A new wave of imperialism picks up in the mid-1800s
+
+- States are seeking access to resources
+
+- Looking for new markets
+
+- Also motivated by nationalism, prestige, etc.
+
+
+
+
+---
+class: left, top
+
+# The Pax Britannica
+
+.pull-left[
+King Leopold II of Belgium
+
+- Belgium colonized the Congo in Central Africa
+
+- Extracted natural resources like rubber
+
+- Also committed terrible atrocities
+
+  - Disfigured workers who performed poorly
+  
+  - Massacred thousands (possibly many more)
+]
+
+.pull-right[
+```{r out.width="80%", fig.cap="A statue of King Leopold II of Belgium covered in spaypaint during 2020 Black Lives Matter protests in Belgium. https://www.independent.co.uk/news/world/europe/belgium-king-leopold-statue-who-colonial-africa-congo-black-lives-matter-a9560291.html"}
+knitr::include_graphics("https://static.independent.co.uk/s3fs-public/thumbnails/image/2020/06/11/10/leopold-statue.jpg", error = FALSE)
+```
+]
+
+
+---
+class: inverse, center, middle
+
+# The Thirty Years' Crisis
+
+
+
+
+---
+class: left, top
+
+# The Thirty Years' Crisis
+
+Approximately 1914–1945
+
+- Covers World War I, Interwar period, and World War II
+
+- Roots of the crisis in a number of major events from the 1800s
+
+  - German and Italian unification disrupted the distribution of power in Europe
+  
+  - Fighting over colonies
+  
+  - Ethnic nationalism increasing in Eastern Europe as Ottoman Empire weakens
+  
+  - Rising German power challenges British dominance
+  
+  
+  
+---
+class: left, top
+
+# The Thirty Years' Crisis
+
+World War I
+
+- 1914–1918
+
+- Central Powers: Germany, Austria-Hungary, Ottoman Empire
+
+- Allied Powers: France, Britain, Russia, Italy, Japan, US (Eventually), and others.
+
+- War quickly becomes a stalemate
+
+- United States enters the war in 1917 helping to break stalemate
+
+
+
+
+---
+class: left, top
+
+# The Thirty Years' Crisis
+
+Treaty of Versailles
+
+- Officially ends major hostilities
+
+- Creates the League of Nations
+
+- Outlines a reparations plan 
+
+- President Woodrow Wilson guides US negotiations, but domestic opposition in US prevents US approval of the treaty
+
+
+
+
+---
+class: left, top
+
+# The Thirty Years' Crisis
+
+.pull-left[
+Costs of the war:
+
+- 15 million+ dead
+
+- Collapse of several old imperial systems (Ottoman, Austro-Hungarian, Russian, German)
+
+- European economies in ruins
+
+- Lays the groundwork for World War II
+]
+
+.pull-right[
+```{r, out.width="50%", fig.align="center", fig.cap="Children playing with a pile of Deutchemarks after World War I. Image provided by FLS."}
+knitr::include_graphics("../../../media/Worpol3_Art_JPEG/ch01/WORPOL3_FIGUN01.p22.jpg", error = FALSE)
+```
+]
+
+
+???
+
+# Notes
+
+Note that we often look at inflation as the worst part, but historian Adam Tooze notes that the deflation was actually the most crippling part of the post-War economic struggles.
+
+
+
+---
+class: left, top
+
+# The Thirty Years' Crisis
+
+World War II
+
+- Germany angered by the post-War settlement
+
+- Great Depression brings inreasing economic isolation (Autarky)
+
+- Rise of Fascism in Germany, Italy, Spain, and Japan
+
+  - These same countries begin building up their militaries and colonizing territories in thei near-abroad
+  
+
+???
+
+# Notes
+
+1. 1933, "Begins" with Japan invading Manchuria in 1933
+2. 1938, Germany annexes Austria in 1938
+3. 1939, Occupies Czechoslovakia and invades Poland in 1939
+4. 1940, Germany invades France
+5. 1941, Germany invades Soviet Union and Japan bombs Pearl Harbor
+
+
+
+---
+class: left, top
+
+# The Thirty Years' Crisis
+
+Costs of the war:
+
+- $\sim$ 55 million deaths
+
+- $\sim$ 25 million combat fatalities
+
+- $\sim$ 20 million deaths from starvation and malnourishment
+
+- $\sim$ 7 million victims of the holocaust. Mostly Jews but also other racial and ethnic minority groups, people with disabilities, and more.
+
+- European infrastructure and economies in total ruins
+
+- US and USSR emerge as the sole super powers
+
+
+
+---
+class: center, middle, inverse
+
+# The Cold War
+
+
+
+---
+class: center, middle
+
+```{r, out.width="75%", fig.align="center", fig.cap="Emerging factions during the Cold War period. Image provided by FLS."}
+knitr::include_graphics("../../../media/Worpol3_Art_JPEG/ch01/WORPOL3_MAP01.04.jpg", error = FALSE)
+```
+
+
+
+
+---
+class: center, middle
+
+```{r}
+
+allies <- peacesciencer::create_dyadyears(system = "cow") %>% 
+  add_atop_alliance() %>% 
+  filter(ccode1 == 2) %>% 
+  group_by(year) %>% 
+  dplyr::summarise(count = sum(atop_defense, na.rm = TRUE)) %>% 
+  filter(year <= 2018)
+
+#ghibli::ghibli_palettes$SpiritedDark
+
+ggplot(allies, aes(x = year, y = count)) +
+  geom_line(size = 1.2, color = "navyblue") +
+  theme_flynn() +
+  labs(x = "Year",
+       y = "Count",
+       title = "US Alliances over time, 1815-2018",
+       subtitle = "The beginning of the Cold War was a transformative moment for the US")
+
+```
+
+
+
+
+---
+class: left, top
+
+# The Cold War
+
+Economic (Re)Organization
+
+The Marshall Plan
+
+- US provides $14 billion+ in aid to Western European Countries
+- Promotes economic recovery and provides food aid
+- Also intended to curb Communist inroads
+
+Bretton Woods System
+
+- US Promotes a restructuring of the global economy emphasizing free trade and global economic integration as a reaction to the interwar period
+
+  - General Agreement on Tariffs and Trade (GATT)
+  - International Monetary Fund (IMF)
+  - International Bank for Reconstruction and Development (World Bank)
+  
+  
+  
+
+
+---
+class: left, top
+
+# The Cold War
+
+Nuclear Weapons
+
+- USSR denonates its first weapon in 1949
+
+- Destructive power of East and West blocs increases steadily
+
+  - Growing number of weapons
+  - More destructive capabilities per weapon (e.g. MIRVs)
+
+- Concept of Mutually Assured Destruction (MAD)
+
+
+
+---
+class: left, top
+
+# The Cold War
+
+Proxy Wars
+
+- US and USSR fight constantly, but typically not directly
+
+- Provide aid, training, and weapons to insurgencies and governments around the world
+
+- Sometimes they directly engage each other's proxies (e.g. US in Vietnam, USSR in Afghanistan)
+
+- Enables a lot of bad behavior by bad regimes
+
+
+
+---
+class: left, top
+
+# The Cold War
+
+Decolonization
+
+- Remnants of the old imperial systems are swept away
+
+- Dozens of newly independent countries enter the international system
+
+- Many struggle to overcome legacies of colonialism and domestic coalitions struggle for power
+
+
+
+---
+class: center, middle
+
+```{r}
+states <- peacesciencer::create_stateyears(system = "gw") %>% 
+  group_by(year) %>% 
+  dplyr::summarise(count = n_distinct(statename))
+
+#ghibli::ghibli_palettes$MarnieMedium2
+
+ggplot(states, aes(x = year, y = count, fill = count)) +
+  geom_area(fill = "#4A57CF") +
+  theme_flynn() +
+  scale_x_continuous(breaks = seq(1815, 2025, 20)) +
+  labs(x = "Year",
+       y = "Count",
+       title = "Number of countries in the international system, 1815–2021",
+       subtitle = "The number of countries in the international system changes frequently, but there are some clear inflection points")
+  
+```
+
+
+
+
+
+
+
+---
+class: center, middle, inverse
+
+# Post-Cold War
+
+
+
+
+---
+class: center, middle
+
+```{r berlin-wall, fig.cap="Fall of the Berlin Wall, November 9, 1989.", out.width="80%"}
+knitr::include_graphics("https://dynaimage.cdn.cnn.com/cnn/c_fill,g_auto,w_1200,h_675,ar_16:9/https%3A%2F%2Fcdn.cnn.com%2Fcnnnext%2Fdam%2Fassets%2F191107162239-berlin-wall-fall-1.jpg", error = FALSE)
+```
+
+
+
+---
+class: left, top
+
+# Post-Cold War 
+
+Globalization 
+
+- Increasing flows of information, technology, trade, investment, etc.
+
+- Barriers to trade and investment lowered through coordinated policy actions
+
+- Non-state actors proliferate and grow in power and influence
+
+- Development of the "Global South" becomes increasingly important policy issue
+
+
+
+---
+class: center, middle
+
+```{r global trade}
+
+trade <- peacesciencer::create_stateyears(system = "cow") %>% 
+  add_cow_trade() %>% 
+  filter(year>= 1950 & year <= 2014) %>% 
+  group_by(year) %>% 
+  mutate(totaltrade = imports + exports) %>% 
+  dplyr::summarise(totaltrade = sum(totaltrade, na.rm = TRUE))
+
+ggplot(trade, aes(x = year, y = totaltrade)) +
+  geom_area(fill = "dodgerblue1") +
+  theme_flynn() +
+  scale_x_continuous(breaks = seq(1950, 2020, 10)) +
+  scale_y_continuous(labels = scales::comma_format()) +
+  labs(x = "Year",
+       y = "Total",
+       title = "Aggregate global trade, 1950–2015",
+       subtitle = "Trade has grown steadily during the post-War period, but the 2000s mark a major inflection point")
+
+
+```
+
+
+---
+class: left, top
+
+# Post-Cold War
+
+Terrorism and transnational actors
+
+- September 11 terror attacks 
+
+- Wars in Afghanistan and Iraq
+
+- Rise of Islamic State of Iraq and Syria (ISIS)
+
+- Expanded ant-terror operations in Middle East, Africa, Central Asia, and Southeast Asia
+
+
+
+---
+class: left, top
+
+# Post-Cold War
+.small[
+Other major policy issues:
+
+- Environmental
+  - Climate change
+  - Global warming
+  - Pollution
+  - Deforestation 
+
+- Mass migration
+  - Climate migrants
+  - Refugees fleeing organized crime, civil war, etc.
+  - Seeking economic, political, and religious freedom
+
+- Global health
+  - Swine Flu
+  - Ebola
+  - COVID-19
+  - Vaccine/PPE/Treatment distribution and equity
+]
