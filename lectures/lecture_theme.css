@@ -131,7 +131,7 @@ figure img {
   vertical-align: top;
 }
 figcaption {
-  font-size: 18px;
+  font-size: 15px;
   text-shadow: none;
   margin: 0;
   color: black;
@@ -142,6 +142,10 @@ figcaption {
   padding-right: 10%;
   max-width: 90%;
   caption-side: bottom;
+}
+
+.caption {
+  font-size: 10px;
 }
 
 
@@ -166,3 +170,5 @@ figcaption {
   width: 80%;
   height: 80%;
 }
+
+

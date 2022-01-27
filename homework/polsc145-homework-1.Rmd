@@ -1,0 +1,77 @@
+---
+title: "POLSC 145 Homework #1"
+author: "Michael Flynn"
+date: "1/17/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(peacesciencer)
+library(tidyverse)
+library(kableExtra)
+library(data.table)
+```
+
+# Assignment
+
+The purpose of this assignment is to start getting students familiar with the contemporary international landscape. To do that we're going to work on a short exercise where students will do some detective work to learn more about a random selection of countries in the international system.
+
+You can find the worksheet in the Files folder here on Canvas. Download that form and use it to complete the following exercise. To find your assigned countries, look at the list in the Country Assignments section below. First, find your name. Second, record the three countries listed across the row containing your name.These are the countries you'll use to complete the exercise. 
+
+# Tasks
+
+1. **Entry**: Identify the year that the country entered the international system.
+2. **Colony** Was the country a former colony? If so, name the colonizing country.
+3. **Regime Type**: What is the country's Polity Score? Does it classify as an Autocracy, Anocracy, or Democracy? The worksheet contains the score ranges. IF the Polity Score is less than -10 or is listed as NA it will not have an accompanying category so just record the given score and leave the category slot blank. 
+4. **Income Level**: What is the country's income level according to the World Bank?
+5. **Currency**: What currency does the country use? (e.g. US Dollars, Euros, Yen, etc.)
+6. **Recent Events**: Find a news store discussing something to do with this country from the last year (i.e. 2021 or later)
+
+# Resources
+
+1. [CIA World Factbook](https://www.cia.gov/the-world-factbook/countries/)
+2. Polity Data (see list below)
+3. [World Development Indicators](https://data.worldbank.org/country). See the upper right corner where it says "Income Level".
+4. [Global Currencies](https://en.wikipedia.org/wiki/List_of_circulating_currencies)
+5. Recent Events: Search for events using reputable news sources (e.g. BBC World News, New York Times, Washington Post, CNN, Financial Times, the Economist, Fox News, etc.)
+
+
+# Country Assignments
+
+```{r, echo = FALSE}
+
+# Make sure I can track who had which countries
+set.seed(66502)
+
+states <- peacesciencer::cow_states %>% 
+  filter(endyear == 2016)
+
+roster <- fread(here::here("homework/polsc145-s2022-roster.csv")) %>% 
+  filter(!is.na(`Wildcat ID`)) %>% 
+  dplyr::select(Name) %>% 
+  rowwise() %>% 
+  mutate(`Country` = list(sample(states$statenme, replace = FALSE, 3))) %>% 
+  separate(Country, into = c("Country #1", "Country #2", "Country #3"), sep = ",") %>% 
+  mutate(across(starts_with("Country"), ~gsub(',|"|c\\(|\\)', "", .x)),
+         Name = gsub(",", ", ", Name))
+
+kableExtra::kable(roster, "html", booktabs = TRUE) %>% 
+  kable_styling(bootstrap_options = "striped") %>% 
+  scroll_box(height = "400px")
+```
+
+
+# Polity Data Series
+
+```{r, echo = FALSE, message=FALSE}
+polity <- peacesciencer::create_stateyears("gw") %>% 
+  add_democracy() %>% 
+  filter(year == 2017) %>% 
+  dplyr::select(statename, year, polity2) %>% 
+  dplyr::rename("Country" = "statename", "Year" = "year", "Polity" = "polity2")
+
+kableExtra::kable(polity, "html", booktabls = TRUE) %>% 
+  kable_styling(bootstrap_options = "striped") %>% 
+  scroll_box(height = "400px")
+```
