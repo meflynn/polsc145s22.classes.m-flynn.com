@@ -1,0 +1,261 @@
+---
+title: "World Politics"
+subtitle: "Alliances and Security Cooperation"
+author: "Michael E. Flynn"
+institute: "Kansas State University"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: ["default", "lecture_theme.css"]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      ratio: 16:9
+      countIncrementalSlides: false
+      titleSlideClass: [middle, left, inverse]
+---
+
+```{r setup, include = FALSE, echo=FALSE, warning=FALSE}
+library(ggplot2)
+library(data.table)
+library(peacesciencer)
+library(tidyverse)
+library(janitor)
+library(here)
+library(ghibli)
+library(ggforce)
+
+knitr::opts_chunk$set(comment = '', dpi = 400, fig.width = 8, fig.height = 5, warning = FALSE, echo = FALSE, message = FALSE)
+
+sysfonts::font_add_google("Oswald", family = "oswald")
+showtext::showtext_auto()
+
+# Windows and Mac seem to process the fotn differently
+if (Sys.info()[[1]] == "Windows"){
+
+basesize <- 35
+
+} else {
+  
+basesize <-  11
+  
+}
+
+update_geom_defaults("text", list(size = 10, family = "oswald", fontface = "plain", lineheight = 0.2))
+
+
+# Regular plot theme
+theme_flynn <- function(){ 
+  
+      theme_linedraw(base_size = basesize, base_family = "oswald") %+replace% 
+        
+        theme(plot.title = element_text(face = "bold", size = basesize * 1.3, hjust = 0, margin = margin(t = 0, b = 0.2, l = 0, r = 0, unit = "cm")),
+              plot.subtitle = element_text(size = basesize, hjust = 0, margin = margin(t = 0.0, b = 0.2, unit = "cm")),
+              plot.caption = element_text(face = "italic", size = basesize * 0.6, hjust = 1, lineheight = 1, margin = margin(t = 0.2, unit = "cm")),
+              panel.border = element_rect(fill = NA, size = 0.2),
+              strip.background = element_rect(fill = "gray80", color = "black", size = 0.2),
+              strip.text = element_text(size = basesize, color = "black", face = "bold", margin = margin(t = 0.2, b = 0.2, l = 0.2, r = 0.2, unit = "cm")),
+              panel.background = element_rect(size = 0.2),
+              panel.grid.major = element_line(color = "gray70", size = 0.15),
+              panel.grid.minor = element_line(color = "gray90", size = 0.1),
+              axis.title = element_text(face = "bold", size = basesize),
+              axis.title.y = element_text(angle = 90, margin = margin(t = 0, r = 0.2, b = 0, l = 0, unit = "cm")),
+              axis.title.x = element_text(margin = margin(t = 0.2, r = 0, b = 0, l = 0, unit = "cm")),
+              axis.ticks = element_line(size = 0.1),
+              axis.ticks.length = unit(0.1, "cm"),
+              legend.title = element_text(size = basesize, face = "bold", hjust = 0, margin = margin(t = 0, b = 0, l = 0, r = 0, unit = "cm")),
+              plot.margin = margin(0.5, 0.5, 0.5, 0.5, unit = "cm"),
+              legend.margin = margin(t=0, b=0, r=0, l=0),
+              legend.box.margin = margin())
+}
+
+#install.packages("RefManageR")
+
+#library(RefManageR)
+#library(bibtex)
+#BibOptions(check.entries = FALSE,
+#           bib.style = "authoryear", # Bibliography style
+#           max.names = 3, # Max author names displayed in bibliography
+#           sorting = "nyt", #Name, year, title sorting
+#           cite.style = "authoryear", # citation style
+#           style = "markdown",
+#           hyperlink = FALSE,
+#           dashed = FALSE)
+
+#myBib <- ReadBib(here::here("../../classrefs.bib", check = FALSE))
+
+```
+
+
+# Lecture Overview
+
+1. Alliances—what are they?
+
+2. Patterns in alliances over time
+
+3. Why and when do states form alliances?
+
+4. Other forms of security cooperation
+
+
+
+---
+
+# Key Questions and Goals
+
+1. Develop an understanding of the factors that drive states to cooperate militarily in general
+
+2. Develop an understanding of the factors that drive more powerful states to ally with weaker states, specifically
+
+3. Define and understand the security-autonomy trade off
+
+4. Develop an understanding of how other issue areas, like trade, investment, and institutions, relate to alliance relationships
+
+
+---
+class: inverse, center, middle
+
+# Defining Alliances
+
+
+
+---
+# Defining Alliances
+
+We talk about alliances a lot, but what are they?
+
+> **Alliance** Institutions that help their members cooperate militarilty in the event of a war (FLS)
+
+- Note that Alliances are *formal* agreements
+
+- States with common interests and policy goals can coordinate action without formally defining their obligations
+
+- This means they're *aligned* but not necessarily *allied*
+
+
+
+
+
+---
+# Defining Alliances
+
+Frieden, Lake, and Schultz offer a basic definition, but some additional detail might be helpful:
+
+Alliances Treaty Obligations and Provisions (ATOP) definition:
+
+> Written agreements, signed by official representatives of at least two independent states, that includ promises to aid a partner in the event of military conflict, to remain neutral in the event of conflict, to refrain from military conflict with one another, or to consult/cooperate in the even tof international crises that create the potential for military conflict (Leeds, Ritter, Mitchell, and Long 2002: 238).
+
+
+
+---
+# Defining Alliances
+
+ATOP's definition includes five alliance pact types:
+
+1. Defense
+
+2. Offense
+
+3. Neutrality
+
+4. Nonaggression
+
+5. Consultation
+
+
+
+
+---
+class: center, middle
+
+```{r alliance-all}
+
+# need to build basic timeline data frame because not all types are present in all years
+time <- data.frame(highally = c("Defense", "Offense", "Neutrality", "Non-Aggression", "Consultation")) %>% 
+  mutate(year = rep(list(seq(1815, 2018)), 5)) %>% 
+  unnest(year)
+
+# Note that alliances still in effect have endyr coded 0. Don't know why. This seems like a silly coding method.
+allies <- fread(here("../../../Data Files/ATOP 5_0 (csv)/atop5_0a.csv")) %>% 
+  group_by(atopid) %>% 
+  mutate(endyr = ifelse(endyr == 0, 2018, endyr),
+         year = list(seq(begyr, endyr))) %>% 
+  dplyr::select(atopid, year, defense, offense, neutral, nonagg, consul, bilat) %>% 
+  mutate(provisions = sum(defense, offense, neutral, nonagg, consul),
+         highally = case_when(
+           defense == 1 ~ "Defense",
+           defense == 0 & offense == 1 ~ "Offense",
+           defense == 0 & offense == 0 & neutral == 1 ~ "Neutrality",
+           defense == 0 & offense == 0 & neutral == 0 & nonagg == 1 ~ "Non-Aggression",
+           defense == 0 & offense == 0 & neutral == 0 & nonagg == 0 & consul == 1 ~ "Consultation",
+         )) %>% 
+    unnest(year) 
+
+
+ally.year <- time %>% 
+  left_join(allies) %>% 
+  group_by(year, highally) %>% 
+  dplyr::summarise(allycount = n_distinct(atopid)) %>% 
+  mutate(highally = factor(highally, levels = c("Defense", "Offense", "Neutrality", "Non-Aggression", "Consultation")))
+
+
+
+
+#ghibli::ghibli_palettes$MarnieDark1
+
+ggplot(ally.year, aes(x = year, y = allycount, group = highally)) +
+  geom_area(fill = "#2F1619FF") +
+  theme_flynn() +
+  scale_x_continuous(breaks = seq(1815, 2020, 15)) +
+  labs(x = "Year",
+       y = "Count",
+       title = "Alliances in the international system, 1815-2016",
+       subtitle = "Where do we see major changes in the number of alliances?",
+       caption = "Data obtained from the Alliance Treaty Obligations and Provisions (ATOP) Data: http://www.atopdata.org/")
+
+  
+```
+
+
+
+---
+class: center, middle
+
+```{r alliance-disaggregated}
+
+ggplot(ally.year, aes(x = year, y = allycount, group = highally, fill = highally)) +
+  geom_area(color = "white", size = 0.2) +
+  theme_flynn() +
+  scale_x_continuous(breaks = seq(1815, 2020, 15)) +
+  viridis::scale_fill_viridis(option = "magma", discrete = TRUE) +
+  labs(x = "Year",
+       y = "Count",
+       fill = "Commitment Type",
+       title = "Alliances in the international system, 1815-2016",
+       subtitle = "Where do we see major changes in the number of alliances?",
+       caption = "Data obtained from the Alliance Treaty Obligations and Provisions (ATOP) Data: http://www.atopdata.org/")
+
+```
+
+
+
+
+---
+class: center, middle
+
+```{r alliance-disaggregated-percent}
+
+ggplot(ally.year, aes(x = year, y = allycount, group = highally, fill = highally)) +
+  geom_area(position = "fill", color = "white", size = 0.2) +
+  theme_flynn() +
+  scale_x_continuous(breaks = seq(1815, 2020, 15), expand = c(0,0)) +
+  scale_y_continuous(labels = scales::percent, expand = c(0,0)) +
+  viridis::scale_fill_viridis(option = "magma", discrete = TRUE) +
+  labs(x = "Year",
+       y = "Count",
+       fill = "Commitment Type",
+       title = "Alliances in the international system, 1815-2016",
+       subtitle = "Where do we see major changes in the number of alliances?",
+       caption = "Data obtained from the Alliance Treaty Obligations and Provisions (ATOP) Data: http://www.atopdata.org/")
+
+```

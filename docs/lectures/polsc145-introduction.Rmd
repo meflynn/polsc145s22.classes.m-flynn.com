@@ -45,7 +45,7 @@ theme_flynn <- function(){
         
         theme(plot.title = element_text(face = "bold", size = basesize * 1.3, hjust = 0, margin = margin(t = 0, b = 0.2, l = 0, r = 0, unit = "cm")),
               plot.subtitle = element_text(size = basesize, hjust = 0, margin = margin(t = 0.0, b = 0.2, unit = "cm")),
-              plot.caption = element_text(face = "italic", size = basesize * 0.6, hjust = 1, lineheight = 0.3, margin = margin(t = 0.2, unit = "cm")),
+              plot.caption = element_text(face = "italic", size = basesize * 0.6, hjust = 1, lineheight = 1, margin = margin(t = 0.2, unit = "cm")),
               panel.border = element_rect(fill = NA, size = 0.2),
               strip.background = element_rect(fill = "gray80", color = "black", size = 0.2),
               strip.text = element_text(size = basesize, color = "black", face = "bold", margin = margin(t = 0.2, b = 0.2, l = 0.2, r = 0.2, unit = "cm")),
@@ -65,16 +65,46 @@ theme_flynn <- function(){
 
 ```
 
-# Welcome!
 
-Welcome!
+# Welcome
 
+
+Course Information
+
+- POLSC 145 Intro to World Politics (Spring 2022)
+
+- Instructor: Dr. Michael Flynn, Department of Political Science
+
+- Meeting Time: Tuesdays and Thursdays 9:30 AM
+
+- Location: 114 Burt Hall
+
+
+???
+
+# Opening notes
+
+1. Sorry this isn't how we all wanted to meet up!
+2. Make sure everyone is in the correct class
+3. Talk a little bit about the motivations for the course.
+  - Close to Fort Riley
+  - Lots of students may have familiy members in the military
+  - Have you traveled or studied abroad?
+  - Have family or friends from other countries?
+  - Human rights issues
+  - Trade (Kansas has a long history of agricultural production and exports)
+
+We'll talk more about this stuff later, and throughout the course, but it's important to think about the reasons you might care.
+
+We can talk about the details of the course later, but first let's have some fun to motivate the course!
 
 
 ---
 class: inverse, center, middle
 
-# What to Expect
+# Quiz Time! 
+# (Just Kidding) 
+# (Sort of)
 
 
 ---
@@ -127,10 +157,9 @@ combined <- aid %>%
   mutate(aid.gdp = aid / (realgdp*1000000))
 
 
-extrafont::loadfonts(device = "win")
 # economic aid over gdp
 ggplot(data = subset(combined, type == "Economic"), aes(x = year, y = aid.gdp, group = type)) +
-  geom_area() + 
+  geom_area(fill = "#1C77A3FF") + 
   theme_flynn() +
   scale_x_continuous(breaks = seq(1950, 2015, 5)) +
   scale_y_continuous(breaks = seq(0, 0.02, 0.005), limits = c(0,0.02), labels = scales::percent_format()) +
@@ -181,7 +210,7 @@ wardata <- wardata %>%
 # Otherwise it will kick back some really weird percentage figures. 
 # Also note that this is including all entries in the data, not just distinct wars as identified by WarNum
 ggplot(data = wardata, aes(x = duration/365, y = (((..count..)/sum(..count..)))*100)) +
-  geom_histogram(position = "dodge", binwidth = 1, boundary = 0, closed = "left") +
+  geom_histogram(position = "dodge", binwidth = 1, boundary = 0, closed = "left", fill = "#1C77A3FF") +
   annotate("text", x = 6, y = 40, label = "Mean = 1.12 Years") +
   annotate("text", x = 6, y = 35, label = "Median = 0.38 Years") +
   theme_flynn() +
@@ -205,6 +234,37 @@ class: center, middle
 
 Which group has carried out the most suicide terror attacks?
 
+
+
+---
+class: center, middle
+
+```{r}
+terror.base <- fread("../../../Data Files/START Data/globalterrorismdb_0616dist.csv")
+
+# Terrorist attack types by group
+terror.groups <- terror.base %>% 
+  group_by(gname) %>% 
+  dplyr::summarise(totalkills = sum(nkill, na.rm = TRUE), 
+                   totalattacks = n_distinct(eventid, na.rm = TRUE), 
+                   totalsuicide = sum(suicide, na.rm = TRUE)) %>% 
+  mutate(deathrate = totalkills/totalattacks,
+         suiciderate = (totalsuicide/totalattacks)*100)
+
+#ghibli::ghibli_palettes$MarnieMedium1
+
+ggplot(terror.groups %>% filter(totalsuicide > 10 & gname != "Unknown"), aes(x = totalsuicide, y = reorder(gname, totalsuicide))) +
+  geom_bar(stat = "identity", fill = "#1C77A3FF") +
+  theme_flynn() +
+  theme(plot.title.position = "plot") +
+  viridis::scale_fill_viridis(option = "magma") +
+  scale_x_continuous(expand = c(0, 1)) +
+  labs(x = "Count of Suicide Attacks",
+       y = "",
+       title = "Organizations Ranked by Total Number of Suicide Terror Attacks, 1970-2015",
+       subtitle = "Many of these groups probably look familiar, but which organizations do you not recognize?")
+
+```
 
 
 
@@ -249,30 +309,6 @@ ggplot(poverty, aes(x = Year, y = poverty / (poverty + not.poverty))) +
 
 
 
----
-class: center, middle
-
-<iframe src="https://embed.polleverywhere.com/multiple_choice_polls/m3ChraXfsoHVUuARKlEG9?controls=none&short_poll=true" width="800px" height="600px"></iframe>
-
-???
-
-What percentage of US federal debt does China own?
-
-
-
-
-
----
-class: center, middle
-
-<iframe src="https://embed.polleverywhere.com/multiple_choice_polls/dpieiQ3PAnWTHD8dhoVij?controls=none&short_poll=true" width="800px" height="600px"></iframe>
-
-???
-
-Approximately what percentage of Americans currently serve in the military?
-
-
-
 
 ---
 class: center, middle
@@ -289,12 +325,71 @@ The US manufactures less now than it did 50 years ago.
 ---
 class: center, middle
 
+```{r, warning=FALSE, echo = FALSE, message=FALSE}
+library(tidyquant)
+
+cpi <- tq_get("CPIAUCNS", get = "economic.data",
+              from = "1945-01-01",
+              to = "2020-01-01") %>% 
+  mutate(year = year(date)) %>% 
+  group_by(year) %>% 
+  dplyr::summarise(cpi = mean(price)) %>% 
+  mutate(cpi = cpi/cpi[64]) %>% 
+  arrange(year)
+
+
+# note that you can use the column numbers rather than the variable names for the measure.vars line
+data.1 <- readxl::read_xlsx("../../../Data Files/US Government Files/BEA/GDPbyInd_VA_1947-2014.xlsx", sheet = "VA", skip = 5) %>% 
+  filter(Line == 1 | Line == 12 | Line == 54 | Line == 76) %>% 
+  mutate(across(3:70, ~as.numeric(.x))) %>% 
+  pivot_longer(cols = 3:70) %>% 
+  dplyr::rename(c("group" = 2, "year" = "name")) %>% 
+  mutate(year = as.numeric(paste(year)),
+         value = as.numeric(value),
+         group = ifelse(group == "Finance, insurance, real estate, rental, and leasing", "Finance and real estate", group))
+
+combined <- cpi %>% 
+  left_join(data.1) %>% 
+  mutate(value.con = value/cpi) 
+
+#ghibli::ghibli_palettes$MarnieMedium1
+
+# US manufacturing value added
+ggplot(data = subset(combined, group == "Gross domestic product"), aes(x = year, y = value.con, group = group)) +
+  geom_area(alpha = .9, colour = "black", size = 0.1, fill = "#67B8D6FF") +
+  theme(legend.key.height=unit(2, "cm")) +
+  theme_flynn() +
+  scale_x_continuous(breaks = seq(1945, 2015, 10), limits = c(1945, 2015)) +
+  scale_y_continuous(labels = scales::dollar_format()) +
+  scale_fill_brewer(palette = "Spectral") +
+  labs(x = "Year",
+       y = "Millions of 2010 dollars",
+       fill = "Sector",
+       title = "Value added of US manufacturing, 1947-2014",
+       caption = "Data obtained from Data obtained from: http://www.bea.gov/industry/gdpbyind_data.htm")
+
+
+```
+
+
+
+---
+class: center, middle
+
 <iframe src="https://embed.polleverywhere.com/multiple_choice_polls/W3XON7I0CD1Kz2n2fvfQK?controls=none&short_poll=true" width="800px" height="600px"></iframe>
 
 ???
 
 Have you used or consumed any products made using slave labor today?
 
+
+
+---
+class: center, middle
+
+```{r, eval=TRUE}
+knitr::include_graphics("../../../media/slavery-profile.png", error = FALSE)
+```
 
 
 
@@ -306,4 +401,63 @@ class: center, middle
 
 ???
 
-Have you used or consumed any products made using slave labor today?
+Why are you here? What questions are you interested in?
+
+
+
+---
+class: inverse, center, middle
+
+# Course Guidelines
+
+
+---
+class: left, top
+
+# Course Guidelines
+
+Evaluation:
+
+- 4 Exams (70%)
+
+- Weekly homework (30%)
+
+Textbook:
+
+- Frieden, Lake, and Schultz. World Politics: Interests, Interactions, and Institutions.
+
+Syllabus can be found [here](https://polsc145s22.classes.m-flynn.com/syllabus.html)
+
+???
+
+# Make up and Extra Credit
+
+1. Re makeup exams and no extra credit
+  - I don't offer either unless...
+  - University excused absence like Covid infection. 
+  - With respect to other class, social, or extracurricular activities: How you prioritize your time is totally up to yor---You're adults! 
+
+
+
+---
+class: left, top
+
+# Course Guidelines
+
+Communications:
+
+- All correspondence should be professional in tone
+
+- Please address emails to “Professor Flynn”, “Dr. Flynn”, etc. 
+
+Tips:
+
+- Other faculty and staff appreciate your effort to be respectful and professional, too.
+
+- Keep the lines of communication open. Especially if you run into any difficulties during the semester.
+
+???
+
+# Parting notes
+
+1. Homework assignment due on Sunday night. This week is hectic so you've got lots of time. Some light detective work to ease us into the semester. 

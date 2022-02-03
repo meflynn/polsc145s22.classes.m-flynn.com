@@ -1,0 +1,795 @@
+---
+title: "World Politics"
+subtitle: "War as an Empirical Phenomenon"
+author: "Michael E. Flynn"
+institute: "Kansas State University"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: ["default", "lecture_theme.css"]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      ratio: 16:9
+      countIncrementalSlides: false
+      titleSlideClass: [middle, left, inverse]
+---
+
+```{r setup, include = FALSE, echo=FALSE, warning=FALSE}
+library(ggplot2)
+library(data.table)
+library(peacesciencer)
+library(tidyverse)
+library(janitor)
+library(kableExtra)
+library(here)
+library(ghibli)
+library(viridis)
+
+knitr::opts_chunk$set(comment = '', dpi = 400, fig.width = 8, fig.height = 5, warning = FALSE, echo = FALSE, message = FALSE)
+
+sysfonts::font_add_google("Oswald", family = "oswald")
+showtext::showtext_auto()
+
+# Windows and Mac seem to process the font differently
+if (Sys.info()[[1]] == "Windows"){
+
+basesize <- 35
+
+} else {
+  
+basesize <-  11
+  
+}
+
+update_geom_defaults("text", list(size = 10, family = "oswald", fontface = "plain", lineheight = 0.2))
+
+
+# Regular plot theme
+theme_flynn <- function(){ 
+  
+      theme_linedraw(base_size = basesize, base_family = "oswald") %+replace% 
+        
+        theme(plot.title = element_text(face = "bold", size = basesize * 1.3, hjust = 0, margin = margin(t = 0, b = 0.2, l = 0, r = 0, unit = "cm")),
+              plot.subtitle = element_text(size = basesize, hjust = 0, margin = margin(t = 0.0, b = 0.2, unit = "cm")),
+              plot.caption = element_text(face = "italic", size = basesize * 0.6, hjust = 1, lineheight = 1, margin = margin(t = 0.2, unit = "cm")),
+              panel.border = element_rect(fill = NA, size = 0.2),
+              strip.background = element_rect(fill = "gray80", color = "black", size = 0.2),
+              strip.text = element_text(size = basesize, color = "black", face = "bold", margin = margin(t = 0.2, b = 0.2, l = 0.2, r = 0.2, unit = "cm")),
+              panel.background = element_rect(size = 0.2),
+              panel.grid.major = element_line(color = "gray70", size = 0.15),
+              panel.grid.minor = element_line(color = "gray90", size = 0.1),
+              axis.title = element_text(face = "bold", size = basesize),
+              axis.title.y = element_text(angle = 90, margin = margin(t = 0, r = 0.2, b = 0, l = 0, unit = "cm")),
+              axis.title.x = element_text(margin = margin(t = 0.2, r = 0, b = 0, l = 0, unit = "cm")),
+              axis.ticks = element_line(size = 0.1),
+              axis.ticks.length = unit(0.1, "cm"),
+              legend.title = element_text(size = basesize, face = "bold", hjust = 0, margin = margin(t = 0, b = -0.3, l = 0, r = 0, unit = "cm")),
+              legend.text = element_text(margin = margin(l = -0.3, unit = "cm")),
+              plot.margin = margin(0.5, 0.5, 0.5, 0.5, unit = "cm"),
+              legend.margin = margin(t=0, b=0, r=0, l=0),
+              legend.box.margin = margin())
+}
+
+#install.packages("RefManageR")
+
+#library(RefManageR)
+#library(bibtex)
+#BibOptions(check.entries = FALSE,
+#           bib.style = "authoryear", # Bibliography style
+#           max.names = 3, # Max author names displayed in bibliography
+#           sorting = "nyt", #Name, year, title sorting
+#           cite.style = "authoryear", # citation style
+#           style = "markdown",
+#           hyperlink = FALSE,
+#           dashed = FALSE)
+
+#myBib <- ReadBib(here::here("../../classrefs.bib", check = FALSE))
+
+```
+
+# Lecture Overview
+
+1. The puzzle of war
+2. What do states fight over?
+3. Defining war
+4. How to analyze war?
+
+???
+
+Notes:
+
+Exercises:
+
+1. Ask students to define war for themselves at the beginning.
+2. Ask students to list wars they can think of from memory
+3. Later, ask students to estimate casualties
+
+
+
+---
+class: left, top
+
+# Key Questions and Goals
+
+1. What do states fight over?
+2. Why is it important to have a definition of war?
+3. What components do you think are the most important? The least?
+4. What are the different taxonomies of war?
+5. How and why has the prevalence of different types of war changed over time?
+
+
+---
+class: center, middle, inverse
+
+# The Puzzle of War
+
+
+
+---
+class: center, middle
+
+
+```{r, fig.align="center", out.width="60%", fig.cap="British soldiers during the Battle of the Somme, 1916. British Imperial War Museum."}
+knitr::include_graphics(here::here("../../media/somme-battle-pic.jpg"))
+```
+
+
+---
+class: center, middle
+
+
+```{r, fig.align="center", out.width="50%", fig.cap="Under the supervision of American soldiers, German civilians from Nammering walk among the corpses of prisoners exhumed from a mass grave near the town. Photograph Number: 14234"}
+knitr::include_graphics("https://collections.ushmm.org/iiif-b/assets/742383")
+```
+
+
+???
+
+# Notes
+
+On April 19, 1945, a freight train with nearly 4,500 prisoners from Buchenwald pulled onto the railroad siding at Nammering. The train had been destined for Dachau, but at Plattling it was diverted towards Nammering because of damage to the railroad caused by Allied bombing. Once in Nammering, some of the local inhabitants attempted to give the prisoners food and water, but these provisions were stolen by the 150 SS and police officers guarding the train. The commanding officer in charge, Lieutenant Hans Meerbach, ordered during the halt that the bodies of the dead be removed from the train and cremated. This work proceeded too slowly for him, however, and prisoners were forced to carry the bodies of the dead to a nearby mass grave in a ravine roughly 500 yards from the train. There the prisoners carrying the corpses were shot by the guards and they were also buried in the grave. Altogether 524 prisoners were shot and nearly 800 were interred in the mass grave. The bodies were then covered with lime and the grave was flooded to speed up decomposition. Those 3,100 prisoners who had remained on the train were sent on to Dachau, where they were liberated. After the discovery of the site by U.S. troops on April 28, the ranking American officer in the area forced SS men collected from a nearby POW camp to exhume the corpses and lay them out on either side of the ravine above the mass grave. The inhabitants of Nammering were then ordered to walk through the gravesite, and the bodies were buried in the surrounding towns of Eging am See, Aicha vom Wald, Nammering, and Fuerstenstein.
+
+
+
+---
+class: center, middle, inverse
+
+# Defining War
+
+
+
+---
+class: left, top
+
+# Defining War
+
+Why do we need a definition?
+
+- "War" presupposes a condition that is "not War"
+
+- "Conflict" is a very broad concept
+
+- It can include both violent and non-violent interactions
+
+- It can be political and non-political
+
+- It can be one-on-one or involve the mobilization of millions of people
+
+- So how do we isolate the specific types of events that make a war a war?
+
+
+
+---
+class: left, top
+
+# Defining War
+
+A couple of definitions
+
+> **FLS**: An event involving the organized use of military force by at least two parties that satisfies some minimum threshold of severity 
+
+> **Correlates of War (COW)**: Sustained combat involving organized armed forces resulting in a minimum of 1,000 battle-related combatant fatalities within a 12-month period. Must also meet effective resistence criteria.
+
+
+
+---
+class: center, middle
+
+```{r war-table}
+
+wartable <- tibble::tribble(~`Party 1`, ~`Party 2`, ~Location, ~Category,
+                            "State/Government", "State/Government", "Between or within states' territories", "Interstate War",
+                            "State/Government", "Non-State Actors", "Within a state's territory", "Civil War/Intrastate War",
+                            "State/Government", "Non-State Actors", "Outside of the state's territory", "Extra-State War",
+                            "Non-State Actor", "Non-State Actor", "Anywhere", "Non-State War")
+
+kable(wartable, booktabs = TRUE, caption = "Four categories of war according to the Correlates of War Project") %>% 
+  kable_styling(bootstrap_options = "striped") %>% 
+  row_spec(0, background = "#512888", color = "white", bold = TRUE) 
+
+```
+
+
+
+
+---
+class: center, middle
+
+```{r}
+wardata <- fread(here::here("../../../Data Files/COW Data/Inter-StateWarData_v4.0.csv")) %>% 
+  group_by(WarNum) %>%
+  rowwise() %>% 
+  mutate(year = list(seq(StartYear1, EndYear1)),
+         startdate = paste(StartYear1, StartMonth1, StartDay1, sep = "-"),
+         startdate = as.Date(startdate, format = "%Y-%m-%d"),
+         enddate = paste(EndYear1, EndMonth1, EndDay1, sep = "-"),
+         enddate = as.Date(enddate, format = "%Y-%m-%d"),
+         durationdays = enddate - startdate
+         ) %>%
+  ungroup() %>% 
+  unnest() %>% 
+  group_by(year)
+
+combined <- tibble(year = seq(1815, 2015)) %>% 
+  left_join(., wardata) %>% 
+  group_by(year)  %>% 
+  mutate(warringcountries = ifelse(!is.na(WarNum), n_distinct(ccode), 0),
+         warcount = ifelse(!is.na(WarNum), n_distinct(WarNum), 0)) %>% 
+  summarise(warringcountries = max(warringcountries),
+            warcount = max(warcount))
+
+# Number of Wars
+ggplot(data = combined, aes(x = year, y = warcount)) +
+  geom_bar(stat = "identity", fill = "darkgreen", color = "black") +
+  theme_flynn() +
+  labs(x = "Year",
+       y = "Count",
+       title = "Number of interstate wars per year",
+       subtitle = "Note that wars are defined here as occurring between pairs of states",
+       caption = "Data obtained from the Correlates of War Project: http://www.correlatesofwar.org/") +
+  scale_x_continuous(breaks = seq(1815, 2015, 15)) 
+
+
+```
+
+
+
+
+---
+class: center, middle
+
+```{r}
+# Number of Warring Countries per year
+ggplot(data = combined, aes(x = year, y = warringcountries)) +
+  geom_bar(stat = "identity", fill = "khaki1", color = "black") +
+  theme_flynn() +
+  labs(x = "Year",
+       y = "Count",
+       title = "Number of countries engaged in inter-state war per year",
+       subtitle = "Note that wars are defined here as occurring between pairs of states",
+       caption = "Data obtained from the Correlates of War Project: http://www.correlatesofwar.org/") +
+  scale_x_continuous(breaks = seq(1815, 2015, 15)) 
+```
+
+
+
+---
+class: center, middle
+
+```{r war-duration}
+wardata <- fread("../../../Data Files/COW Data/Inter-StateWarData_v4.0.csv") %>% 
+  group_by(WarNum) %>%
+  rowwise() %>% 
+  mutate(year = list(seq(StartYear1, EndYear1)),
+         startdate = paste(StartYear1, StartMonth1, StartDay1, sep = "-"),
+         startdate = as.Date(startdate, format = "%Y-%m-%d"),
+         enddate = paste(EndYear1, EndMonth1, EndDay1, sep = "-"),
+         enddate = as.Date(enddate, format = "%Y-%m-%d"),
+         durationdays = enddate - startdate
+         ) %>%
+  ungroup() %>% 
+  unnest() %>% 
+  group_by(year)
+
+wardata <- wardata %>% 
+  ungroup() %>% 
+  group_by(WarNum)  %>% 
+  summarise(duration = max(durationdays)) %>% 
+  mutate(duration = as.numeric(duration))
+
+# Note that the parentheses around the "..count.." stuff needs to wrap the entire expression.
+# Otherwise it will kick back some really weird percentage figures. 
+# Also note that this is including all entries in the data, not just distinct wars as identified by WarNum
+ggplot(data = wardata, aes(x = duration/365, y = (((..count..)/sum(..count..)))*100)) +
+  geom_histogram(position = "dodge", binwidth = 1, boundary = 0, closed = "left", fill = "#1C77A3FF", color = "black", size = 0.1) +
+  annotate("text", x = 6, y = 40, label = "Mean = 1.12 Years") +
+  annotate("text", x = 6, y = 35, label = "Median = 0.38 Years") +
+  theme_flynn() +
+  labs(x = "Years",
+       y = "Percent",
+       title = "Duration of Interstate Wars",
+       subtitle = "Contrary to popular perceptions most wars are very short",
+       caption = "Data obtained from the Correlates of War Project: http://www.correlatesofwar.org/") +
+  scale_x_continuous(breaks = seq(0,11,1)) +
+  scale_y_continuous(breaks = seq(0,80,10)) 
+
+```
+
+
+
+---
+class: center, middle
+
+```{r wars-combined}
+war_interstate <- fread(here("../../../Data Files/COW Data/Inter-StateWarData_v4.0.csv"))
+war_intrastate <- fread(here("../../../Data Files/COW Data/Intra-StateWarData_v4.1.csv"))
+war_extrastate <- fread(here("../../../Data Files/COW Data/Extra-StateWarData_v4.0.csv"))
+war_nonstate <- fread(here("../../../Data Files/COW Data/Non-StateWarData_v4.0.csv"))
+
+war_interstate <- war_interstate %>% 
+  distinct(WarNum, .keep_all = TRUE) %>% 
+  rowwise() %>% 
+  mutate(year = list(seq(StartYear1, EndYear1))) %>%
+  ungroup() %>% 
+  unnest() %>% 
+  arrange(WarNum, year) %>% 
+  select(WarNum, year) %>% 
+  distinct(WarNum, year) %>% 
+  group_by(year) %>% 
+  summarise(numinterwars = n()) -> numinterwars
+
+war_intrastate <- war_intrastate %>% 
+  distinct(WarNum, .keep_all = TRUE) %>% 
+  rowwise() %>% 
+  filter(!is.na(EndYear1)) %>% 
+  mutate(year = list(seq(StartYear1, EndYear1))) %>% 
+  ungroup() %>% 
+  unnest() %>% 
+  arrange(WarNum, year) %>% 
+  select(WarNum, year) %>% 
+  distinct(WarNum, year) %>% 
+  group_by(year) %>% 
+  summarize(numintrawars = n()) -> numintrawars 
+
+war_extrastate <- war_extrastate %>% 
+  rowwise() %>% 
+  filter(!is.na(EndYear1)) %>% 
+  filter(EndYear1 >= 1816) %>% 
+  mutate(year = list(seq(StartYear1, EndYear1))) %>% 
+  ungroup() %>% 
+  unnest() %>% 
+  arrange(WarNum, year) %>% 
+  select(WarNum, year) %>% 
+  distinct(WarNum, year) %>% 
+  group_by(year) %>% 
+  summarise(numextrawars = n()) -> numextrawars
+
+war_nonstate <- war_nonstate %>% 
+  rowwise() %>% 
+  filter(!is.na(EndYear)) %>% 
+  mutate(year = list(seq(StartYear, EndYear))) %>% 
+  ungroup() %>% 
+  unnest() %>% 
+  arrange(WarNum, year) %>% 
+  select(WarNum, year) %>% 
+  distinct(WarNum, year) %>% 
+  group_by(year) %>% 
+  summarize(numnonwars = n()) -> numnonwars
+
+combined <- tibble(year = seq(1816,2007)
+) %>% 
+  left_join(., numinterwars) %>% 
+  left_join(., numintrawars) %>%
+  left_join(., numextrawars) %>% 
+  left_join(., numnonwars) %>% 
+  mutate_all(funs(replace(., is.na(.), 0))) %>% 
+  mutate(`Inter-State` = numinterwars,
+         `Intra-State` = numintrawars,
+         `Extra-State` = numextrawars,
+         `Non-State` = numnonwars) %>% 
+  gather(Category, Value, `Inter-State`:`Non-State`) %>% 
+  mutate(Category = forcats::fct_relevel(Category, "Inter-State", "Intra-State", "Extra-State", "Non-State"),
+         total = numinterwars+numintrawars+numextrawars+numnonwars) 
+
+combined_annual <- combined %>% 
+  group_by(year) %>% 
+  dplyr::summarise(., total = sum(Value)) %>% 
+  arrange(., year)
+
+
+ggplot(data = combined_annual, aes(x = year, y = total)) +
+  geom_area(alpha = .8, colour = "black", size = .1, alpha = .8, fill = "purple") +
+  scale_x_continuous(breaks = seq(1815,2010,15)) +
+  scale_y_continuous(breaks = seq(0,30,5), limits = c(0,30)) +
+  viridis::scale_fill_viridis(option = "magma", discrete = TRUE) +
+  theme_flynn() +
+  labs(caption = "Data obtained from Correlates of War Data: http://www.correlatesofwar.org/data-sets/COW-war",
+       x = "Year", 
+       y = "", 
+       title = "Inter-state wars are very prominent",
+       subtitle = "But what can we learn from the changing frequency of different types of war over time?") 
+
+```
+
+
+
+
+---
+class: center, middle
+
+```{r wars-combined-disaggregated}
+ggplot(data = combined, aes(x = year, y = Value, fill = Category)) +
+  geom_area(alpha = .8, colour = "black", size = .1, alpha = .8) +
+  theme_flynn() +
+  scale_x_continuous(breaks = seq(1815,2010,15)) +
+  scale_y_continuous(breaks = seq(0,30,5), limits = c(0,30)) +
+  viridis::scale_fill_viridis(option = "magma", discrete = TRUE) +
+  labs(caption = "Data obtained from Correlates of War Data: http://www.correlatesofwar.org/data-sets/COW-war",
+       x = "Year", 
+       y = "", 
+       title = "Inter-state wars are very prominent",
+       subtitle = "But what can we learn from the changing frequency of different types of war over time?") 
+
+
+```
+
+
+---
+class: center, middle
+
+```{r wars-combined-disaggregated-percent}
+ggplot(data = combined, aes(x = year, y = Value, fill = Category)) +
+  geom_area(position = "fill", colour = "black", size = .1, alpha = .8) +
+  scale_x_continuous(breaks = seq(1815,2010,15), expand = c(0,0)) +
+  scale_y_continuous(labels = scales::percent, expand = c(0,0)) +
+  viridis::scale_fill_viridis(option = "magma", discrete = TRUE) +
+  theme_flynn() +
+  theme(legend.title = element_text(margin = margin(b = -0.3, unit = "cm")),
+        legend.text = element_text(margin = margin(l = -0.3, unit = "cm"))) +
+  labs(caption = "Data obtained from Correlates of War Data: http://www.correlatesofwar.org/data-sets/COW-war",
+       x = "Year", 
+       y = "", 
+       title = "Inter-state wars are very prominent",
+       subtitle = "But what can we learn from the changing frequency of different types of war over time?") 
+  
+```
+
+
+
+---
+class: center, middle
+
+```{r war duration and fatality table, echo = FALSE, warning=FALSE, message=FALSE}
+
+intrastate <- fread(here("../../../Data Files/COW Data/Intra-StateWarData_v4.1.csv"))
+nonstate <- fread(here("../../../Data Files/COW Data/Non-StateWarData_v4.0.csv"))
+interstate <- fread(here("../../../Data Files/COW Data/Inter-StateWarData_v4.0.csv"))
+extrastate <- fread(here("../../../Data Files/COW Data/Extra-StateWarData_v4.0.csv")) 
+
+interstate.df <- interstate %>% 
+  mutate(start = glue::glue("{StartYear1}-{StartMonth1}-{StartDay1}"),
+         end = glue::glue("{EndYear1}-{EndMonth1}-{EndDay1}"),
+         Duration = as.Date(end) - as.Date(start),
+         BatDeath = ifelse(BatDeath<0, NA, BatDeath)) %>% 
+  group_by(WarName) %>% 
+  dplyr::summarise(Parties = n_distinct(StateName),
+                   Duration = max(Duration, na.rm = TRUE),
+                   Fatalities = sum(BatDeath, na.rm = TRUE),
+                   Onset = min(start, na.rm = TRUE)) %>% 
+  mutate(Type = "Inter-state")
+
+intrastate.df <- intrastate %>% 
+    mutate(start = glue::glue("{StartYear1}-{StartMonth1}-{StartDay1}"),
+         end = glue::glue("{EndYear1}-{EndMonth1}-{EndDay1}"),
+         start = gsub("--", "-", start),
+         end = gsub("--", "-", end),
+         Duration = as.Date(end) - as.Date(start),
+         SideADeaths = as.numeric(ifelse(SideADeaths<0, NA, SideADeaths)),
+         SideBDeaths = as.numeric(ifelse(SideBDeaths<0, NA, SideBDeaths)),
+         BatDeath = SideADeaths + SideBDeaths,
+         BatDeath = ifelse(BatDeath<0, "NA", BatDeath)) %>% 
+  group_by(WarName) %>% 
+  mutate(SideA = as.character(SideA),
+         SideB = as.character(SideB),
+         sideaparties = n_distinct(SideA),
+         sidebparties = n_distinct(SideB),
+         totalparties = sideaparties + sidebparties) %>% 
+  group_by(WarName) %>% 
+  dplyr::summarise(Parties = max(totalparties, na.rm = TRUE),
+                   Duration = max(Duration, na.rm = TRUE),
+                   Fatalities = max(BatDeath, na.rm = TRUE),
+                   Onset = min(start, na.rm = TRUE)) %>% 
+  mutate(Type = "Civil War")
+
+
+war.com <- bind_rows(interstate.df, intrastate.df)
+
+war.duration.table <- war.com %>% 
+  dplyr::filter(Duration > quantile(Duration, probs = c(0.98))) %>% 
+  filter(is.finite(Duration)) %>% 
+  mutate(Fatalities = ifelse(is.finite(Fatalities), Fatalities, NA)) %>% 
+  arrange(-Duration) %>% 
+  kbl(booktabs = TRUE, caption = "Longest Wars According to COW Interstate and Intrastate War Data",
+      align = c("lrrrcc")) %>% 
+  kable_styling(bootstrap_options = c("striped")) %>% 
+  row_spec(0, background = "#512888", color = "white", bold = TRUE)
+
+war.duration.table
+
+```
+
+
+
+
+
+
+---
+class: center, middle
+
+```{r war-fatality-table}
+
+war.fatality.table <- war.com %>% 
+  dplyr::filter(Fatalities > quantile(Fatalities, probs = c(0.98))) %>% 
+  filter(is.finite(Fatalities)) %>% 
+  mutate(Fatalities = ifelse(is.finite(Fatalities), Fatalities, NA)) %>% 
+  arrange(-Fatalities) %>% 
+  kbl(booktabs = TRUE, caption = "Deadliest Wars According to COW Interstate and Intrastate War Data",
+      align = c("lrrrcc")) %>% 
+  kable_styling(bootstrap_options = c("striped")) %>% 
+  row_spec(0, background = "#512888", color = "white", bold = TRUE)
+
+war.fatality.table
+
+```
+
+
+---
+class: left, top
+
+# Defining War
+
+What are we leaving on the table?
+
+- War captures a particular type of conflict—not all conflict
+
+- Definitions and measurement ultimately involve choices
+
+- Those choices determine what we include/exclude
+
+- Excluding some things doesn't necessarily mean we don't care about them
+
+
+---
+class: center, middle
+
+```{r war-sim-measurement}
+
+set.seed(123)
+
+war.sim <- data.table(time = seq(1, 30, 1),
+                      year = seq(1990, 2020, 1)) %>% 
+  mutate(fatalities = round(rnorm(length(year), mean = 900, sd = 50) + (5 * time)),
+         war = ifelse(fatalities>1000, "War", "Not War"))
+
+ggplot(war.sim, aes(x = year, y = fatalities)) +
+  geom_bar(stat = "identity", aes(fill = war), color = "black", alpha = 0.8, size = 0.2) +
+  geom_hline(yintercept = 1000, size = 1.2, color = "red") +
+  scale_fill_viridis(option = "magma", discrete = TRUE, begin = 0.1, end = 0.8) +
+  scale_y_continuous(breaks = seq(0, 1200, 200)) +
+  theme_flynn() +
+  labs(title = "Simulated annual fatality counts and war categorization",
+       subtitle = "Simple measurement schemes have advantages, but they can also have tradeoffs",
+       x = "Year",
+       y = "Fatalities",
+       fill = "War Category")
+
+```
+
+
+---
+class: center, middle
+
+```{r}
+
+mid.table <- tribble(~Code, ~Level,
+                     1,      "No Militarized Action",
+                     2,      "Threat to use force",
+                     3,      "Display of force",
+                     4,      "Use of force",
+                     5,      "War") %>% 
+  kbl(caption = "Militarized Interstate Dispuates (MID)", align = c("cl")) %>% 
+  kable_styling(bootstrap_options = "striped", full_width = TRUE) %>% 
+  row_spec(0, color = "white", background = "#512888") %>% 
+  column_spec(1, width = "2cm") %>% 
+  column_spec(2, width = "8cm")
+
+mid.table
+```
+
+
+
+
+
+
+---
+class: center, middle
+
+```{r mid-figure}
+middata <- fread("../../../Data Files/COW Data/MID-level/MIDA_4.01.csv") %>% 
+  filter(HostLev < 5) %>%
+  subset(select = c(DispNum3,HostLev,StYear,EndYear)) %>% 
+  group_by(DispNum3) %>%
+  mutate(year = list(seq(StYear,EndYear)),
+         level = as.factor(HostLev)) %>% 
+  ungroup() %>% 
+  unnest()  
+
+midtimeseries <- tibble(year = seq(1815, 2010)) %>% 
+  left_join(., middata) %>% 
+  group_by(year, level) %>% 
+  summarise(midcount = n_distinct(DispNum3, na.rm = TRUE)) %>%
+  ungroup() 
+
+midtimeseries2 <- midtimeseries %>% 
+  spread(key = level, value = midcount, fill = 0) %>% 
+  gather(key = level, value = midcount, -year) %>% 
+  arrange(year, level) %>% 
+  filter(level != "<NA>")
+
+ggplot(data = midtimeseries2, aes(x = year, y = midcount, fill = level, group = level)) +
+  geom_area(position = "stack", alpha = .8, colour = "black", size = .1) +
+  theme_flynn() +
+  scale_fill_viridis(option = "magma", discrete = TRUE, labels = c("Threat", "Display", "Use of Force")) +
+  scale_x_continuous(breaks = seq(1815,2010,15)) +
+  scale_y_continuous(breaks = seq(0,80,20), limits = c(0,80))+
+  labs(x = "Year",
+       y = "Count",
+       fill = "Level",
+       title = "Militarized Interstate Disputes (MIDs) over time, 1815-2010",
+       subtitle = "Not all MIDs involve the actual use of force",
+       caption = "Data obtained from the Correlates of War Project: http://www.correlatesofwar.org/") 
+
+
+```
+
+
+
+---
+class: center, middle
+
+```{r}
+
+states <- peacesciencer::create_stateyears(system = "gw") %>% 
+  group_by(year) %>% 
+  dplyr::summarise(states = n_distinct(statename))
+
+#viridis::magma(6)
+#ghibli::ghibli_palettes$LaputaMedium
+
+ggplot(states, aes(x = year, y = states)) +
+  geom_area(alpha = 0.8, fill = "#AE93BEFF", color = "black", size = 0.2) +
+  theme_flynn() +
+  labs(x = "Year",
+       y = "Count",
+       title = "Number of states in the international system, 1815–2021",
+       subtitle = "More actors means more opportunities for conflict")
+  
+```
+
+
+---
+class: center, middle, inverse
+
+# Analytical Approaches to Studying War
+
+
+
+---
+class: left, top
+
+# Analytical Approaches to Studying War
+
+There are different ways we can approach the subject to understand why, where, and when war occurs
+
+Levels of analysis:
+
+- Individual
+
+- State
+
+- System
+
+
+
+---
+class: left, top
+
+# Analytical Approaches to Studying War
+
+.pull-left[
+Individual-level explanations
+
+- Human nature (People are just violent)
+
+- Bad people (Do bad things)
+]
+
+--
+
+.pull-right[
+Criticisms
+
+- Why do some good people go to war?
+
+- Why do some really bad people *not* go to war?
+
+- Ignores broader social, economic, and political forces
+]
+
+
+
+
+---
+class: left, top
+
+# Analytical Approaches to Studying War
+
+.pull-left[
+State-level explanations
+
+- Characteristics of individual units determine behavior
+
+- Regime type
+
+- Economic development
+
+- Trade
+]
+
+--
+
+.pull-right[
+Criticisms
+
+- Often ignores broader environmental factors
+
+- Structural/constant factors cannot explain variation
+
+- Ignores individual and behavioral explainations 
+
+- Often ignores subnational variation (i.e. changing parties in government, social movements, etc.)
+]
+
+
+---
+class: left, top
+
+# Analytical Approaches to Studying War
+
+.pull-left[
+System-level explanations
+
+- Individual parts do not explain outcomes
+
+- Structure of the overall system matters more
+
+  - Anarchy
+  
+  - Distribution/balance of power
+  
+  - Blocs of states
+]
+
+--
+
+.pull-right[
+Criticisms
+
+- How do you study a system without reference to its parts?
+
+- In effect this approach is still dealing with individual states
+
+- Normative objections: Do we hold leaders accountable for their decisions if they're just responding to structural incentives and forces?
+
+]

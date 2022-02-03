@@ -1,0 +1,71 @@
+---
+title: "POLSC 145 Homework #2"
+author: "Michael Flynn"
+date: "1/17/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(peacesciencer)
+library(tidyverse)
+library(kableExtra)
+library(data.table)
+```
+
+
+This homework assignment builds off of the previous homework assignment and consists of a couple of basic tasks. The goal here is to think about how states differ in terms of their basic terrain and topography. We will also record some basic information about agricultural production.
+
+# Tasks
+
+1. **Region** Record the region your country falls in according to the list below.
+2. **Terrain**: Record the terrain ruggedness score for your three countries using the table below. Higher numbers indicate more rugged terrain. If your country does not have a terrain value provided simply record "NA".
+3. **Relative Terrain** Look at the summary statistics provided below. Record the following:
+    - Is the country's terrain score higher or lower than the global mean?
+    - Is the country's terrain score higher or lower than the regional mean?
+4. **Agriculture**: Using the CIA World Factbook data from last time (linked below) list what, if any, agricultural products the country produces.
+
+
+
+# Resources
+
+1. [CIA World Factbook](https://www.cia.gov/the-world-factbook/countries/)
+
+
+# Country Data
+
+```{r, echo = FALSE, message=FALSE, warning=FALSE}
+
+stats <- peacesciencer::create_stateyears(system = "gw") %>% 
+  peacesciencer::add_rugged_terrain() %>% 
+  dplyr::mutate(Region = countrycode::countrycode(gwcode, "gwn", "region")) %>% 
+  mutate(`Global Mean Ruggedness` = round(mean(newlmtnest, na.rm = TRUE), 2),
+         `Global Median Ruggedness` = round(median(newlmtnest, na.rm = TRUE), 2)) %>% 
+  group_by(Region) %>% 
+  dplyr::summarise(`Global Mean Ruggedness` = max(`Global Mean Ruggedness`, na.rm = TRUE),
+                   `Global Median Ruggedness` = max(`Global Median Ruggedness`, na.rm = TRUE),
+                   `Regional Mean Ruggedness` = round(mean(newlmtnest, na.rm = TRUE), 2),
+                   `Regional Median Ruggedness` = round(median(newlmtnest, na.rm = TRUE), 2)) %>% 
+  dplyr::filter(!is.na(Region)) %>% 
+  kable(caption = "Ruggedness summary statistics", align = "lcccc") %>% 
+  kable_styling(bootstrap_options = "striped") %>% 
+  row_spec(0, background = "#512888", color = "white") 
+
+stats
+```
+
+```{r, echo = FALSE, message=FALSE, warning=FALSE}
+
+test <- peacesciencer::create_stateyears(system = "cow") %>% 
+  peacesciencer::add_rugged_terrain() %>% 
+  dplyr::mutate(Region = countrycode::countrycode(code, "gwn", "region")) %>% 
+  group_by(statename, Region) %>% 
+  dplyr::summarise(Terrain = round(mean(newlmtnest, na.rm = TRUE), 2)) %>% 
+  dplyr::rename("Country" = "statename") %>% 
+  kable(caption = "Countries and Terrain Ruggedness", align = "lrr") %>% 
+  kable_styling(bootstrap_options = "striped") %>% 
+  row_spec(0, background = "#512888", color = "white") %>% 
+  scroll_box(height = "400px")
+
+test
+```

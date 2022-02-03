@@ -1,0 +1,481 @@
+---
+title: "World Politics"
+subtitle: "The Bargaining Model of War"
+author: "Michael E. Flynn"
+institute: "Kansas State University"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: ["default", "lecture_theme.css"]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      ratio: 16:9
+      countIncrementalSlides: false
+      titleSlideClass: [middle, left, inverse]
+---
+
+```{r setup, include = FALSE, echo=FALSE, warning=FALSE}
+library(ggplot2)
+library(data.table)
+library(peacesciencer)
+library(tidyverse)
+library(janitor)
+library(kableExtra)
+library(here)
+library(ghibli)
+library(viridis)
+
+knitr::opts_chunk$set(comment = '', dpi = 400, fig.width = 8, fig.height = 5, warning = FALSE, echo = FALSE, message = FALSE)
+
+sysfonts::font_add_google("Oswald", family = "oswald")
+showtext::showtext_auto()
+
+# Windows and Mac seem to process the font differently
+if (Sys.info()[[1]] == "Windows"){
+
+basesize <- 35
+
+} else {
+  
+basesize <-  11
+  
+}
+
+update_geom_defaults("text", list(size = 10, family = "oswald", fontface = "plain", lineheight = 0.2))
+
+
+# Regular plot theme
+theme_flynn <- function(){ 
+  
+      theme_linedraw(base_size = basesize, base_family = "oswald") %+replace% 
+        
+        theme(plot.title = element_text(face = "bold", size = basesize * 1.3, hjust = 0, margin = margin(t = 0, b = 0.2, l = 0, r = 0, unit = "cm")),
+              plot.subtitle = element_text(size = basesize, hjust = 0, margin = margin(t = 0.0, b = 0.2, unit = "cm")),
+              plot.caption = element_text(face = "italic", size = basesize * 0.6, hjust = 1, lineheight = 1, margin = margin(t = 0.2, unit = "cm")),
+              panel.border = element_rect(fill = NA, size = 0.2),
+              strip.background = element_rect(fill = "gray80", color = "black", size = 0.2),
+              strip.text = element_text(size = basesize, color = "black", face = "bold", margin = margin(t = 0.2, b = 0.2, l = 0.2, r = 0.2, unit = "cm")),
+              panel.background = element_rect(size = 0.2),
+              panel.grid.major = element_line(color = "gray70", size = 0.15),
+              panel.grid.minor = element_line(color = "gray90", size = 0.1),
+              axis.title = element_text(face = "bold", size = basesize),
+              axis.title.y = element_text(angle = 90, margin = margin(t = 0, r = 0.2, b = 0, l = 0, unit = "cm")),
+              axis.title.x = element_text(margin = margin(t = 0.2, r = 0, b = 0, l = 0, unit = "cm")),
+              axis.ticks = element_line(size = 0.1),
+              axis.ticks.length = unit(0.1, "cm"),
+              legend.title = element_text(size = basesize, face = "bold", hjust = 0, margin = margin(t = 0, b = -0.3, l = 0, r = 0, unit = "cm")),
+              legend.text = element_text(margin = margin(l = -0.3, unit = "cm")),
+              plot.margin = margin(0.5, 0.5, 0.5, 0.5, unit = "cm"),
+              legend.margin = margin(t=0, b=0, r=0, l=0),
+              legend.box.margin = margin())
+}
+
+theme_flynn_map <- function(){
+  
+      theme_void(base_size = basesize, base_family = "oswald") %+replace% 
+    
+    theme(plot.title = element_text(face = "bold", size = 18, hjust = 0, margin = margin(t = 0, b = 0.3, l = 0, r = 0, unit = "cm")),
+          plot.subtitle = element_text(size = 12, hjust = 0, margin = margin(t = 0, b = 0.3, l = 0, r = 0, unit = "cm")),
+          plot.caption = element_text(face = "italic", size = 8, hjust = 1, margin = margin(t = 0.2, unit = "cm")),
+          plot.background = element_rect(fill = "white", color = "white"),
+          strip.background = element_rect(fill = "gray80", color = "black"),
+          strip.text = element_text(color = "black", face = "bold"),
+          panel.grid.major = element_line(color = "white", size = 0),
+          panel.grid.minor = element_line(color = "white", size = 0),
+          #axis.title = element_text(face = "bold", size = 0),
+          #axis.title.y = element_text(margin = margin(t = 0, r = 0.5, b = 0, l = 0, unit = "cm")),
+          #axis.title.x = element_text(margin = margin(t = 0.5, r = 0, b = 0, l = 0, unit = "cm")),
+          legend.title = element_text(face = "bold"),
+          legend.position = "bottom",
+          legend.key.height = unit(0.6, "cm"),
+          legend.key.width = unit(2.5, "cm"))
+}
+
+
+#install.packages("RefManageR")
+
+#library(RefManageR)
+#library(bibtex)
+#BibOptions(check.entries = FALSE,
+#           bib.style = "authoryear", # Bibliography style
+#           max.names = 3, # Max author names displayed in bibliography
+#           sorting = "nyt", #Name, year, title sorting
+#           cite.style = "authoryear", # citation style
+#           style = "markdown",
+#           hyperlink = FALSE,
+#           dashed = FALSE)
+
+#myBib <- ReadBib(here::here("../../classrefs.bib", check = FALSE))
+
+```
+
+# Lecture Overview
+
+1. The Puzzle of War
+
+2. Review Previous Explanations
+
+3. Conceptualizing War in a Bargaining Framework
+
+
+
+---
+class: left, top
+
+# Key Questions and Goals
+
+1. What does it mean when we refer to the "puzzle" of war?
+
+2. What are the three sources of bargaining failure?
+
+3. How can states seek to communicate or signal things like resolve?
+
+4. How does the bargaining model build on previous ways of thinking about war?
+
+
+
+---
+class: center, middle, inverse
+
+# The Puzzle of War
+
+
+
+---
+class: left, top
+
+# The Puzzle of War
+
+Why do states go to war?
+
+- War is very costly
+
+  - Militaries are expensive
+
+  - Lots of suffering
+
+- Opportunity costs
+
+- War can also be highly unpredictable
+
+
+
+---
+class: left, top
+
+# The Puzzle of War
+
+More specifically
+
+> Given that war is incredibly costly for both sides, why can't states negotiate a settlement that leaves both sides better off?
+
+
+
+
+---
+class: left, top
+
+# The Puzzle of War
+
+Previous explanations
+
+- Bad people
+
+- Anarchy
+
+- Imbalances of power
+
+
+
+---
+class: center, middle, inverse
+
+# Conceptualizing War
+
+
+
+
+
+---
+class: left, top
+
+# Conceptualizing War
+
+.pull-left[
+
+Carl von Clausewitz
+
+- 1780-1831
+
+- Prussian General
+
+- Military Theorist
+
+- Author of *On War*
+]
+
+.pull-right[
+```{r clausewitz, out.width="70%", fig.align="center"}
+knitr::include_graphics("https://www.clausewitz.com/images/Clausewitz-romantik.jpg")
+```
+]
+
+
+
+---
+class: left, top
+
+# Conceptualizing War
+
+
+
+> **Bargaining Model**: A class of itneractions in which actors try to resolve disputes over the allocation of goods.
+
+
+
+
+
+
+---
+class: left, top
+
+# Conceptualizing War
+
+> **Crisis Bargaining**: A bargaining interaction in which at least one actor threatens to use force in the event that its demands are not met.
+
+> **Coercive Diplomacy**: The use of threats to influence the outcome of a bargaining interaction.
+
+
+
+---
+class: left, top
+
+# Conceptualizing War
+
+```{r}
+
+table <- tribble(~Variable, ~Notation, ~Value,
+                "Total Value of the good in dispute", "V", 100,
+                "Pre-War bargain share of good", "B", 90,
+                "Expected cost of war", "C", 20,
+                "Value of victory", "V-C", 80,
+                "Value of defeat", "0-C", -20) %>% 
+  kbl(caption = "Basic Bargaining Model Components", align = c("lcc")) %>% 
+  kable_styling(bootstrap_options = "striped", full_width = TRUE) %>% 
+  row_spec(0, color = "white", background = "#512888", bold = TRUE) %>%
+  column_spec(1, width = "10cm") %>% 
+  column_spec(2, width = "4cm") %>% 
+  column_spec(3, width = "4cm") 
+  
+table
+
+```
+
+
+
+---
+class: center, middle
+
+```{r, out.width="40%"}
+knitr::include_graphics("../../../media/Worpol3_Art_JPEG/ch03/WORPOL3_FIGUN03.p99.jpg", error = FALSE)
+
+```
+
+
+---
+class: center, middle
+
+```{r, out.width="40%"}
+knitr::include_graphics("../../../media/Worpol3_Art_JPEG/ch03/WORPOL3_FIGUN03.p98.jpg", error = FALSE)
+
+```
+
+
+
+
+---
+class: left, top
+
+# Conceptualizing War
+
+Mexican-American War (1846-1848)
+
+- US offered Mexico $35 million in cash and debt forgiveness (about \$800 million + in constant dollars)
+
+- US Paid \$15 million after the war
+
+- Cost of war to US: $\sim$ $100 million; 13,000+ deaths
+
+- Cost of war to Mexico: $\sim$ 25,000 dead; large economic losses
+
+
+
+
+---
+class: center, middle
+
+```{r ottoman rail networks, out.width="65%"}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/f/f9/Map_of_Ottoman_Rail_Network_in_World_War_I.jpg")
+
+```
+
+
+
+
+---
+class: center, middle, inverse
+
+# Sources of Bargaining Failure
+
+
+
+
+---
+class: left, top
+
+# Sources of Bargaining Failure
+
+Three primary reason bargaining fails
+
+1. Private/incomplete information
+
+2. Commitment problems
+
+3. Issue indivisibility
+
+
+
+
+---
+class: left, top
+
+# Sources of Bargaining Failure
+
+Private or Incomplete information
+
+- More information about your own position than your opponent's
+
+- Unknown, or hard to know, variables that may include:
+
+  - Capabilities
+  
+  - Resolve
+  
+- Leads to poor estimates of essential factors
+
+
+
+---
+class: center, middle
+
+```{r russo japanese war, out.width="75%", fig.cap="In the Battle of the Sha River, a Company of Our Forces Drives a Strong Enemy Force to the Left Bank of the Taizi River” by Yoshikuni, November 1904."}
+knitr::include_graphics("https://visualizingcultures.mit.edu/throwing_off_asia_01/image/2000_472_l.jpg")
+```
+
+
+
+
+---
+class: center, middle
+
+.middle[
+.pull-left[
+```{r george-w-bush, fig.height=6, fig.width=4, fig.cap="George W. Bush", fig.align='center'}
+knitr::include_graphics("../../../media/George-W-Bush.jpeg", error = FALSE)
+```
+]
+
+.pull-right[
+```{r saddam-hussein, fig.height=6, fig.width=4, fig.cap="Saddam Hussein", fig.align='center'}
+knitr::include_graphics("../../../media/saddam-hussein.jpg", error = FALSE)
+```
+]
+]
+
+
+
+
+---
+class: left, top
+
+# Sources of Bargaining Failure
+
+Private Incomplete Information
+
+- Why not just tell your opponent? 
+
+- Credibility
+
+- Big incentives to bluff
+
+
+
+---
+class: center, middle
+
+```{r}
+library(sf)
+
+troop.data <- troopdata::get_troopdata(startyear = 1950, endyear = 1950) %>% 
+  filter(ccode != 2) %>% 
+  mutate(ccode = ifelse(ccode == 260, 255, ccode))
+
+
+map.base <- rnaturalearth::ne_countries(returnclass = "sf")
+
+map.1950 <- cshapes::cshp(date = as.Date("1950-01-01")) %>%  
+  dplyr::mutate(., ccode = countrycode::countrycode(gwcode, "gwn", "cown")) %>% 
+  left_join(troop.data, by = "ccode")
+
+
+ggplot() +
+  geom_sf(data = map.base, aes(geometry = geometry), fill = "gray90", color = "gray90", size = 0.1) +
+  geom_sf(data = map.1950, aes(geometry = geometry, fill = troops), color = "white", size = 0.1) +
+  theme_flynn_map() +
+  theme(legend.text = element_text(size = basesize*1.05, margin = margin(t = -6, unit = "pt")),
+        legend.title = element_text(size = basesize*1.1, lineheight = 0.3),
+        plot.margin = margin(0, 0, 0, 0)) +
+  viridis::scale_fill_viridis(option = "magma", direction = -1, begin = 0.1, end = 0.9, na.value = "gray90", breaks = c(0, 20, 200, 2000, 20000, 200000), limits = c(0, 200000), trans = "log1p", label = scales::comma_format()) +
+  coord_sf(crs = st_crs("ESRI:54030")) +
+  labs(fill = "Deployment\nSize")
+
+```
+
+
+
+
+---
+class: left, top
+
+# Sources of Bargaining Failure
+
+Commitment Problems
+
+- Can states agree to a deal and not try to renegotiate or make additional demands in the future?
+
+- Some bargaining arrangements necessarily widen power disparities
+
+- Other deals are made against the backdrop of changing power dynamics
+
+
+
+
+---
+class: left, top
+
+# Sources of Bargaining Failure
+
+Issue Indivisibility
+
+- Can all goods be divided?
+
+- Does dividing a good destroy its value?
+
+- Indivisibility implies impossibility of compromise
+
+- Skepticism
+
+  - Incentives to bluff
+  
+  - Is physical partition the only solution?

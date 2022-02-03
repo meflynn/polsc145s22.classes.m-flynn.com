@@ -1,0 +1,929 @@
+---
+title: "World Politics"
+subtitle: "Social Science Theories and Methods"
+author: "Michael E. Flynn"
+institute: "Kansas State University"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: ["default", "lecture_theme.css"]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      ratio: 16:9
+      countIncrementalSlides: false
+      titleSlideClass: [middle, left, inverse]
+---
+
+```{r setup, include = FALSE, echo=FALSE, warning=FALSE}
+library(ggplot2)
+library(data.table)
+library(peacesciencer)
+library(tidyverse)
+library(janitor)
+library(here)
+library(ghibli)
+library(ggforce)
+
+knitr::opts_chunk$set(comment = '', dpi = 400, fig.width = 8, fig.height = 5, warning = FALSE, echo = FALSE, message = FALSE)
+
+sysfonts::font_add_google("Oswald", family = "oswald")
+showtext::showtext_auto()
+
+# Windows and Mac seem to process the fotn differently
+if (Sys.info()[[1]] == "Windows"){
+
+basesize <- 35
+
+} else {
+  
+basesize <-  11
+  
+}
+
+update_geom_defaults("text", list(size = 10, family = "oswald", fontface = "plain", lineheight = 0.2))
+
+
+# Regular plot theme
+theme_flynn <- function(){ 
+  
+      theme_linedraw(base_size = basesize, base_family = "oswald") %+replace% 
+        
+        theme(plot.title = element_text(face = "bold", size = basesize * 1.3, hjust = 0, margin = margin(t = 0, b = 0.2, l = 0, r = 0, unit = "cm")),
+              plot.subtitle = element_text(size = basesize, hjust = 0, margin = margin(t = 0.0, b = 0.2, unit = "cm")),
+              plot.caption = element_text(face = "italic", size = basesize * 0.6, hjust = 1, lineheight = 1, margin = margin(t = 0.2, unit = "cm")),
+              panel.border = element_rect(fill = NA, size = 0.2),
+              strip.background = element_rect(fill = "gray80", color = "black", size = 0.2),
+              strip.text = element_text(size = basesize, color = "black", face = "bold", margin = margin(t = 0.2, b = 0.2, l = 0.2, r = 0.2, unit = "cm")),
+              panel.background = element_rect(size = 0.2),
+              panel.grid.major = element_line(color = "gray70", size = 0.15),
+              panel.grid.minor = element_line(color = "gray90", size = 0.1),
+              axis.title = element_text(face = "bold", size = basesize),
+              axis.title.y = element_text(angle = 90, margin = margin(t = 0, r = 0.2, b = 0, l = 0, unit = "cm")),
+              axis.title.x = element_text(margin = margin(t = 0.2, r = 0, b = 0, l = 0, unit = "cm")),
+              axis.ticks = element_line(size = 0.1),
+              axis.ticks.length = unit(0.1, "cm"),
+              legend.title = element_text(size = basesize, face = "bold", hjust = 0, margin = margin(t = 0, b = 0, l = 0, r = 0, unit = "cm")),
+              plot.margin = margin(0.5, 0.5, 0.5, 0.5, unit = "cm"),
+              legend.margin = margin(t=0, b=0, r=0, l=0),
+              legend.box.margin = margin())
+}
+
+#install.packages("RefManageR")
+
+#library(RefManageR)
+#library(bibtex)
+#BibOptions(check.entries = FALSE,
+#           bib.style = "authoryear", # Bibliography style
+#           max.names = 3, # Max author names displayed in bibliography
+#           sorting = "nyt", #Name, year, title sorting
+#           cite.style = "authoryear", # citation style
+#           style = "markdown",
+#           hyperlink = FALSE,
+#           dashed = FALSE)
+
+#myBib <- ReadBib(here::here("../../classrefs.bib", check = FALSE))
+
+```
+
+# Lecture Overview
+
+1. Read FLS Chapter 2
+2. Motivations
+3. Conceptualizing Science
+4. The Research Process
+
+
+
+---
+class: left, top
+
+# Key Questions and Goals
+
+1. Develop a better understanding of what even is Science?
+2. Think about why we need theories in the social sciences?
+3. Identify strengths and weaknesses of various methodological approaches
+4. Be able to think about causal relationships and outcomes in probabilistic terms
+5. Develop a better understanding of the different stages of the research process
+6. Think about the important of measurement in social sciences
+
+
+---
+class: center, middle
+
+```{r, out.width="60%", fig.cap="Be mindful of your limits"}
+knitr::include_graphics("../../How much I know graph.jpg", error = FALSE)
+```
+
+
+---
+class: center, middle
+
+```{r, out.width="60%", fig.cap="Care with data analytics is not often conducive to riveting TV."}
+knitr::include_graphics("../../../media/phd-comics-news-statistics.jpg", error = FALSE)
+```
+
+
+
+
+---
+class: left, top
+
+# Motivations
+
+What do we mean when we talk about social science?
+
+- Science is not just a noun (i.e. a thing)
+
+- It's a verb
+
+- Science is a method of structuring inquiry—it's the *way* we go about structuring our approach to research
+
+- Emphasis on transparency, replicability, rigor, etc.
+
+
+
+---
+class: left, top
+
+# Motivations
+
+Our goals can vary depending on the question or problem
+
+- Descriptive
+- Causal
+- Predictive
+
+More broadly
+
+- Produce generalizeable knowledge
+- Solve interesting problems
+- Improve the human condition
+- Alleviate human suffering
+- And more
+
+
+
+---
+class: left, top
+
+# Motivations
+
+Description
+
+- We want to know what a thing actually looks like
+
+- We want to know what the relationship between two things looks like
+
+- Necessitates accurate measurement
+
+- Examples:
+
+  - How long do most wars last?
+  - Are most countries in the world democracies, autocracies, or something else?
+  
+  
+
+---
+class: left, top
+
+# Motivations
+
+Causation
+
+- The occurerence of one event/phenomena is the consequence of another
+
+- Correlation does not equal causation (except when it does)
+
+- Alternatively, causation does not necessarily equal (observable) correlation
+
+
+???
+# Notes
+
+A good example here is pressing a gas pedal in a car. On a flat surface pressing the pedal clearly causes an observable increase in speed. But on an increasingly steep hill pressing down on the gas pedal will help you maintain a constant speed as the incline increases (assuming lots of other factors hold constant). 
+
+
+
+
+---
+class: center, middle
+
+```{r}
+library(lubridate)
+library(patchwork)
+
+sim.icecream <- data.frame(time = seq(as.Date("1980-01-01"), as.Date("2020-12-01"), "1 month")) %>% 
+  mutate(month = format(time, "%b"),
+         month = factor(month, levels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")),
+         month_num = month(time),
+         year = year(time),
+         icecream = 1 + 0.5*month_num - 0.04*(month_num ^2) + rnorm(length(time), 0, 0.10))
+
+
+sim.sharks <- data.frame(time = seq(as.Date("1980-01-01"), as.Date("2020-12-01"), "1 month")) %>% 
+  mutate(month = format(time, "%b"),
+         month = factor(month, levels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")),
+         month_num = month(time),
+         year = year(time),
+         sharks = 0 + 1.75*month_num - 0.14*(month_num^2) + rnorm(length(time), 0, 0.5))
+
+icecream <- ggplot(sim.icecream, aes(x = month, y = icecream, group = year, color = factor(year))) +
+  geom_line() +
+  theme_flynn() +
+  guides(color = "none") +
+  viridis::scale_color_viridis(option = "magma", discrete = TRUE)  +
+  labs(x = "Month",
+         y = "Average",
+         title = "Ice Cream Consumption")
+
+correlation <- round(cor(sim.icecream$icecream, sim.sharks$sharks), 2)
+
+sharks <- ggplot(sim.sharks, aes(x = month, y = sharks, group = year, color = factor(year))) +
+  geom_line() +
+  theme_flynn() +
+  guides(color = "none") +
+  viridis::scale_color_viridis(option = "magma", discrete = TRUE)  +
+  labs(x = "Month",
+         y = "Average",
+         title = "Shark Attacks")
+
+plot.com <- icecream | sharks 
+
+plot.com <- plot.com +
+  plot_annotation(title = glue::glue("Individual Ice Cream Consumption and Reported Shark Attacks, 1980-2020"),
+                  subtitle = glue::glue("The correlation between the two is {correlation}, but does this mean there's a causal relationship?"),
+                  theme = theme(plot.title = element_text(size = basesize * 1.5, family = "oswald", face = "bold"),
+                                plot.subtitle = element_text(size = basesize * 1.2, family = "oswald", face = "bold")))
+
+plot.com
+
+```
+
+
+
+---
+class: left, top
+
+# Motivations
+
+Predictive Analysis
+
+- We want to understand variation in outcomes
+
+- This often requires considering relationships between outcomes and multiple predictors
+
+- Individual causal relationships don't always explain a ton of variation
+
+
+---
+class: center, middle
+
+```{r}
+
+example <- data.frame(x = c(1, 2.25, 1.4, 1.4, 1.2),
+                      y = c(1, 1, 1.4, -1.4, -.5),
+                      radius = c(1, 0.4, 0.4, 0.4, 0.4),
+                      group = c("Base", "Causal", "Predict", "Predict", "Predict"),
+                      variable = c("Outcome", "X1", "X2", "X3", "X4"))
+
+ggplot(example %>% filter(group %in% c("Base", "Causal"))) +
+  ggforce::geom_circle(aes(x0 = x, y0 = y, r= radius, fill = group), alpha = 0.4) +
+  geom_text(aes(x = x, y = y, label = variable), size = basesize) +
+  annotate("text", x = 1.90, y = 1.8, label = "Make sure your estimate\nof this part is as accurate\nas possible.", size = 16, hjust = 0) +
+  annotate("segment", x = 1.98, xend = 1.925, y = 1.7, yend = 1, colour = "black") +
+  coord_equal() +
+  theme_void() +
+  theme(plot.title = element_text(family = "oswald", size = basesize * 2.2)) +
+  guides(fill = "none") +
+  labs(title = "Causal Analysis")
+
+```
+
+
+
+
+---
+class: center, middle
+
+```{r}
+
+example <- data.frame(x = c(1, 2.25, 1.6, 1.5, 0.5),
+                      y = c(1, 1, 1.4, 0.2, 0.6),
+                      radius = c(1, 0.4, 0.4, 0.4, 0.5),
+                      group = c("Base", "Causal", "Predict", "Predict", "Predict"),
+                      group2 = c("Base", "Predict", "Predict", "Predict", "Predict"),
+                      variable = c("Outcome", "X1", "X2", "X3", "X4"))
+
+ggplot(example) +
+  ggforce::geom_circle(aes(x0 = x, y0 = y, r= radius, fill = group2), alpha = 0.4) +
+  geom_text(aes(x = x, y = y, label = variable), size = basesize) +
+  annotate("text", x = 1.9, y = 1.8, label = "Make sure you're explaining\nas much of this as possible.", size = 16, hjust = 0) +
+  annotate("segment", x = 1.98, xend = 1.0, y = 1.7, yend = 1.5, colour = "black") +
+  coord_equal() +
+  theme_void() +
+  theme(plot.title = element_text(family = "oswald", size = basesize * 2.2)) +
+  guides(fill = "none") +
+  labs(title = "Predictive Analysis")
+
+```
+
+
+
+---
+class: left, top
+
+# Motivations
+
+Bias—what is it?
+
+- Not how we use the term in contemporary media/politics
+
+- A more technical set of meanings, but most broadly...
+
+> **Bias**: Systematic error of some sort that can affect our inferences and conclusions (Howard 2017, 151)
+
+
+
+---
+class: left, top
+
+# Motivations
+
+Lots of types of bias/names for bias
+
+- Omitted variable bias
+- Confounding
+- Observation bias
+- Social desirability bias
+- Selection bias
+- Selecting on the dependent variable
+- Survivor bias
+- Aggregation bias
+- Ecological fallacy
+
+
+
+---
+class: center, middle
+
+```{r, out.width="70%"}
+knitr::include_graphics(here::here("../../media/survivor-bias-plane.png"), error = FALSE)
+```
+
+
+---
+class: center, middle
+
+```{r, out.width="60%"}
+knitr::include_graphics(here::here("../../media/steve-jobs.jpg"), error = FALSE)
+```
+
+
+
+
+
+
+---
+class: left, top
+
+# Motivations
+
+Charismatic Megafauna
+
+.pull-left[
+- Cases that have symbolic value or widespread/popular appeal 
+
+- But cases that attract the most attention are often atypical in some way
+
+- May not be representative of broader population
+
+- Can still be useful, but caution is in order when using them to generalize or draw inferences about broader population of cases
+
+- The Barnes and Noble rule
+]
+
+.pull-right[
+```{r, out.width="80%"}
+knitr::include_graphics(here::here("../../media/giant-panda-waving.jpg"))
+```
+]
+
+
+
+---
+class: left, top
+
+# Motivations
+
+.pull-left[
+Example
+
+- Munich conference of 1938
+
+- Genesis of "Appeasement" policy attempting to satisfy Hitler's ambitions
+
+- Used to generalize to a wide range of cases
+]
+
+
+.pull-right[
+.middle[
+```{r, out.width="85%"}
+knitr::include_graphics(here::here("../../media/selecting-on-the-dv-1.png"))
+```
+]
+]
+
+
+
+---
+class: left, top
+
+# Motivations
+
+.pull-left[
+Example
+
+- Munich conference of 1938
+
+- Genesis of "Appeasement" policy attempting to satisfy Hitler's ambitions
+
+- Used to generalize to a wide range of cases
+]
+
+
+.pull-right[
+.middle[
+```{r, out.width="85%"}
+knitr::include_graphics(here::here("../../media/selecting-on-the-dv-2.png"), error = FALSE)
+```
+]
+]
+
+
+
+
+---
+class: center, middle, inverse
+
+# The Research Process
+
+
+
+---
+class: center, middle
+
+```{r scentific method, out.width="60%"}
+knitr::include_graphics(here::here("../../media/scientific-method-clean.jpg"), error = FALSE)
+```
+
+
+---
+class: left, top
+
+# The Research Process
+
+Theory
+
+- Colloquial definition: A hunch or a guess that is similar to a hypothesis
+
+> A logically consistent set of statements that explains a phenomenon of interest (FLS, xxix)
+
+
+
+---
+class: left, top
+
+# The Research Process
+
+Theories help us do a few things
+
+1. Explain why something happens
+2. Describe how things happen
+3. Predict what will happen
+4. Prescribe what we should do in a given situation
+
+
+
+
+---
+class: left, top
+
+# The Research Process
+
+Theories require simplification
+
+- The world is really complex
+
+- Theories help us to focus on the most essential and influential factors
+
+- Implication: All theories are, as a rule, "wrong" or "inaccurate"
+
+- But...
+  - Is it useful? 
+  - Does it help us to explain or understand something about the world? 
+  - Does it advance upon previous theories? 
+  - Does it generate clear expectations or implications?
+
+
+
+
+---
+class: left, top
+
+# The Research Process
+
+Theories and falsifiability
+
+- We can never prove a theory "true"
+
+- Much of what we deal with is probabilistic, not deterministic
+
+- New events can always come along and create new data that will weaken or prove a theory wrong
+
+
+
+
+---
+class: left, top
+
+# The Research Process
+
+Organizing analysis
+
+- It's hard
+
+- Define the relevant actors
+
+- How do we measure phenomena of interest?
+
+- How do we structure our analysis?
+
+
+
+
+---
+class: left, top
+
+# The Research Process
+
+Actors
+
+  - States
+  - Individuals
+  - Corporations
+  - Groups
+  - Factors of production (i.e. labor/capital)
+  - Years
+  - State-Year
+  - Dyad-Year
+  
+  
+
+
+---
+class: left, top
+
+# The Research Process
+
+Actors
+
+  - We often treat actors *as if* they are unitary (even when we know they're not)
+  
+  - Assumptions and simplications are necessary (otherwise we're not building a model)
+  
+  Examples:
+    - Political Parties
+    - Voting blocs
+    - Governments
+    
+    
+
+
+---
+class: left, top
+
+# The Research Process
+
+Interests
+
+  - What do actors want?
+  
+  - How do we conceptualize interests?
+  
+  - Rationality
+
+$$X = \{X^i, X^{ii}, X^{iii}\}$$
+
+$$X^i \geq X^{ii} \geq X^{iii}$$
+
+
+
+---
+class: left, top
+
+# The Research Process
+
+Institutions
+
+- Rules that govern interactions between different actors
+
+- The "rules of the game"
+
+- Formal vs informal
+
+- Enforcement
+
+
+
+---
+class: left, top
+
+# The Research Process
+
+Generating generalizable knowledge and inferences
+
+- One observations is usually not sufficient
+
+- We can't always identify causal relationships from casual inspection
+
+- Often there are multiple causal factors
+
+- Need variation in outcomes and predictors to assess general relationships
+
+
+
+
+---
+class: left, top
+
+# The Research Process
+
+Measurement
+
+- We need some way to evaluate the relative frequency, intensity, gradations, etc., of phenomena of interest
+
+- This means we have to **define** and **measure** the things we're interested in tracking across space and time
+
+  - **Validity**: Is your measurement an appropriate proxy or operationalization of the underlying concept?
+
+  - **Reliability**: Is your measurement scheme *consistently* capturing into the underlying concept?
+
+- Even qualitative analysis require measurement schemes
+
+
+
+
+---
+class: center, middle
+
+```{r accuracy-validity}
+
+N <- 1e2
+
+circles <- data.frame(
+  x0 = rep(0, 5),
+  y0 = rep(0, 5),
+  r = seq(0.1, 1, length.out = 5)
+)
+
+data.av <- tibble(x = rnorm(N, 0, 0.1),
+                  y = rnorm(N, 0, 0.1),
+                  group = "Valid, Reliable") 
+
+data.anv <- tibble(x = rnorm(N, 0.5, 0.1),
+                  y = rnorm(N, 0.5, 0.1),
+                  group = "Not Valid, Reliable") 
+
+data.nav <- tibble(x = rnorm(N, 0, 0.25),
+                   y = rnorm(N, 0, 0.25),
+                   group = "Valid, Not Reliable") 
+
+data.nanv <- tibble(x = rnorm(N, -0.5, 0.25),
+                   y = rnorm(N, -0.6, 0.25),
+                   group = "Not Valid, Not Reliable") 
+
+
+
+plot.av <- ggplot() +
+  geom_circle(data = circles, aes(x0 = x0, y0 = y0, r = r, fill = r), alpha = 0.4, show.legend = FALSE) +
+  geom_point(data = data.av, aes(x = x, y = y), fill = "maroon", alpha = .8, size = 2, pch = 21) +
+  coord_fixed() +
+  theme_void() +
+  theme(plot.title = element_text(size = basesize * 1.5, family = "oswald", face = "bold")) +
+  scale_x_continuous(limits = c(-1.25, 1.25)) +
+  scale_y_continuous(limits = c(-1.25, 1.25)) +
+  labs(title = "Valid, Reliable")
+
+
+plot.anv <- ggplot() +
+  geom_circle(data = circles, aes(x0 = x0, y0 = y0, r = r, fill = r), alpha = 0.4, show.legend = FALSE) +
+  geom_point(data = data.anv, aes(x = x, y = y), fill = "maroon", alpha = .8, size = 2, pch = 21) +
+  coord_fixed() +
+  theme_void() +
+  theme(plot.title = element_text(size = basesize * 1.5, family = "oswald", face = "bold")) +
+  scale_x_continuous(limits = c(-1.25, 1.25)) +
+  scale_y_continuous(limits = c(-1.25, 1.25)) +
+  labs(title = "Not Valid, Reliable")
+
+plot.nav <- ggplot() +
+  geom_circle(data = circles, aes(x0 = x0, y0 = y0, r = r, fill = r), alpha = 0.4, show.legend = FALSE) +
+  geom_point(data = data.nav, aes(x = x, y = y), fill = "maroon", alpha = .8, size = 2, pch = 21) +
+  coord_fixed() +
+  theme_void() +
+  theme(plot.title = element_text(size = basesize * 1.5, family = "oswald", face = "bold")) +
+  scale_x_continuous(limits = c(-1.25, 1.25)) +
+  scale_y_continuous(limits = c(-1.25, 1.25)) +
+  labs(title = "Valid, Not Reliable")
+
+
+plot.nanv <- ggplot() +
+  geom_circle(data = circles, aes(x0 = x0, y0 = y0, r = r, fill = r), alpha = 0.4, show.legend = FALSE) +
+  geom_point(data = data.nanv, aes(x = x, y = y), fill = "maroon", alpha = .8, size = 2, pch = 21) +
+  coord_fixed() +
+  theme_void() +
+  theme(plot.title = element_text(size = basesize * 1.5, family = "oswald", face = "bold")) +
+  scale_x_continuous(limits = c(-1.25, 1.25)) +
+  scale_y_continuous(limits = c(-1.25, 1.25)) +
+  labs(title = "Not Valid, Not Reliable")
+
+
+
+plot.com <- wrap_plots(plot.av, plot.nav, plot.anv, plot.nanv)
+
+plot.com
+
+
+```
+
+
+
+---
+class: left, top
+
+# The Research Process
+
+Analyses and Evaluating Evidence
+
+- Lots of different ways of doing this
+
+- Case studies
+
+- Observational studies
+
+- Experimental research
+
+
+
+---
+class: left, top
+
+# The Research Process
+
+Case studies
+
+- Rely on a small number of units (individuals, countries, groups, etc.)
+
+- Collect more in-depth information about the units
+
+- Try to identify causal effects and relationships using this information
+
+
+
+
+
+---
+class: left, top
+
+# The Research Process
+
+Observational studies
+
+- Can take lots of different forms
+
+- Often involves collecting lots of measurements of different variables for lots of different units
+
+- Predictor variables are not under the control of the reseracher
+
+- Attempt to design the study in such a way as to maximize validity, reduce, biases, etc.
+
+
+
+
+
+
+---
+class: center, middle
+
+```{r, dpi = 400, echo = FALSE, warning = FALSE}
+library(dagitty)
+library(ggdag)
+dag.df <- dagitty(' dag{
+                  "x" [exposure]
+                  "y" [outcome]
+                  
+                  "x" [pos="1,1"]
+                  "y" [pos="2,1"]
+                  "z" [pos="1.5,2"]
+                  
+                  "x" -> "y"
+                  "y" <- "z" -> "x"
+}') %>% 
+  tidy_dagitty()
+
+
+
+ggplot(dag.df %>% filter(name != "z"), aes(x = x, xend = xend, y = y, yend = yend)) +
+  geom_dag_point(aes(color = name), show.legend = FALSE, size = 20) +
+  geom_dag_edges() +  
+  geom_text(aes(label = name), color = "white", size = basesize, parse = TRUE) +
+  theme_dag() +
+  viridis::scale_color_viridis(discrete = TRUE, begin = 0.1, end = 0.9) 
+
+```
+
+---
+class: center, middle
+
+```{r}
+library(dagitty)
+library(ggdag)
+
+dag.df <- dagitty(' dag{
+                  "x" [exposure]
+                  "y" [outcome]
+                  
+                  "x" [pos="1,1"]
+                  "y" [pos="2,1"]
+                  "z" [pos="1.5,2"]
+                  
+                  "x" -> "y"
+                  "y" <- "z" -> "x"
+}') %>% 
+  tidy_dagitty()
+
+
+
+ggplot(dag.df, aes(x = x, xend = xend, y = y, yend = yend)) +
+  geom_dag_point(aes(color = name), show.legend = FALSE, size = 20) +
+  geom_dag_edges(size = 10) +  
+  geom_text(aes(label = name), color = "white", size = basesize, parse = TRUE) +
+  theme_dag() +
+  viridis::scale_color_viridis(discrete = TRUE, begin = 0.1, end = 0.9) 
+```
+
+
+
+
+---
+class: left, top
+
+# The Research Process
+
+Experimental Studies
+
+- Researcher control all (or almost all) of the treatment assignment
+
+- The **treatment** is the predictor whose causal effect on the outcome is what we're trying to measure
+
+- Researcher controls assignment so easier to reduce biases
+
+
+
+---
+class: left, top
+
+# The Research Process
+
+Experimental vs observational
+
+- Experimental is "ideal" in lots of ways, but researchers often can't do this for a variety of reasons (e.g. ethical concerns, feasibility, etc.)
+
+- Learning how to structure good observational studies is just as important as learning how to conduct a randomized controlled trial
+
+
+
+
+---
+class: left, top
+
+# The Research Process
+
+Conclusions and assessment
+
+- Do the results match your expectations/support your hyothesis?
+
+- Substantive significance?
+
+- Statistical significance?
+
+- Have you adjusted for potentially confounding factors?
+
+- Are there multiple interpretations of the results?
+
+- Is reformulating the theory necessary?
+
+- What questions remain?
+
+- What steps should future researchers take?
