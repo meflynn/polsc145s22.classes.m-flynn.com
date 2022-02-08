@@ -131,7 +131,7 @@ class: center, middle
 
 
 ```{r, fig.align="center", out.width="60%", fig.cap="British soldiers during the Battle of the Somme, 1916. British Imperial War Museum."}
-knitr::include_graphics(here::here("../../media/somme-battle-pic.jpg"))
+knitr::include_graphics("../../../media/somme-battle-pic.jpg", error = FALSE)
 ```
 
 
