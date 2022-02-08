@@ -26,6 +26,9 @@ library(here)
 library(ghibli)
 library(viridis)
 
+xaringanExtra::use_scribble()
+xaringanExtra::use_editable(expires = 365)
+
 knitr::opts_chunk$set(comment = '', dpi = 400, fig.width = 8, fig.height = 5, warning = FALSE, echo = FALSE, message = FALSE)
 
 sysfonts::font_add_google("Oswald", family = "oswald")
@@ -131,7 +134,7 @@ class: center, middle
 
 
 ```{r, fig.align="center", out.width="60%", fig.cap="British soldiers during the Battle of the Somme, 1916. British Imperial War Museum."}
-knitr::include_graphics("../../../media/somme-battle-pic.jpg", error = FALSE)
+knitr::include_graphics("../../../media/Somme.jpg", error = FALSE)
 ```
 
 
@@ -211,6 +214,16 @@ kable(wartable, booktabs = TRUE, caption = "Four categories of war according to 
 ```
 
 
+
+
+---
+# Defining War
+
+Which wars do you think were the longest? The most severe?
+
+List: 
+
+.can-edit[]
 
 
 ---
