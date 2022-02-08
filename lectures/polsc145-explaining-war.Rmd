@@ -135,7 +135,7 @@ class: center, middle
 
 
 ```{r, fig.align="center", out.width="60%", fig.cap="British soldiers during the Battle of the Somme, 1916. British Imperial War Museum."}
-knitr::include_graphics("../../../media/somme-battle-pic.jpg", error = FALSE)
+knitr::include_graphics("https://winstonchurchill.org/wp-content/uploads/2021/05/Somme_1916-1.jpg", error = FALSE)
 ```
 
 
