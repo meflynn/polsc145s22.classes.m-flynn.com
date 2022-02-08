@@ -1,0 +1,510 @@
+---
+title: "World Politics"
+subtitle: "Collective Security"
+author: "Michael E. Flynn"
+institute: "Kansas State University"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: ["default", "lecture_theme.css"]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      ratio: 16:9
+      countIncrementalSlides: false
+      titleSlideClass: [middle, left, inverse]
+---
+  
+```{r setup, include = FALSE, echo=FALSE, warning=FALSE}
+#remotes::install_github("gadenbuie/xaringanExtra")
+
+library(ggplot2)
+library(data.table)
+library(peacesciencer)
+library(kableExtra)
+library(tidyverse)
+library(janitor)
+library(here)
+library(ghibli)
+library(ggforce)
+library(scales)
+library(xaringanExtra)
+
+knitr::opts_chunk$set(comment = '', dpi = 400, fig.width = 8, fig.height = 5, warning = FALSE, echo = FALSE, message = FALSE)
+
+sysfonts::font_add_google("Oswald", family = "oswald")
+showtext::showtext_auto()
+
+# Windows and Mac seem to process the fotn differently
+if (Sys.info()[[1]] == "Windows"){
+  
+  basesize <- 35
+  
+} else {
+  
+  basesize <-  11
+  
+}
+
+update_geom_defaults("text", list(size = 10, family = "oswald", fontface = "plain", lineheight = 0.2))
+
+
+# Regular plot theme
+theme_flynn <- function(){ 
+  
+  theme_linedraw(base_size = basesize, base_family = "oswald") %+replace% 
+    
+    theme(plot.title = element_text(face = "bold", size = basesize * 1.3, hjust = 0, margin = margin(t = 0, b = 0.2, l = 0, r = 0, unit = "cm")),
+          plot.subtitle = element_text(size = basesize, hjust = 0, margin = margin(t = 0.0, b = 0.2, unit = "cm")),
+          plot.caption = element_text(face = "italic", size = basesize * 0.6, hjust = 1, lineheight = 0.3, margin = margin(t = 0.2, unit = "cm")),
+          panel.border = element_rect(fill = NA, size = 0.2),
+          strip.background = element_rect(fill = "gray80", color = "black", size = 0.2),
+          strip.text = element_text(size = basesize, color = "black", face = "bold", margin = margin(t = 0.2, b = 0.2, l = 0.2, r = 0.2, unit = "cm")),
+          panel.background = element_rect(size = 0.2),
+          panel.grid.major = element_line(color = "gray70", size = 0.15),
+          panel.grid.minor = element_line(color = "gray90", size = 0.1),
+          axis.title = element_text(face = "bold", size = basesize),
+          axis.title.y = element_text(angle = 90, margin = margin(t = 0, r = 0.2, b = 0, l = 0, unit = "cm")),
+          axis.title.x = element_text(margin = margin(t = 0.2, r = 0, b = 0, l = 0, unit = "cm")),
+          axis.ticks = element_line(size = 0.1),
+          axis.ticks.length = unit(0.1, "cm"),
+          legend.title = element_text(size = basesize, face = "bold", hjust = 0, margin = margin(t = 0, b = -0.3, l = 0, r = 0, unit = "cm")),
+          legend.text = element_text(size = basesize, hjust = 0, margin = margin(t = 0, b = 0, l = -0.5, r = 0, unit = "cm")),
+          legend.box.spacing =  unit(0.2, "cm"),
+          plot.margin = margin(0.3, 0.3, 0.3, 0.3, unit = "cm"))
+}
+
+#install.packages("RefManageR")
+
+#library(RefManageR)
+#library(bibtex)
+#BibOptions(check.entries = FALSE,
+#           bib.style = "authoryear", # Bibliography style
+#           max.names = 3, # Max author names displayed in bibliography
+#           sorting = "nyt", #Name, year, title sorting
+#           cite.style = "authoryear", # citation style
+#           style = "markdown",
+#           hyperlink = FALSE,
+#           dashed = FALSE)
+
+#myBib <- ReadBib(here::here("../../classrefs.bib", check = FALSE))
+
+```
+
+# Lecture Overview
+
+1. What is collective security?
+
+2. Historical development
+
+3. Current status
+
+4. Military interventions
+
+
+
+---
+
+# Key Questions and Goals
+
+1. What is collective security?
+
+2. How does it differ from collective defense and alliances?
+
+3. Who contributes and why?
+
+4. When and where are interventions effective?
+
+5. What are the consequences of peacekeeping?
+
+
+
+---
+class: inverse, center, middle
+
+
+# Defining Collective Security
+
+
+
+
+
+---
+# Defining Collective Security
+
+What are collective security institutions?
+
+> Broad-based institutions that promote peace and security among their members (FLS)
+
+Key points
+
+- Broad-based
+
+- Institutions
+
+- **Among** member states
+
+
+
+---
+# Defining Collective Security
+
+
+What are they designed to do?
+
+- Promote peaceful resolution of disputes between member states
+
+- Provide a structure and forum for routine communication and negotiation between states
+
+- Deter and/or punish acts of aggression
+
+
+
+
+---
+class: center, middle
+
+```{r}
+knitr::include_graphics("../../../media/collective-security-1.png", error = FALSE)
+```
+
+
+---
+class: center, middle
+
+```{r}
+knitr::include_graphics("../../../media/collective-security-2.png", error = FALSE)
+```
+
+
+---
+class: center, middle
+
+```{r}
+knitr::include_graphics("../../../media/collective-security-3.png", error = FALSE)
+```
+
+
+---
+class: center, middle
+
+```{r}
+knitr::include_graphics("../../../media/collective-security-4.png", error = FALSE)
+```
+
+
+
+
+---
+class: center, middle, inverse
+
+# Historical Development
+
+
+
+---
+# Historical Development
+
+.pull-left[
+## 20th Century Origins
+
+- Woodrow Wilson and World War I
+
+- Balance of power and alliance politics of the past
+
+- League of Nations (1919-1946)
+]
+
+
+.pull-right[
+```{r, out.width="60%", fig.align="center"}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/f/f2/Thomas_Woodrow_Wilson%2C_Harris_%26_Ewing_bw_photo_portrait%2C_1919_%28cropped%29.jpg")
+```
+]
+
+
+
+---
+# Historical Development
+
+.pull-left[
+## 20th Century Origins
+
+- Franklin D. Roosevelt and World War II
+
+- Four Policemen
+
+- United Nations (1946-Present)
+]
+
+
+.pull-right[
+```{r, out.width="60%", fig.align="center"}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/FDR_1944_Color_Portrait.jpg/1200px-FDR_1944_Color_Portrait.jpg")
+```
+]
+
+
+
+
+---
+class: center, middle
+
+```{r}
+
+system.data <- fread(here::here("../../../Data Files/COW Data/System/system2016.csv")) %>% 
+  group_by(year) %>% 
+  dplyr::summarise(countries = n_distinct(ccode))
+  system.data$Group <- "All States"
+
+un.mems <- foreign::read.dta(here::here("../../../Projects/Foreign Aid and Spatial Conflict/Data/Raw Data/Idealpointsdyadicdistance_1.dta")) %>% 
+  group_by(year) %>% 
+  dplyr::summarise(countries = n_distinct(ccode1))
+  un.mems$Group <- "UN Member States"
+  
+combined <- rbind(system.data, un.mems) %>% 
+  filter(year >= 1950 & year <= 2012)
+
+ggplot(data = combined, aes(x = year, y = countries, group = Group, fill = Group)) +
+  geom_area(position = "identity", alpha = .8) +
+  theme_flynn() +
+  scale_fill_brewer(palette = "Set1") +
+  labs(x = "Year",
+       y = "Countries",
+       title = "International system size and UN member states, 1950-2012",
+       subtitle = "UN is designed to be all-inclusive",
+       caption = "UN member data obtained from: https://blogs.commons.georgetown.edu/erikvoeten/data/ \n and international system data from: www.correlatesofwar.org") +
+  scale_x_continuous(breaks = seq(1950, 2012, 10))
+
+
+```
+
+
+
+---
+class: inverse, middle, center
+
+# Current Status
+
+
+
+---
+# Current Status
+
+## Purpose has changed over time
+
+- Emphasis on interstate conflict remains, but...
+
+- Conceptualization of security has broadened
+
+  - Conflict within states
+  
+  - Human rights issues
+  
+  - Environmental and health issues
+  
+  
+  
+  
+---
+# Current Status
+
+## UN activities include
+
+- Peacekeeping missions
+- International police missions
+- Monitoring chemical and nuclear weapons
+- Conflict mediation
+- Humanitarian interventions
+- Monitoring election integrity
+- Monitoring and responding to global health crises
+
+
+
+
+---
+# Current Status
+
+## UN Organization
+
+- Security Council
+  - Five permanent members (US, UK, France, Russia, China)
+  - 10 temporary members
+  - Decisions require unanimous consent of permanent members and majority of temporary members
+- General Assembly
+  - Consists of all UN member states
+  - Representatives routinely meet to discuss global issues
+- Subsidiary agencies
+  - Specialize in monitoring particular issues
+  - Collect and disseminate information from/to member countries
+  - Conduct inspections, aid in enforcement
+  - Examples include World Health Organization, International Atomic Energy Agency, etc.
+  
+  
+
+
+---
+# Current Status
+
+## Types of Interventions
+
+- Peace Enforcement
+
+- Peacekeeping
+
+- Humanitarian
+
+
+
+
+
+---
+class: center, middle, inverse
+
+# Interventions
+
+
+
+
+---
+# Interventions
+
+## Why does the UN intervene?
+
+- Conflicts between states
+
+- Conflicts within states
+
+- Conditioning factors
+
+  - Do major powers have strong interests?
+  - Do regional powers have strong interests?
+  - How big and/or complex is the conflict?
+  
+  
+---
+class: center, middle
+
+```{r, out.width="60%"}
+knitr::include_graphics("../../../media/Worpol3_Art_JPEG/ch05/WORPOL3_FIG05.03.jpg", error = FALSE)
+```
+
+
+
+
+---
+class: center, middle
+
+```{r}
+pko <- fread(here("../../../Data Files/peacekeeping.csv")) %>% 
+  mutate(Date = as.Date(Date, "%m/%d/%y"),
+         Group = ifelse(`Contributor - P5, G4 or A3` == "P5", "P5", "Other")) %>% 
+  group_by(Date, Group) %>% 
+  dplyr::summarise(total = sum(as.numeric(`Troop Contributions`), na.rm = TRUE))
+
+#ghibli::ghibli_palettes$TotoroMedium
+
+ggplot(pko, aes(x = Date, y = total, group = Group)) +
+  geom_area(fill = "#AD8152FF") +
+  theme_flynn() +
+  theme(axis.text.x.bottom = element_text(angle = 90, margin = margin(t = 0.25, unit = "cm"))) +
+  scale_x_date(breaks = seq(as.Date("1990-11-30"), as.Date("2015-08-31"), "1 year")) +
+  scale_y_continuous(labels = scales::comma_format()) +
+  viridis::scale_fill_viridis(option = "magma", begin = 0.3, end = 0.9, discrete = TRUE) +
+  labs(x = "Date",
+       y = "Count",
+       title = "Total UN peacekeeping contributions, 1990-2015",
+       subtitle = "The end of the Cold War saw a significant increase in peacekeeping operations")
+```
+
+
+
+---
+class: center, middle
+
+```{r}
+#ghibli::ghibli_palettes$TotoroMedium
+xaringanExtra::use_scribble()
+
+ggplot(pko, aes(x = Date, y = total, fill = Group)) +
+  geom_area(color = "black", size = 0.2) +
+  theme_flynn() +
+  theme(axis.text.x.bottom = element_text(angle = 90, margin = margin(t = 0.25, unit = "cm"))) +
+  scale_x_date(breaks = seq(as.Date("1990-11-30"), as.Date("2015-08-31"), "1 year")) +
+  scale_y_continuous(labels = scales::comma_format()) +
+  viridis::scale_fill_viridis(option = "magma", begin = 0.3, end = 0.9, discrete = TRUE) +
+  labs(x = "Date",
+       y = "Count",
+       title = "Total UN peacekeeping contributions, 1990-2015",
+       subtitle = "The end of the Cold War saw a significant increase in peacekeeping operations")
+```
+
+
+
+
+
+---
+class: left, top
+```{r xaringan-editable, echo=FALSE, out.width="80%"}
+xaringanExtra::use_editable(expires = 1)
+```
+# Interventions
+
+Who do you think are the top contributors to peacekeeping missions?
+
+## Countries 
+
+.can-edit[
+
+]
+
+
+
+
+
+
+---
+class: center, middle
+
+```{r}
+xaringanExtra::use_scribble()
+
+pko.table <- fread(here("../../../Data Files/peacekeeping.csv")) %>% 
+  mutate(Date = as.Date(Date, "%m/%d/%y"),
+         Group = ifelse(`Contributor - P5, G4 or A3` == "P5", "P5", "Non-P5")) %>% 
+  group_by(Contributor, Group) %>% 
+  dplyr::summarise(`Total Contributions` = sum(`Total Contributions`, na.rm = TRUE)) %>%
+  arrange(-`Total Contributions`) %>% 
+  ungroup() %>%  # have to ungroup to get slice to work
+  dplyr::slice(1:10) %>%
+  mutate(`Total Contributions` = format(`Total Contributions`, big.mark = ",")) %>% 
+  kable(caption = "Sum of troop-month contributions by sending state", align = "lcr", fontsize = 10) %>% 
+  kableExtra::kable_styling(bootstrap_options = "striped", full_width = TRUE) %>% 
+  kableExtra::row_spec(0 , color = "white", background = "#512888")
+  
+pko.table
+```
+
+
+---
+# Current Status
+
+.pull-left[
+## Is peacekeeping effective?
+
+It depends
+
+- Peace enforcement is less effective
+
+- Peacekeeping has a higher success rate
+
+- Selection effects?
+
+- Negative externalities
+]
+
+.pull-right[
+```{r, out.width="120%", fig.align="center", fig.cap="Rosine Mengue, 18, holding her 1-year-old son, says she was 16 when a Moroccan peacekeeper coerced her into sex for money, giving her a total of $8 for two visits and making her pregnant. https://www.washingtonpost.com/sf/world/2016/02/27/peacekeepers/"}
+knitr::include_graphics("https://www.washingtonpost.com/sf/world/wp-content/uploads/sites/15/2016/02/peacekeepers07v3.jpg")
+```
+]

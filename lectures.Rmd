@@ -12,3 +12,5 @@ Lectures will be archived here *after* they are given.
 1. [Historical Background](lectures/polsc145-historical-background.html)
 
 2. [Social Science Methods](lectures/polsc145-social-science.html)
+
+3. [Explaining War](lectures/polsc145-explaining-war.html)

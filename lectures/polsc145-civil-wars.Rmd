@@ -1,0 +1,828 @@
+---
+title: "World Politics"
+subtitle: "Civil Wars"
+author: "Michael E. Flynn"
+institute: "Kansas State University"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: ["default", "lecture_theme.css"]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      ratio: 16:9
+      countIncrementalSlides: false
+      titleSlideClass: [middle, left, inverse]
+---
+  
+```{r setup, include = FALSE, echo=FALSE, warning=FALSE}
+#remotes::install_github("gadenbuie/xaringanExtra")
+
+library(ggplot2)
+library(data.table)
+library(peacesciencer)
+library(kableExtra)
+library(tidyverse)
+library(janitor)
+library(here)
+library(ghibli)
+library(ggforce)
+library(scales)
+library(rmapshaper)
+library(sf)
+library(sp)
+library(tmap)
+library(raster)
+library(broom)
+library(xaringanExtra)
+
+
+xaringanExtra::use_scribble()
+xaringanExtra::use_editable(expires = 365)
+
+knitr::opts_chunk$set(comment = '', dpi = 400, fig.width = 8, fig.height = 5, warning = FALSE, echo = FALSE, message = FALSE)
+
+sysfonts::font_add_google("Oswald", family = "oswald")
+showtext::showtext_auto()
+
+# Windows and Mac seem to process the fotn differently
+if (Sys.info()[[1]] == "Windows"){
+  
+  basesize <- 35
+  
+} else {
+  
+  basesize <-  11
+  
+}
+
+update_geom_defaults("text", list(size = 10, family = "oswald", fontface = "plain", lineheight = 0.2))
+
+
+# Regular plot theme
+theme_flynn <- function(){ 
+  
+  theme_linedraw(base_size = basesize, base_family = "oswald") %+replace% 
+    
+    theme(plot.title = element_text(face = "bold", size = basesize * 1.3, hjust = 0, margin = margin(t = 0, b = 0.2, l = 0, r = 0, unit = "cm")),
+          plot.subtitle = element_text(size = basesize, hjust = 0, margin = margin(t = 0.0, b = 0.2, unit = "cm")),
+          plot.caption = element_text(face = "italic", size = basesize * 0.6, hjust = 1, lineheight = 0.3, margin = margin(t = 0.2, unit = "cm")),
+          panel.border = element_rect(fill = NA, size = 0.2),
+          strip.background = element_rect(fill = "gray80", color = "black", size = 0.2),
+          strip.text = element_text(size = basesize, color = "black", face = "bold", margin = margin(t = 0.2, b = 0.2, l = 0.2, r = 0.2, unit = "cm")),
+          panel.background = element_rect(size = 0.2),
+          panel.grid.major = element_line(color = "gray70", size = 0.15),
+          panel.grid.minor = element_line(color = "gray90", size = 0.1),
+          axis.title = element_text(face = "bold", size = basesize),
+          axis.title.y = element_text(angle = 90, margin = margin(t = 0, r = 0.2, b = 0, l = 0, unit = "cm")),
+          axis.title.x = element_text(margin = margin(t = 0.2, r = 0, b = 0, l = 0, unit = "cm")),
+          axis.ticks = element_line(size = 0.1),
+          axis.ticks.length = unit(0.1, "cm"),
+          legend.title = element_text(size = basesize, face = "bold", hjust = 0, margin = margin(t = 0, b = -0.3, l = 0, r = 0, unit = "cm")),
+          legend.text = element_text(size = basesize, hjust = 0, margin = margin(t = 0, b = 0, l = -0.5, r = 0, unit = "cm")),
+          legend.box.spacing =  unit(0.2, "cm"),
+          plot.margin = margin(0.3, 0.3, 0.3, 0.3, unit = "cm"))
+}
+
+#install.packages("RefManageR")
+
+#library(RefManageR)
+#library(bibtex)
+#BibOptions(check.entries = FALSE,
+#           bib.style = "authoryear", # Bibliography style
+#           max.names = 3, # Max author names displayed in bibliography
+#           sorting = "nyt", #Name, year, title sorting
+#           cite.style = "authoryear", # citation style
+#           style = "markdown",
+#           hyperlink = FALSE,
+#           dashed = FALSE)
+
+#myBib <- ReadBib(here::here("../../classrefs.bib", check = FALSE))
+
+```
+
+# Lecture Overview
+
+1. Defining civil wars (revisisted)
+
+2. Why do we see civil wars?
+
+3. Bargaining problems
+
+4. Strategies
+
+
+
+---
+# Key Questions and Goals
+
+1. Be able to recognize some of the issues and challenges that make civil wars different from inter-state wars
+
+2. What factors motivate individuals to rebel against their governments?
+
+3. How do geographic and spatial factors affect mobilization, onset, and duration of civil wars?
+
+
+
+
+---
+class: inverse, middle, center
+
+# Defining Civil Wars
+
+
+
+
+---
+# Defining Civil Wars
+
+> **Civil War**: A war in which the main participants are within the same state, such as the government and a rebel group.
+
+You can also call these intrastate wars.
+
+
+
+
+---
+class: center, middle
+
+```{r wars-combined-disaggregated}
+war_interstate <- fread(here("../../../Data Files/COW Data/Inter-StateWarData_v4.0.csv"))
+war_intrastate <- fread(here("../../../Data Files/COW Data/Intra-StateWarData_v4.1.csv"))
+war_extrastate <- fread(here("../../../Data Files/COW Data/Extra-StateWarData_v4.0.csv"))
+war_nonstate <- fread(here("../../../Data Files/COW Data/Non-StateWarData_v4.0.csv"))
+
+war_interstate <- war_interstate %>% 
+  distinct(WarNum, .keep_all = TRUE) %>% 
+  rowwise() %>% 
+  mutate(year = list(seq(StartYear1, EndYear1))) %>%
+  ungroup() %>% 
+  unnest() %>% 
+  arrange(WarNum, year) %>% 
+  dplyr::select(WarNum, year) %>% 
+  distinct(WarNum, year) %>% 
+  group_by(year) %>% 
+  summarise(numinterwars = n()) -> numinterwars
+
+war_intrastate <- war_intrastate %>% 
+  distinct(WarNum, .keep_all = TRUE) %>% 
+  rowwise() %>% 
+  filter(!is.na(EndYear1)) %>% 
+  mutate(year = list(seq(StartYear1, EndYear1))) %>% 
+  ungroup() %>% 
+  unnest() %>% 
+  arrange(WarNum, year) %>% 
+  dplyr::select(WarNum, year) %>% 
+  distinct(WarNum, year) %>% 
+  group_by(year) %>% 
+  summarize(numintrawars = n()) -> numintrawars 
+
+war_extrastate <- war_extrastate %>% 
+  rowwise() %>% 
+  filter(!is.na(EndYear1)) %>% 
+  filter(EndYear1 >= 1816) %>% 
+  mutate(year = list(seq(StartYear1, EndYear1))) %>% 
+  ungroup() %>% 
+  unnest() %>% 
+  arrange(WarNum, year) %>% 
+  dplyr::select(WarNum, year) %>% 
+  distinct(WarNum, year) %>% 
+  group_by(year) %>% 
+  summarise(numextrawars = n()) -> numextrawars
+
+war_nonstate <- war_nonstate %>% 
+  rowwise() %>% 
+  filter(!is.na(EndYear)) %>% 
+  mutate(year = list(seq(StartYear, EndYear))) %>% 
+  ungroup() %>% 
+  unnest() %>% 
+  arrange(WarNum, year) %>% 
+  dplyr::select(WarNum, year) %>% 
+  distinct(WarNum, year) %>% 
+  group_by(year) %>% 
+  summarize(numnonwars = n()) -> numnonwars
+
+combined <- tibble(year = seq(1816,2007)) %>% 
+  left_join(., numinterwars) %>% 
+  left_join(., numintrawars) %>%
+  left_join(., numextrawars) %>% 
+  left_join(., numnonwars) %>% 
+  mutate_all(funs(replace(., is.na(.), 0))) %>% 
+  mutate(`Inter-State` = numinterwars,
+         `Intra-State` = numintrawars,
+         `Extra-State` = numextrawars,
+         `Non-State` = numnonwars) %>% 
+  gather(Category, Value, `Inter-State`:`Non-State`) %>% 
+  mutate(Category = forcats::fct_relevel(Category, "Inter-State", "Intra-State", "Extra-State", "Non-State"),
+         total = numinterwars+numintrawars+numextrawars+numnonwars) 
+
+combined_annual <- combined %>% 
+  group_by(year) %>% 
+  dplyr::summarise(., total = sum(Value)) %>% 
+  arrange(., year)
+
+
+ggplot(data = combined, aes(x = year, y = Value, fill = Category)) +
+  geom_area(alpha = .8, colour = "black", size = .1, alpha = .8) +
+  theme_flynn() +
+  scale_x_continuous(breaks = seq(1815,2010,15)) +
+  scale_y_continuous(breaks = seq(0,30,5), limits = c(0,30)) +
+  viridis::scale_fill_viridis(option = "magma", discrete = TRUE) +
+  labs(caption = "Data obtained from Correlates of War Data: http://www.correlatesofwar.org/data-sets/COW-war",
+       x = "Year", 
+       y = "", 
+       title = "Inter-state wars are very prominent",
+       subtitle = "But what can we learn from the changing frequency of different types of war over time?") 
+
+
+```
+
+
+---
+class: center, middle
+
+```{r wars-combined-disaggregated-percent}
+ggplot(data = combined, aes(x = year, y = Value, fill = Category)) +
+  geom_area(position = "fill", colour = "black", size = .1, alpha = .8) +
+  scale_x_continuous(breaks = seq(1815,2010,15), expand = c(0,0)) +
+  scale_y_continuous(labels = scales::percent, expand = c(0,0)) +
+  viridis::scale_fill_viridis(option = "magma", discrete = TRUE) +
+  theme_flynn() +
+  labs(caption = "Data obtained from Correlates of War Data: http://www.correlatesofwar.org/data-sets/COW-war",
+       x = "Year", 
+       y = "", 
+       title = "Inter-state wars are very prominent",
+       subtitle = "But what can we learn from the changing frequency of different types of war over time?") 
+  
+```
+
+
+
+
+---
+# Defining Civil War
+
+.pull-left[
+The United States' Civil War
+
+- 1861-1865
+
+- Issues at stake
+
+  - Territory (Secession)
+  
+  - Government control (Secession)
+  
+  - Policy (Slavery)
+]
+  
+.pull-right[
+```{r, fig.cap="CSA President Jefferson David and United States President Abraham Lincoln."}
+knitr::include_graphics("https://georgiainfo.galileo.usg.edu/gastudiesimages/Jefferson%20Davis-Abraham%20Lincoln.jpg", error = FALSE)
+```
+]
+
+
+
+
+---
+# Defining Civil War
+
+.pull-left[
+Multiple Iraqi-Kurd Wars
+
+- 1961-1990s
+
+- Issues at stake
+
+  - Policy
+  
+  - Greater regional autonomy
+  
+  - Budget distribution
+  
+  - Oil revenues
+]
+
+
+.pull-right[
+```{r, fig.cap="A group of female guerrillas in the Qandil mountains, Kurdistan, 2013."}
+
+knitr::include_graphics("https://s4.reutersmedia.net/resources/r/?m=02&d=20190709&t=2&i=1406216790&w=780&fh=&fw=&ll=&pl=&sq=&r=2019-07-09T183148Z_12326_MRPRC1145721B60_RTRMADP_0_IRAQ-IRAN-PESHMERGA-FEMALES", error = FALSE)
+```
+]
+
+
+
+---
+# Defining Civil War
+
+.pull-left[
+Colombian Civil War
+
+- 1989-2016(Maybe?)
+
+- Issues at stake
+
+  - Policy
+  
+  - Corruption
+  
+  - Economic power and opportunity
+  
+  - Political representation and power
+  
+  - Drug trafficking
+]
+
+
+.pull-right[
+```{r, fig.cap="A group of female FARC fighers in Colombia."}
+
+knitr::include_graphics("https://ichef.bbci.co.uk/news/976/cpsprodpb/473E/production/_87183281_87173538.jpg", error = FALSE)
+```
+]
+
+
+
+---
+# Defining Civil War
+
+.pull-left[
+Republic/Empire Civil War
+
+- A long time ago
+
+- Issues at stake
+
+  - Corruption
+  
+  - Control of central government
+  
+  - Religion
+  
+  - Economic power and opportunity
+  
+  - Political representation and power
+  
+  - Drug trafficking
+]
+
+
+.pull-right[
+```{r, fig.cap="A group of female FARC fighers in Colombia."}
+
+knitr::include_graphics("https://lumiere-a.akamaihd.net/v1/images/hb_disneyplus_skywalkersaga_mobile_19267_e964ed2c.jpeg?region=0,0,640,400", error = FALSE)
+```
+]
+
+
+
+
+---
+class: center, middle, inverse
+
+# Why Civil War?
+
+
+
+---
+# Why Civil War?
+
+## Motivations
+
+- Greed
+- Grievance
+
+--
+
+## Conflict aims and types
+
+- Policy
+- Government control
+- Territory
+
+
+
+---
+# Why Civil War?
+
+## Policy
+
+- Rebel groups seek to change status quo in some policy area
+
+- Distribution of economic resources
+
+- Political access, opportunities, or representation
+
+- State repression
+
+
+
+---
+# Why Civil War?
+
+## Control of Government
+
+- Rebel groups seek to take control of central government
+
+- Post-colonial states
+
+- Resource-rich states
+
+- Ethnic divides may coincide with these sorts of conflict
+
+
+
+---
+# Why Civil War?
+
+## Territory
+
+- Rebel group striving to break their region/territory off from the main state
+
+  - Secession: Form an independent state
+  
+  - Irredentist: Break away to join another territory/state
+  
+- Ethnic or religious divides
+
+- Natural resources
+
+
+
+
+---
+class: center, middle
+
+```{r, fig.cap="Sudan and South Sudan."}
+
+knitr::include_graphics("../../../media/South Sudan Oil Fields.gif", error = FALSE)
+```
+
+
+
+
+---
+class: center, middle, inverse
+
+# Organization and Mobilization
+
+
+
+
+---
+# Organization and Mobilization
+
+## Why do people fight? 
+
+- Collective action problem
+
+  - Why participate?
+  - War is dangerous, so why not enjoy benefits without suffering risks?
+
+- So what factors facilitate and/or incentives rebellion?
+
+  - Individual-level
+  - Group-level
+  - State-level
+  - International-level
+
+
+
+
+
+
+---
+# Organization and Mobilization
+
+Individual-level factors
+
+- Ideology
+
+- Religious beliefs
+
+- Policy salience
+
+- Risk aversion
+
+- Economic interests/opportunism
+
+- Network connections
+
+
+
+
+
+---
+# Organization and Mobilization
+
+Group-level factors
+
+- Social networks
+
+- Ideology
+
+- Private payments
+
+
+
+
+---
+# Organization and Mobilization
+
+State-level factors
+
+- Wealth and development
+
+  - Grievances
+  - Greed
+  - State capacity
+
+- Regime type
+
+  - Political opportunities
+  - Mechanisms for resolving grievances
+
+- Geography
+
+  - Opportunities to fight
+  - Can shape locus of conflict
+  - Resources and points of extraction
+
+
+
+---
+class: center, middle
+
+```{r}
+
+x <- seq(-10, 10, length.out = 100)
+y = dnorm(x, mean = 0, sd = 2)
+
+data <- tibble(x = x, 
+               y = y)
+
+ggplot(data, aes(x = x, y = y)) +
+  geom_area(fill = "darkgreen") +
+  theme_flynn() +
+  theme(axis.text.y = element_blank()) +
+  labs(x = "Polity Score",
+       y = "Pr(Civil War)")
+
+```
+
+
+---
+# Organization and Mobilization
+
+International/transnational-level factors
+
+- External support?
+
+- Cross-border sanctuaries?
+
+- Opportunities for external intervention?
+
+
+
+
+---
+# Organization and Mobilization
+
+.pull-left[
+Example: Afghanistan
+
+- Individual and group-level grievances against central government and US
+
+- Organizational and ideological cohesion helps mobilization
+
+- Territory/geography make US coalition efforts to police and monitor difficult
+
+- Poppy trade helps finance insurgency 
+
+- Geography provides safe havens for militants
+]
+
+.pull-right[
+```{r, out.width="100%", fig.cap="A US soldier stands in a field of poppies in Afghanistan."}
+knitr::include_graphics("../../../media/Poppies.jpg", error = FALSE)
+```
+]
+
+
+
+
+---
+class: center, middle
+
+```{r afghanistan fatalities}
+
+afghan_fatality_wide <- fread(here::here("../../../Data Files/US Afghanistan Deaths.csv"))
+
+afghan_fatality_long <- gather(afghan_fatality_wide, month, deaths, -year) %>% 
+  group_by(year) %>% 
+  mutate(month = as.numeric(str_extract(month, "[:digit:]{1,2}")),
+         date = paste(year, month, 1, sep = "-"),
+         date = as.Date(date, format = "%Y-%m-%d"),
+         `Season` = as.factor(ifelse(month >= 11 | month <= 4, "Growing", "Fighting"))) 
+
+
+
+ggplot(data = afghan_fatality_long, aes(x = date)) +
+  geom_bar(stat = "identity", aes(y = deaths, group = `Season`, fill = `Season`)) +
+  theme_flynn() +
+  scale_x_date(breaks = seq(as.Date("2001-10-1"), as.Date("2016-12-1"), by = "3 years"), labels = date_format("%B %Y")) +
+  scale_y_continuous(breaks = seq(0,125,20)) +
+  viridis::scale_fill_viridis(option = "magma", discrete = TRUE, begin = 0.1, end = 0.8, direction = -1) +
+  labs(title = "US military fatalities in Afghanistan by month, 2001-2014", 
+       subtitle = "Casualties track the poppy growing cycle fairly closely",
+       x = "",
+       y = "Count",
+       caption = "Casualty data obtained from http://icasualties.org/OEF/ByMonth.aspx.") 
+
+```
+
+
+
+---
+class: center, middle
+
+```{r, warning=FALSE, message=FALSE}
+
+
+# Fatality Data
+fatalities <- fread(here::here("../../../Data Files/icasualties/afghan-fatalities-region.csv")) %>% 
+  arrange(id)
+fatalities$id <- c("Badghis", "Baghlan", "Balkh", "Bamyan", "Farah", 
+                   "Faryab", "Ghazni", "Ghor", "Hilmand", "Hirat", 
+                   "Jawzjan", "Kabul", "Kandahar", "Kapisa", "Khost", 
+                   "Kunar", "Kunduz", "Laghman", "Logar", "Nangarhar", 
+                   "Nimroz", "Nuristan", "Uruzgan", "Paktya", "Paktika", 
+                   "Panjshir", "Parwan", "Samangan", "Takhar", "Wardak", 
+                   "Zabul")
+
+
+# This works. Figuring out how to transition to map is different story. 
+afghan <- getData("GADM", country = "AFG", level = 1) %>% 
+  sf::st_as_sf() %>% 
+  group_by(NAME_1) %>% 
+  mutate(centroid = sf::st_centroid(geometry)) %>% 
+  left_join(fatalities, by = c("NAME_1" = "id")) %>% 
+  mutate(`Fatalities` = ifelse(is.na(fatalities), 0, fatalities))
+
+pakistan <- getData("GADM", country = "PAK", level = 0) %>% 
+  sf::st_as_sf()
+iran <- getData("GADM", country = "IRN", level = 0) %>% 
+  sf::st_as_sf()
+tajikistan <- getData("GADM", country = "TJK", level = 0) %>% 
+  sf::st_as_sf()
+uzbekistan <- getData("GADM", country = "UZB", level = 0) %>% 
+  sf::st_as_sf()
+turkmenistan <- getData("GADM", country = "TKM", level = 0) %>% 
+  sf::st_as_sf()
+
+
+
+
+# Getting the right group aes identifyer is REALLY important here.
+# It prevents the weird lines from appearing that connect random points. 
+ggplot() +
+  geom_sf(data = afghan, aes(group = NAME_1, fill = `Fatalities`)) +
+  geom_sf(data = pakistan, fill = "gray90", color = "white", size = 0.2) +
+  geom_sf(data = iran, fill = "gray90", color = "white", size = 0.2) +
+  geom_sf(data = tajikistan, fill = "gray90", color = "white", size = 0.2) +
+  geom_sf(data = uzbekistan, fill = "gray90", color = "white", size = 0.2) +
+  geom_sf(data = turkmenistan, fill = "gray90", color = "white", size = 0.2) +
+  geom_sf_label(data = afghan, aes(label = NAME_1), size = basesize * 0.2) +
+  coord_sf(xlim = c(59, 75.5), ylim = c(28, 39)) +
+  viridis::scale_fill_viridis() +
+  theme_void() +
+  theme(plot.title = element_text(family = "oswald", face = "bold", size = basesize * 1.3),
+        plot.caption = element_text(family = "oswald", face = "italic", size = basesize * 0.9),
+        legend.title = element_text(size = basesize *1.2, margin = margin(b = -0.5, unit = "cm")),
+        text = element_text(family = "oswald"),
+        legend.text = element_text(size = basesize, margin = margin(l = -0.5, unit = "cm"))) +
+  labs(title = "Coalition fatalities by province, 2001-2011",
+       caption = "Data obtained from http://icasualties.org/OEF/ByProvince.aspx") 
+```
+
+
+
+
+---
+class: center, middle
+
+```{r}
+
+terrain <- getData("alt", country = "Afghanistan", path = here()) 
+
+terrain.df <- as.data.frame(rasterToPoints(terrain))
+
+ggplot(terrain.df) +
+  geom_tile(aes(x = x, y= y, fill = AFG_msk_alt)) +
+  theme_void() +
+  theme(plot.title = element_text(size = basesize * 1.5, family = "oswald"),
+        text = element_text(size = basesize, family = "oswald"),
+        legend.text = element_text(margin = margin(l = -0.5, unit = "cm")),
+        legend.title = element_text(margin = margin(b = -0.5, unit = "cm"))) +
+  viridis::scale_fill_viridis(option = "magma") +
+  #scale_fill_gradient(low = "tan", high = "brown3") +
+  labs(title = "Topography of Afghanistan",
+       fill = "Altitude")
+
+```
+
+
+
+---
+class: inverse, center, middle
+
+# Bargaining Problems
+
+
+
+
+---
+# Bargaining Problems
+
+## Bargaining in Civil Wars
+
+Basic problems resemble those in interstate wars
+
+Sources of bargaining failure
+
+- Private/incomplete information
+
+- Commitment problems
+
+- Issue indivisibility
+
+Civil wars have features that can exacerbate these issues
+
+
+
+
+---
+# Bargaining Problems
+
+Civil Wars often characterized by power asymmetries
+
+Incentivizes insurgencies over traditional maneuver battle
+
+- Small units
+
+- Often blend in with civilian population
+
+- Lightly armed
+
+- Harassment
+
+- Hit and run attacks
+
+- Terrorism
+
+
+---
+# Bargaining Problems
+
+.pull-left[
+The West Side Boys
+
+- Rebel group in Sierra Leone
+
+- Splinter group of the Armed Forces Revolutionary Council (AFRC)
+
+- Goals: Drinking, drugs, banditry, rape, general brutality
+]
+
+.pull-right[
+```{r, out.width="100%"}
+knitr::include_graphics("../../../media/West Side Boys.jpg", error = FALSE)
+```
+]
+
+
+
+---
+# Bargaining Problems
+
+Strategies
+
+- Governments frequently have a hard time fighting insurgencies
+
+- Rebel strength can be hard to assess
+
+- Distinguishing between militants and non-militants can be difficult
+
+- Governments often unwilling to address political/economic grievances
+
+- Government forces often poorly suited for irregular warfare
+
+
+---
+class: center, middle
+
+```{r Kim Phuc Photograph, out.width="80%", fig.cap="South Vietnamese forces follow after terrified children, including 90year-old Kim Phuc, center, as they run down Route 1 near Trang Bang after an aerial attack on suspected Vietcong hiding places on June 8, 1972. Photo taken by Associated Press photographer Nick Ut. South Vietnamese military dropped napalm on a village, mistaking fleeing civilians for insurgents."}
+knitr::include_graphics("../../../media/Napalm Girl Vietnam.jpg", error = FALSE)
+```

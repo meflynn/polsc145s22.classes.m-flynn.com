@@ -445,7 +445,7 @@ Reasons to be skeptical
 ---
 class: center, middle
 
-```{r}
+```{r afghanistan fatalities}
 
 afghan_fatality_wide <- fread(here::here("../../../Data Files/US Afghanistan Deaths.csv"))
 
@@ -486,7 +486,7 @@ ggplot(data = combined, aes(x = date)) +
 ---
 class: center, middle
 
-```{r}
+```{r iraq-fatalities}
 
 # Create empty list to enter new data tables
 # 
