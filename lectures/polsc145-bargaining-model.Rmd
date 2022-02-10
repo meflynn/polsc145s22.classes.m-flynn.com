@@ -317,7 +317,6 @@ class: center, middle
 
 ```{r ottoman rail networks, out.width="65%"}
 knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/f/f9/Map_of_Ottoman_Rail_Network_in_World_War_I.jpg")
-
 ```
 
 
