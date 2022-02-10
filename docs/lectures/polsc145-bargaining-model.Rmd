@@ -25,6 +25,7 @@ library(kableExtra)
 library(here)
 library(ghibli)
 library(viridis)
+library(knitr)
 
 knitr::opts_chunk$set(comment = '', dpi = 400, fig.width = 8, fig.height = 5, warning = FALSE, echo = FALSE, message = FALSE)
 
@@ -279,7 +280,6 @@ class: center, middle
 
 ```{r, out.width="40%"}
 knitr::include_graphics(here("../../media/Worpol3_Art_JPEG/ch03/WORPOL3_FIGUN03.p99.jpg"), error = FALSE)
-
 ```
 
 
