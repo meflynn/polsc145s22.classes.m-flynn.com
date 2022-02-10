@@ -14,3 +14,5 @@ Lectures will be archived here *after* they are given.
 2. [Social Science Methods](lectures/polsc145-social-science.html)
 
 3. [Explaining War](lectures/polsc145-explaining-war.html)
+
+4. [The Bargaining Model of War](lectures/polsc145-bargaining-model.html)
