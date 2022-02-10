@@ -279,7 +279,7 @@ table
 class: center, middle
 
 ```{r, out.width="40%"}
-knitr::include_graphics("images/WORPOL3_FIGUN03.p99.jpg", error = FALSE)
+knitr::include_graphics("WORPOL3_FIGUN03.p99.jpg", error = FALSE)
 ```
 
 
@@ -287,7 +287,7 @@ knitr::include_graphics("images/WORPOL3_FIGUN03.p99.jpg", error = FALSE)
 class: center, middle
 
 ```{r, out.width="40%"}
-knitr::include_graphics("images/WORPOL3_FIGUN03.p98.jpg", error = FALSE)
+knitr::include_graphics("WORPOL3_FIGUN03.p98.jpg", error = FALSE)
 ```
 
 
