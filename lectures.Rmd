@@ -16,3 +16,5 @@ Lectures will be archived here *after* they are given.
 3. [Explaining War](lectures/polsc145-explaining-war.html)
 
 4. [The Bargaining Model of War](lectures/polsc145-bargaining-model.html)
+
+5. [Domestic Politics and War](lectures/polsc145-domestic-politics.html)
