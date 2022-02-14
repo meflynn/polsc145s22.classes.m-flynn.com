@@ -414,19 +414,11 @@ Diversionary Incentive
   
   
 
----
-class: center, middle
-
-
-<img src="../images/clinton-impeachment-headline.PNG" style="width:40%;">
-<caption>Headline from the New York Times discussing Clinton impeachment scandal alongside attacks on suspected terrorist sites.</caption>
-
-
 
 ---
 class: center, middle
 
-```{r, out.width="40%", fig.cap="TEST TESTING!"}
+```{r, out.width="37%", fig.cap="Headline from the New York Times discussing Clinton impeachment scandal alongside attacks on suspected terrorist sites."}
 knitr::include_graphics("../images/clinton-impeachment-headline.PNG", error = FALSE)
 ```
 
