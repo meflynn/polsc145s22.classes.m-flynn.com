@@ -423,6 +423,14 @@ class: center, middle
 
 
 
+---
+class: center, middle
+
+```{r, out.width="40%", fig.cap="TEST TESTING!"}
+knitr::include_graphics("../images/clinton-impeachment-headline.PNG", error = FALSE)
+```
+
+
 
 ---
 # Interests and War
