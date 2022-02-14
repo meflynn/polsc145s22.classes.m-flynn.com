@@ -419,7 +419,7 @@ class: center, middle
 
 
 ```{r, out.width="40%", fig.cap="Headline from the New York Times discussing Clinton impeachment scandal alongside attacks on suspected terrorist sites."}
-knitr::include_graphics("lectures/lecture-media/clinton-impeachment-headline.PNG", error = FALSE)
+knitr::include_graphics(here("lectures/lecture-media/clinton-impeachment-headline.PNG"), error = FALSE)
 ```
 
 
@@ -631,7 +631,7 @@ The Historical Role of Casualties in Domestic Support for U.S. Military Operatio
 class: center, middle
 
 ```{r, out.width="40%"}
-knitr::include_graphics("lectures/lecture-media/Worpol3_Art_JPEG/ch04/WORPOL3_FIGUN04.p153a.jpg", error = FALSE)
+knitr::include_graphics(here("lectures/lecture-media/Worpol3_Art_JPEG/ch04/WORPOL3_FIGUN04.p153a.jpg"), error = FALSE)
 ```
 
 
@@ -640,7 +640,7 @@ knitr::include_graphics("lectures/lecture-media/Worpol3_Art_JPEG/ch04/WORPOL3_FI
 class: center, middle
 
 ```{r, out.width="40%"}
-knitr::include_graphics("lectures/lecture-media/Worpol3_Art_JPEG/ch04/WORPOL3_FIGUN04.p153b.jpg", error = FALSE)
+knitr::include_graphics(here("lectures/lecture-media/Worpol3_Art_JPEG/ch04/WORPOL3_FIGUN04.p153b.jpg"), error = FALSE)
 ```
 
 
