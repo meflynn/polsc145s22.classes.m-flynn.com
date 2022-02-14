@@ -418,9 +418,9 @@ Diversionary Incentive
 class: center, middle
 
 
-```{r, out.width="40%", fig.cap="Headline from the New York Times discussing Clinton impeachment scandal alongside attacks on suspected terrorist sites."}
-knitr::include_graphics(here("lectures/lecture-media/clinton-impeachment-headline.PNG"), error = FALSE)
-```
+<img src="../images/clinton-impeachment-headline.PNG" style="width:40%;">
+<caption>Headline from the New York Times discussing Clinton impeachment scandal alongside attacks on suspected terrorist sites.</caption>
+
 
 
 
@@ -630,18 +630,19 @@ The Historical Role of Casualties in Domestic Support for U.S. Military Operatio
 ---
 class: center, middle
 
-```{r, out.width="40%"}
-knitr::include_graphics(here("lectures/lecture-media/Worpol3_Art_JPEG/ch04/WORPOL3_FIGUN04.p153a.jpg"), error = FALSE)
-```
+<img src="../images/Worpol3_Art_JPEG/ch04/WORPOL3_FIGUN04.p153a.jpg" style="width:40%;">
+
+
 
 
 
 ---
 class: center, middle
 
-```{r, out.width="40%"}
-knitr::include_graphics(here("lectures/lecture-media/Worpol3_Art_JPEG/ch04/WORPOL3_FIGUN04.p153b.jpg"), error = FALSE)
-```
+<img src="../images/Worpol3_Art_JPEG/ch04/WORPOL3_FIGUN04.p153b.jpg" style="width:40%;">
+
+
+
 
 
 
@@ -685,9 +686,7 @@ Special Interests
 ]
 
 .pull-right[
-```{r, out.width="60%", fig.align="center"}
-knitr::include_graphics("lectures/lecture-media/Jacobo Arbenz.jpg")
-```
+<img src="../images/Jacobo Arbenz.jpg" style="width:60%;">
 ]
 
 
