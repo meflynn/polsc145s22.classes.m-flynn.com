@@ -1,0 +1,733 @@
+---
+title: "World Politics"
+subtitle: "International Trade"
+author: "Michael E. Flynn"
+institute: "Kansas State University"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: ["default", "lecture_theme.css"]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      ratio: 16:9
+      countIncrementalSlides: false
+      titleSlideClass: [middle, left, inverse]
+---
+  
+```{r setup, include = FALSE, echo=FALSE, warning=FALSE}
+#remotes::install_github("gadenbuie/xaringanExtra")
+
+library(ggplot2)
+library(data.table)
+library(peacesciencer)
+library(kableExtra)
+library(tidyverse)
+library(janitor)
+library(here)
+library(ghibli)
+library(ggforce)
+library(scales)
+library(rmapshaper)
+library(sf)
+library(sp)
+library(tmap)
+library(raster)
+library(broom)
+library(xaringanExtra)
+library(gghighlight)
+library(tidyquant)
+
+xaringanExtra::use_scribble()
+xaringanExtra::use_editable(expires = 365)
+
+knitr::opts_chunk$set(comment = '', dpi = 400, fig.width = 8, fig.height = 5, warning = FALSE, echo = FALSE, message = FALSE)
+
+sysfonts::font_add_google("Oswald", family = "oswald")
+showtext::showtext_auto()
+
+# Windows and Mac seem to process the fotn differently
+if (Sys.info()[[1]] == "Windows"){
+  
+  basesize <- 35
+  
+} else {
+  
+  basesize <-  11
+  
+}
+
+update_geom_defaults("text", list(size = 10, family = "oswald", fontface = "plain", lineheight = 0.2))
+
+
+# Regular plot theme
+theme_flynn <- function(){ 
+  
+  theme_linedraw(base_size = basesize, base_family = "oswald") %+replace% 
+    
+    theme(plot.title = element_text(face = "bold", size = basesize * 1.3, hjust = 0, margin = margin(t = 0, b = 0.2, l = 0, r = 0, unit = "cm")),
+          plot.subtitle = element_text(size = basesize, hjust = 0, margin = margin(t = 0.0, b = 0.2, unit = "cm")),
+          plot.caption = element_text(face = "italic", size = basesize * 0.6, hjust = 1, lineheight = 0.3, margin = margin(t = 0.2, unit = "cm")),
+          panel.border = element_rect(fill = NA, size = 0.2),
+          strip.background = element_rect(fill = "gray80", color = "black", size = 0.2),
+          strip.text = element_text(size = basesize, color = "black", face = "bold", margin = margin(t = 0.2, b = 0.2, l = 0.2, r = 0.2, unit = "cm")),
+          panel.background = element_rect(size = 0.2),
+          panel.grid.major = element_line(color = "gray70", size = 0.15),
+          panel.grid.minor = element_line(color = "gray90", size = 0.1),
+          axis.title = element_text(face = "bold", size = basesize),
+          axis.title.y = element_text(angle = 90, margin = margin(t = 0, r = 0.2, b = 0, l = 0, unit = "cm")),
+          axis.title.x = element_text(margin = margin(t = 0.2, r = 0, b = 0, l = 0, unit = "cm")),
+          axis.ticks = element_line(size = 0.1),
+          axis.ticks.length = unit(0.1, "cm"),
+          legend.title = element_text(size = basesize, face = "bold", hjust = 0, margin = margin(t = 0, b = -0.3, l = 0, r = 0, unit = "cm")),
+          legend.text = element_text(size = basesize, hjust = 0, margin = margin(t = 0, b = 0, l = -0.5, r = 0, unit = "cm")),
+          legend.box.spacing =  unit(0.2, "cm"),
+          plot.margin = margin(0.3, 0.3, 0.3, 0.3, unit = "cm"))
+}
+
+#install.packages("RefManageR")
+
+#library(RefManageR)
+#library(bibtex)
+#BibOptions(check.entries = FALSE,
+#           bib.style = "authoryear", # Bibliography style
+#           max.names = 3, # Max author names displayed in bibliography
+#           sorting = "nyt", #Name, year, title sorting
+#           cite.style = "authoryear", # citation style
+#           style = "markdown",
+#           hyperlink = FALSE,
+#           dashed = FALSE)
+
+#myBib <- ReadBib(here::here("../../classrefs.bib", check = FALSE))
+
+```
+
+# Lecture Overview
+
+1. What is trade?
+
+2. Why trade?
+
+3. Trade protection
+
+4. Trade as a policy instrument
+
+5. International institutions and trade
+
+
+
+---
+# Key Questions and Goals
+
+1. What is the difference between absolute and comparative advantage?
+
+2. What are factors of production and how do they determine what states trade?
+
+3. Define protectionism and identify different types of protectionist policies
+
+4. If trade is so beneficial, why do countries implement protectionist policies?
+
+
+
+---
+class: center, middle
+
+# What is Trade?
+
+
+
+---
+# What is Trade?
+
+> **Trade**: The exchange of goods and services between individuals
+
+Key points
+
+- Trade occurs between individuals
+
+- States don’t trade with one another, but we talk about them anyway
+
+
+
+---
+# What is Trade?
+
+Lots of ways to think about trade:
+
+- Total trade
+- Exports
+- Imports
+- Sector or industry (technology sector, auto industry, etc.)
+- Specific goods and items 
+  - North American Industry Classification System Item #522390: Other Activities Related to Credit Intermediation. This industry comprises establishments primarily engaged in facilitating credit intermediation (except mortgage and loan brokerage; and financial transactions processing, reserve, and clearinghouse activities). Illustrative Examples: Check cashing services, Money order issuance services, Loan servicing, Travelers' check issuance services, Money transmission services, and Payday lending services.
+
+
+
+---
+class: center, middle
+
+```{r total trade}
+
+cpi <- tidyquant::tq_get("CPIAUCNS",
+                         "economic.data",
+                         from = "1920-01-01",
+                         to = "2014-01-01") %>% 
+  mutate(year = year(date)) %>% 
+  group_by(year) %>% 
+  dplyr::summarise(cpi = mean(price)) %>% 
+  ungroup() %>% 
+  mutate(cpi = cpi/cpi[year == 2014])
+
+trade <- peacesciencer::create_stateyears(syste = "cow") %>% 
+  peacesciencer::add_cow_trade() %>% 
+  filter(year >= 1920 & year <= 2014) %>% 
+  left_join(cpi) %>% 
+  mutate(totaltrade = (imports + exports) / cpi) %>% 
+  group_by(year) %>% 
+  dplyr::summarise(totaltrade = sum(totaltrade, na.rm = TRUE))
+
+
+ggplot(trade, aes(x = year, y = totaltrade)) +
+  geom_area(fill = ghibli::ghibli_palettes$PonyoMedium[2]) +
+  theme_flynn() +
+  scale_x_continuous(breaks = seq(1920, 2020, 10)) +
+  scale_y_continuous(labels = scales::comma_format()) +
+  labs(x = "Year",
+       y = "Millions of constant 2014 Dollars",
+       title = "Aggregate global trade, 1920-2014",
+       subtitle = "Trade has grown expontentially over the post-WWII period",
+       caption = "Trade data obtained fromt he COW trade data v4.0\nInflation data obtained from FRED database with tidyquant package.")
+```
+
+
+
+---
+class: center, middle, inverse
+
+# Why Trade?
+
+
+
+---
+# Why Trade?
+
+Gains from trade
+
+- Needs (Food, natural resources, etc.)
+
+- Want (Silks, Foods, Playstations, etc.)
+
+- Capacity to produce yourself (Try building your own Playstation).
+
+- Specialization: You can export goods you’re good at making and import goods you’re bad at making
+
+
+
+---
+# Why Trade?
+
+Trade not always viewed as a good thing
+
+- Mercantilism
+
+- Emphasis is on self-sufficiency 
+
+- Trade can benefit / enrich adversaries
+
+- Colonies
+
+
+
+---
+# Why Trade?
+
+.pull-left[
+Adam Smith
+
+- 1723–1790
+
+- The Wealth of Nations
+
+- Emphasized the benefits of **specialization** and **absolute advantage**
+]
+
+.pull-right[
+```{r, out.width="50%", fig.align="center"}
+knitr::include_graphics("https://fathertheo.files.wordpress.com/2011/02/adam-smith.jpg")
+```
+]
+
+
+
+
+---
+# Why Trade?
+
+.pull-left[
+David Ricardo
+
+- 1772–1823
+
+- Refined the idea of **comparative advantage**
+]
+
+.pull-right[
+```{r, out.width="60%", fig.align="center"}
+knitr::include_graphics("https://cdn.britannica.com/85/9585-050-1E2B612E/David-Ricardo-portrait-Thomas-Phillips-National-Portrait-1821.jpg")
+```
+]
+
+
+
+---
+# Why Trade?
+
+Comparative advantage
+
+- People / countries should focus on relative strengths
+
+- Does not mean you do it better than anyone else (i.e. Absolute advantage)
+
+- Comparative advantage is about opportunity costs of production
+
+
+
+
+---
+class: center, middle
+
+```{r}
+
+tab <- tribble(~Country, ~Clothing, ~Wine, ~Total,
+                "England", 15, 30, 45,
+                "Portugal", 10, 15, 25,
+                "Total", 25, 45, 70) %>% 
+  kbl(caption = "Production in a 2-good, 2-state world. Hours required to produce 1 unit of each good.", align = "lccc") %>% 
+  kable_styling(full_width = TRUE) %>% 
+  row_spec(0, color = "white", background = "#512888") %>% 
+  column_spec(1, color = "white", background = "#512888")
+
+tab
+```
+
+
+
+---
+class: center, middle
+
+```{r}
+
+tab <- tribble(~Country, ~Clothing, ~Wine,
+                "England", "Clothing / Wine", "Wine / Clothing",
+                "Portugal", "Clothing / Wine = 0.66", "Wine / Clothing",
+                "Which is lower?", "", "") %>% 
+  kbl(caption = "Production in a 2-good, 2-state world. Hours required to produce 1 unit of each good.", align = "lcc") %>% 
+  kable_styling(full_width = TRUE) %>% 
+  row_spec(0, color = "white", background = "#512888") %>% 
+  column_spec(1, color = "white", background = "#512888")
+
+tab
+```
+
+
+---
+class: center, middle
+
+```{r}
+
+tab <- tribble(~Country, ~Clothing, ~Wine,
+                "England", "15/30 = 0.5", "30/15 = 2",
+                "Portugal", "10/15 = 0.66", "15/10 = 1.5",
+                "Which is lower?", "", "") %>% 
+  kbl(caption = "Production in a 2-good, 2-state world. Hours required to produce 1 unit of each good.", align = "lcc") %>% 
+  kable_styling(full_width = TRUE) %>% 
+  row_spec(0, color = "white", background = "#512888") %>% 
+  column_spec(1, color = "white", background = "#512888")
+
+tab
+```
+
+
+```{r}
+
+tab <- tribble(~Country, ~Clothing, ~Wine,
+                "England", "15/30 = 0.5", "30/15 = 2",
+                "Portugal", "10/15 = 0.66", "15/10 = 1.5",
+                "Which is lower?", "England", "Portugal") %>% 
+  kbl(caption = "Production in a 2-good, 2-state world. Hours required to produce 1 unit of each good.", align = "lcc") %>% 
+  kable_styling(full_width = TRUE) %>% 
+  row_spec(0, color = "white", background = "#512888") %>% 
+  column_spec(1, color = "white", background = "#512888")
+
+tab
+```
+
+
+
+---
+# Why Trade?
+
+Why do states produce what they do?
+
+- States will produce what they can produce
+
+- We must consider abundance and scarcity of factors of production
+
+  - Land
+
+  - Unskilled labor
+
+  - Skilled labor (human capital)
+
+  - Capital
+  
+  
+  
+  
+---
+# Why Trade?
+
+Heckscher–Ohlin theory
+
+- Countries will export goods that make intensive use of the factors that are abundant
+
+- Countries will import goods that make intensive use of the factors that are scarce
+
+
+
+---
+class: center, middle, inverse
+
+# Trade Protection
+
+
+
+---
+# Trade Protection
+
+If trade is so good why do we see people fighting against it?
+
+What is trade protection?
+
+> **Protectionism**: Policies aimed at protecting domestic industries, often by blocking competing imports from other countries or using subsidies to prop up domestic industries.
+
+Examples include tariffs, quotas, subsidies
+
+
+
+---
+# Trade Protection
+
+Motivation for protection
+
+- Trade creates winners and losers
+
+- Free trade can produce aggregate gains, but some groups will also be hurt
+
+- National versus international markets and competition
+
+
+
+---
+# Trade Protection
+
+Balance of Trade
+
+- $$\text{Balance of Trade} = \text{Exports} – \text{Imports}$$
+
+- Positive values represent a trade surplus
+
+- Negative values represent a trade deficit
+
+
+---
+class: center, middle
+
+```{r}
+trade.national <- fread(here("../../../Data Files/COW Data/COW_Trade_4.0/National_COW_4.0.csv")) %>% 
+  filter(ccode == 2)
+
+gdp <- read.delim(here("../../../Data Files/expgdpv6.0/gdpv6.txt")) %>% 
+  filter(statenum == 2)
+
+cpi <- fread(here("../../../Data Files/US Government Files/BLS/cpi_1913_2015.csv")) %>% 
+  subset(year >= 1950, select = c(year, annualavg)) %>% 
+  mutate(cpi = annualavg/236.736)
+
+us.trade.gdp <- trade.national %>% 
+  dplyr::filter(ccode == 2) %>% 
+  subset(year >= 1950) %>%
+  group_by(year) %>% 
+  mutate(imports = imports, na.rm = TRUE,
+         exports = exports, na.rm = TRUE) %>% 
+  left_join(cpi, by = "year") %>% 
+  mutate(imports.con = (imports/cpi),
+         exports.con = (exports/cpi),
+         deficit = exports.con - imports.con) %>% 
+  left_join(gdp, by = "year") %>% 
+  mutate(exports.gdp = ((exports.con/realgdp)),
+        imports.gdp = ((imports.con/realgdp))) %>% 
+  as.data.frame() %>% 
+  plyr::rename(c("exports.gdp" = "Exports", "imports.gdp" = "Imports", "deficit" = "Deficit")) %>% 
+  melt(id = c("year"), measure.vars = c("Exports", "Imports", "exports.con", "imports.con", "Deficit", "realgdp"))
+
+growth.comparison <- us.trade.gdp %>% 
+  subset(variable == "Deficit" | variable == "realgdp") %>% 
+  group_by(variable) %>% 
+  arrange(variable, year) %>% 
+  mutate(growth = ((value-lag(value))/lag(value))) %>% 
+  dplyr::filter(year <= 2010) %>% 
+  arrange(variable, year) %>% 
+  ungroup() %>% 
+  mutate(variable = factor(variable, labels = c("Deficit", "GDP"))) %>% 
+  arrange(variable, year)
+
+# US trade deficit
+ggplot(data = subset(growth.comparison, variable == "Deficit"), aes(x = year, y = value)) +
+  geom_bar(stat = "identity", alpha = .8, fill = "deepskyblue2", colour = "black", size = .1) +
+  geom_hline(yintercept = 0) +
+  theme_flynn()+
+  labs(x = "Year",
+       y = "Millions of 2014 Dollars",
+       title = "US trade deficit, 1950-2014",
+       subtitle = "Trade deficits result when states import more than they export",
+       caption = "Data obtained from the Correlates of War Data's National Trade Data (v4.0)") +
+  scale_y_continuous(labels = scales::dollar) +
+  scale_x_continuous(breaks = seq(1950,2015,5))
+```
+
+
+
+---
+# Trade Protection
+
+Does this actually mean the economy loses money? 
+
+--
+
+No, because there’s more to the economy than trade.
+
+--
+
+How we measure GDP:
+
+$$GDP = Consumption + Investment + GovernmentSpending + (Exports - Imports)$$
+
+--
+
+But this is still a politically powerful idea used to mobilize broader support
+
+
+
+---
+# Trade Protection
+
+Economic explanations for protectionism
+
+**Stolper–Samuelson Theorem**
+
+- Owners of the scarce factors of production in a country will support protection
+
+- Assumes factors of production are mobile
+
+**Ricardo–Viner Model**
+
+- Support and opposition to free trade are linked to sector-specific interests
+
+- Assumes that factors of production are immobile
+
+
+
+---
+# Trade Protection 
+
+Policymakers’ perspectives
+
+- Policymakers don’t represent the entire country
+
+- Legislators represent distinct geographic and/or economic constituencies
+
+- Protection is a way to provide benefits to those constituents
+
+
+---
+class: center, middle
+
+
+```{r manufacturing index}
+
+# CPI to adjust wage data
+cpi <- tq_get("CPILFESL",
+              get = "economic.data",
+              from = "1960-01-01",
+              to = "2021-01-01")
+
+# Manufacturing employment 
+man.emp <- tq_get("MANEMP",
+                         get = "economic.data",
+                         from = "1960-01-01",
+                         to = "2021-01-01")
+  
+# Manufacturing wages data
+man.wage <- tq_get("CES3000000008",
+                         get = "economic.data",
+                         from = "1960-01-01",
+                         to = "2021-01-01")
+
+
+man.wage <- man.wage %>% 
+  left_join(cpi, by = c("date")) %>% 
+  mutate(cpi = price.y / price.y[date=="2019-01-01"],
+    price = price.x/cpi) %>% 
+  dplyr::select(-c(symbol.y)) %>% 
+  dplyr::rename("symbol" = "symbol.x")
+
+# Manufacturing Production Index
+man.index <- tq_get("IPMAN",
+                         get = "economic.data",
+                         from = "1960-01-01",
+                         to = "2021-01-01")
+
+
+ggplot(data = man.index) +
+  geom_line(aes(x = date, y = price), size = 1.2) +
+  theme_flynn() +
+  scale_x_date(breaks = "5 years") +
+  labs(x = "Date",
+       y = "Index (2012 = 100)",
+       title = "US Manufacturing Production Index, 1972-2019",
+       subtitle = "Overlall manufacturing production has generally risen over time",
+       caption = "Data obtained from FRED data series IPMAN")
+
+
+```
+
+
+
+
+---
+class: center, middle
+
+```{r manufacturing employment and wages}
+
+man.com <- bind_rows(man.emp, man.wage) %>% 
+  group_by(symbol) %>% 
+  mutate(index = (price / price[date == "2012-01-01"]) * 100,
+         symbol = ifelse(is.na(symbol), "CES3000000008", symbol),
+         group = factor(symbol, levels = c("MANEMP", "CES3000000008"), labels = c("Employment", "Wages")))
+
+ggplot(man.com, aes(x = date, y = index, color = group)) +
+  geom_line(size = 2, alpha = 0.8) +
+  geom_vline(xintercept = as.Date("2018-03-01"), linetype = "dotted") +
+  annotate("text", x = as.Date("2008-01-01"), y = 130, size = 3, label = "Trump announces tariffs\non steel and aluminum\nMarch 2, 2018", hjust = 0) +
+  theme_flynn() +
+  scale_x_date() +
+  scale_color_brewer(palette = "Set1") +
+  labs(x = "Date",
+       y = "Index (2012 = 100)",
+       color = "Index",
+       title = "Index of manufacturing wages and employment, 1960-2020",
+       subtitle = "Consider the case and effect of these changes in the broader historical context",
+       caption = "Data obtained from FRED data series MANEMP and CES3000000008.\nWage data adjusted for inflation.")
+
+```
+
+???
+# Notes
+
+There's really no evidence that Trump's tariffs altered the employment or wage levels/growth that we see here.
+
+
+
+
+---
+class: center, middle
+
+```{r steel and aluminum production index}
+
+# Manufacturing employment 
+index.steel <- tq_get("IPN3311A2RN",
+                         get = "economic.data",
+                         from = "1960-01-01",
+                         to = "2021-01-01")
+  
+# Manufacturing wages data
+index.alum <- tq_get("IPG3313SQ",
+                         get = "economic.data",
+                         from = "1960-01-01",
+                         to = "2021-01-01")
+
+industry.com <- bind_rows(index.alum, index.steel) %>% 
+  mutate(industry = factor(symbol, labels = c("Aluminum", "Steel"))) %>% 
+  group_by(industry) %>%
+  mutate(index = (price/price[date=="2010-01-01"]) * 100)
+  
+
+
+# Steel and aluminum production
+ggplot(data = industry.com, aes(x = date, y = index, color = industry)) +
+  geom_line(size = 1, alpha = 0.8) +
+  theme_flynn() +
+  scale_x_date(breaks = seq(as.Date("1972-01-01"), as.Date("2019-01-01"), by = "5 years"), date_labels = "%Y") +
+  scale_y_continuous(breaks = seq(50, 200, 50), limits = c(50, 200)) +
+  scale_color_brewer(palette = "Set1") +
+  labs(x = "Date",
+       y = "Index (2012 = 100)",
+       colour = "Group",
+       title = "Industry Production Index, 1972-2019",
+       subtitle = "Production of both aluminum and steel has been largely stable since the 1980s.",
+       caption = "Data obtained from Federal Reserve of St. Louis data series IPG3313SQ and IPN3311A2RN")
+
+```
+
+
+
+---
+class: center, middle
+
+```{r soy-futures, echo = FALSE, warning=FALSE}
+# Soy data
+soy.data <- tidyquant::tq_get("CHRIS/CME_S1",
+                   get = "quandl",
+                   from = "2018-01-01",
+                   to = "2019-06-01")
+
+# Soybeans
+# Note: Prices rescaled from cents per bushel in original to dollars per bushel
+ggplot(data = soy.data, aes(x = date, y = settle/100)) +
+  geom_line(size = 1.7) +
+  geom_vline(xintercept = as.Date("2018-03-02"), linetype = "dotted", size = 1) + # Trump announaces
+  geom_vline(xintercept = as.Date("2018-03-23"), linetype = "dotted", size = 1) + # US imposes first steel and aluminum tariffs
+  geom_vline(xintercept = as.Date("2018-05-29"), linetype = "dotted", size = 1) + # Talks break down
+  geom_vline(xintercept = as.Date("2018-07-06"), linetype = "dotted", size = 1) + # China and US tariffs take effect on same date
+  annotate("text", x = as.Date("2018-03-06"), y = 11.3, size = 2.75, hjust = 0, label = "Trump tweets about tariffs\non steel and aluminum\nMarch 2, 2018") +
+  annotate("text", x = as.Date("2018-03-27"), y = 10.85, size = 2.75, hjust = 0, label = "US tariffs on Chinese goods,\nsteel, and aluminum take effect \nMarch 22-23, 2018") +
+  annotate("text", x = as.Date("2018-06-03"), y = 10.45, size = 2.75, hjust = 0, label = "US-Chinese talks break down \nMay 29, 2018") +
+  annotate("text", x = as.Date("2018-07-10"), y = 9.95, size = 2.75, hjust = 0, label = "US tariffs on Chinese goods \nand Chinese tariffs on US goods \ntake effect \nJuly 6, 2018") +
+  theme_flynn() +
+  scale_x_date(breaks = seq(as.Date("2018-01-01"), as.Date("2019-03-29"), by = "2 months"), date_labels = "%b %Y",
+               limits = c(as.Date("2018-01-01"), as.Date("2019-03-29"))) +
+  scale_y_continuous(breaks = seq(8, 11, 1), 
+                     limits = c(8, 11.4),
+                     labels = dollar_format()) +
+  labs(y = "Closing price per bushel",
+       title = "Soybean futures contract prices, January 2018-March 2019",
+       caption = "Data obtained from https://www.quandl.com/data/CHRIS/CME_S1")
+
+
+```
+
+
+
+---
+# Trade Protection
+
+So how can people get away with this? Why do they do it?
+
+Collective action problem
+
+- Concentrated benefits and diffuse costs
+
+- Protectionist interests usually have advantages in organizing since they stand to reap significant gains
+
+- Diffuse costs are passed on to consumers

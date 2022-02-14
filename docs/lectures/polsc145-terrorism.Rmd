@@ -1,0 +1,778 @@
+---
+title: "World Politics"
+subtitle: "Terrorism"
+author: "Michael E. Flynn"
+institute: "Kansas State University"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: ["default", "lecture_theme.css"]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      ratio: 16:9
+      countIncrementalSlides: false
+      titleSlideClass: [middle, left, inverse]
+---
+  
+```{r setup, include = FALSE, echo=FALSE, warning=FALSE}
+#remotes::install_github("gadenbuie/xaringanExtra")
+
+library(ggplot2)
+library(data.table)
+library(peacesciencer)
+library(kableExtra)
+library(tidyverse)
+library(janitor)
+library(here)
+library(ghibli)
+library(ggforce)
+library(scales)
+library(rmapshaper)
+library(sf)
+library(sp)
+library(tmap)
+library(raster)
+library(broom)
+library(xaringanExtra)
+library(gghighlight)
+
+
+xaringanExtra::use_scribble()
+xaringanExtra::use_editable(expires = 365)
+
+knitr::opts_chunk$set(comment = '', dpi = 400, fig.width = 8, fig.height = 5, warning = FALSE, echo = FALSE, message = FALSE)
+
+sysfonts::font_add_google("Oswald", family = "oswald")
+showtext::showtext_auto()
+
+# Windows and Mac seem to process the fotn differently
+if (Sys.info()[[1]] == "Windows"){
+  
+  basesize <- 35
+  
+} else {
+  
+  basesize <-  11
+  
+}
+
+update_geom_defaults("text", list(size = 10, family = "oswald", fontface = "plain", lineheight = 0.2))
+
+
+# Regular plot theme
+theme_flynn <- function(){ 
+  
+  theme_linedraw(base_size = basesize, base_family = "oswald") %+replace% 
+    
+    theme(plot.title = element_text(face = "bold", size = basesize * 1.3, hjust = 0, margin = margin(t = 0, b = 0.2, l = 0, r = 0, unit = "cm")),
+          plot.subtitle = element_text(size = basesize, hjust = 0, margin = margin(t = 0.0, b = 0.2, unit = "cm")),
+          plot.caption = element_text(face = "italic", size = basesize * 0.6, hjust = 1, lineheight = 0.3, margin = margin(t = 0.2, unit = "cm")),
+          panel.border = element_rect(fill = NA, size = 0.2),
+          strip.background = element_rect(fill = "gray80", color = "black", size = 0.2),
+          strip.text = element_text(size = basesize, color = "black", face = "bold", margin = margin(t = 0.2, b = 0.2, l = 0.2, r = 0.2, unit = "cm")),
+          panel.background = element_rect(size = 0.2),
+          panel.grid.major = element_line(color = "gray70", size = 0.15),
+          panel.grid.minor = element_line(color = "gray90", size = 0.1),
+          axis.title = element_text(face = "bold", size = basesize),
+          axis.title.y = element_text(angle = 90, margin = margin(t = 0, r = 0.2, b = 0, l = 0, unit = "cm")),
+          axis.title.x = element_text(margin = margin(t = 0.2, r = 0, b = 0, l = 0, unit = "cm")),
+          axis.ticks = element_line(size = 0.1),
+          axis.ticks.length = unit(0.1, "cm"),
+          legend.title = element_text(size = basesize, face = "bold", hjust = 0, margin = margin(t = 0, b = -0.3, l = 0, r = 0, unit = "cm")),
+          legend.text = element_text(size = basesize, hjust = 0, margin = margin(t = 0, b = 0, l = -0.5, r = 0, unit = "cm")),
+          legend.box.spacing =  unit(0.2, "cm"),
+          plot.margin = margin(0.3, 0.3, 0.3, 0.3, unit = "cm"))
+}
+
+#install.packages("RefManageR")
+
+#library(RefManageR)
+#library(bibtex)
+#BibOptions(check.entries = FALSE,
+#           bib.style = "authoryear", # Bibliography style
+#           max.names = 3, # Max author names displayed in bibliography
+#           sorting = "nyt", #Name, year, title sorting
+#           cite.style = "authoryear", # citation style
+#           style = "markdown",
+#           hyperlink = FALSE,
+#           dashed = FALSE)
+
+#myBib <- ReadBib(here::here("../../classrefs.bib", check = FALSE))
+
+```
+
+# Lecture Overview
+
+1. Defining terrorism
+
+2. Organization
+
+3. Why terror?
+
+4. Responding to terrorism
+
+
+
+---
+# Key Questions and Goals
+
+1. Develop a better understanding of why groups choose terror tactics vs other tactics
+
+2. Develop a better understanding of the factors that lead some groups to use terror tactics
+
+3. Think about the different types of targets and audiences for terror attacks
+
+4. Think about the causal mechanisms by which terror is expected to bring about policy change
+
+
+
+
+---
+class: center, middle, inverse
+
+# Defining Terrorism
+
+
+
+
+---
+
+```{r september-11-attacks, out.width="90%", fig.align="center"}
+knitr::include_graphics("https://ichef.bbci.co.uk/news/1024/branded_pidgin/2FDA/production/_119705221_twintowers.jpg")
+
+```
+
+
+
+---
+# Defining Terrorism
+
+.pull-left[
+Gerry Adams
+
+- Former President of Sinn Fein (1983-2018)
+
+- Former Member of Irish Parliament
+
+- Alleged to have close ties with the Provisional Irish Republican Army (PIRA)
+
+- Arrested on at least two occasions in connection with a bombing and a murder
+]
+
+.pull-right[
+```{r gerry-adams, out.width="80%"}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Gerry_Adams_-_26370225138.jpg/1280px-Gerry_Adams_-_26370225138.jpg")
+```
+]
+
+
+
+---
+# Defining Terrorism
+
+.pull-left[
+Timothy McVeigh
+
+- Decorated US Army veteran
+
+- Stationed at Ft. Riley, KS for a period
+
+- Served in First Gulf War
+
+- Killed 168 people in the 1995 bombing of the Oklahoma City Federal Building. 19 of those victims were children, 15 of whom were in the building's daycare center.
+
+- 680+ injured
+]
+
+.pull-right[
+```{r tim-mcveigh, out.width="80%"}
+knitr::include_graphics("https://cdn.britannica.com/91/116191-050-02A9E208/Timothy-McVeigh-Okla-Perry-Noble-County-Courthouse.jpg")
+```
+]
+
+
+---
+# Defining Terrorism
+
+.pull-left[
+Brenton Tarrant
+
+- Australian national
+
+- White supremacist
+
+- Attacker in the Christchurch, New Zealand shootings of March 2019
+
+- Murdered 51 Muslim mosque-goers during prayer services. Injured another 40.
+
+- Livestreamed attacks on Facebook
+]
+
+.pull-right[
+```{r christchurch-shooter, out.width="80%"}
+knitr::include_graphics("https://gdb.rferl.org/FAB795A5-C308-4EBC-8B01-F8063B5CCCB7_w1200_r1.jpg")
+```
+]
+
+
+
+
+---
+# Defining Terrorism
+
+.pull-left[
+Nelson Mandela
+
+- Member of the African National Congress (ANC) and founding member of the ANC's youth league
+
+- Co-founded Ukkhonto we Sizwe (Spear of the Nation). Became armed wing of the ANC (though officially separate)
+
+- Imprisoned for 27 years
+
+- Won Nobel Peace Price in 1993. Shared with South African President FW de Klerk for ending Apartheid regime.
+
+- Elected President of South Africa in 1994.
+]
+
+.pull-right[
+```{r nelson-mandela, out.width="60%"}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Nelson_Mandela_1994.jpg/1024px-Nelson_Mandela_1994.jpg")
+```
+]
+
+
+
+---
+# Defining Terrorism
+
+.pull-left[
+January 6 RNC/DNC Bomber
+
+- Planted pipe bombs at Republican National Committee and Democratic National Committee Headquarters
+
+- Still at large
+]
+
+.pull-right[
+```{r january-6-bomber, out.width="80%"}
+knitr::include_graphics("https://s.abcnews.com/images/US/pipe-bomb-suspect-ht-ps-210309_1615319311778_hpEmbed_2_16x9_992.jpg")
+```
+]
+
+
+
+---
+# Defining Terrorism
+
+.pull-left[
+Ashin Wirathu
+
+- Leader of the 969 Movement
+
+- Ultra-nationalist Buddhist/anti-Muslim group in Myanmar
+
+- Referred to as the "Buddhist Bin Laden"
+]
+
+.pull-right[
+```{r ashin-wirathu, out.width="60%", fig.align="center"}
+knitr::include_graphics("http://img.timeinc.net/time/images/covers/asia/2013/20130701_600.jpg")
+```
+]
+
+
+???
+
+# Notes
+
+- Blamed for stoking violence against Rohingya Muslims
+- Urged Buddhists to only marry and do business with other Buddhists
+
+
+
+
+---
+# Defining Terrorism
+
+How would you define terrorism?
+
+What criteria would you include? (e.g. targets, violence, type of action, etc.)
+
+List:
+
+.can-edit[
+
+
+]
+
+---
+# Defining Terrorism
+
+Terrorism is a label that is often used loosely, but it has more specific technical and legal definnitions
+
+> **Terrorism**: The premeditated threat or use of violence against noncombatant targets by individuals or subnational groups to obtain a political or social objective through intimidation of a larger audience (FLS).
+
+
+
+---
+# Defining Terrorism
+
+Let's break that down...
+
+--
+
+1. Premeditated
+
+--
+
+2. Threat OR use of violence
+
+--
+
+3. Perpetrators: Individuals O subnational groups
+
+--
+
+4. Targets: Non-combatants (immediate) and a larger audience (extended)
+
+--
+
+5. Goals: Various political, economic, and/or social goals
+
+
+
+
+---
+# Defining Terrorism
+
+But what does this leave out?
+
+- States and militaries as perpetrators?
+
+- States and militaries as targets?
+
+- Property as targets?
+
+
+
+---
+class: inverse, center, middle
+
+# Organization
+
+
+
+
+
+---
+# Organization
+
+Key Point: Terrorism is a **tactic**, not an identity
+
+--
+
+"Terrorist" is a label used to identify those who use terror as a tactic
+
+--
+
+Who cares? Why does this matter?
+
+--
+
+Because...
+
+- Not all groups that use terror look alike
+- Groups often fight using mixed strategies—important to understand who uses terror, when, and how 
+- Legalities associated with who/what constitutes a legitimate enemy combatant
+- Differentiating more routine acts of violence from terrorism
+
+
+
+---
+# Organization
+
+Traditional military/paramilitary 
+
+- Tamil Tigers
+- Islamic State of Iraq and Syria
+
+--
+
+Networked Actors
+
+- al Qaeda and affiliates
+  - al Qaeda in Iraq (AQI) (later Islamic State)
+  - al Nusra Front (al Qaeda affiliate in Syria)
+  - al Qaeda in the Arabian Peninsula
+  - al Qaeda in the Islamic Magreb
+
+--
+
+Hybrid Groups
+
+- Hezbollah
+- Provisional Irish Republican Army/Sinn Fein
+
+
+
+
+---
+class: inverse, center, middle
+
+# Tactics
+
+
+---
+# Tactics
+
+So why do groups use terror?
+
+- Power asymmetries
+
+- Political power, representation, access (or lack thereof)
+
+- Issue salience
+
+- Broader support (or lack thereof)
+
+
+
+
+
+---
+class: center, middle
+
+```{r}
+
+sim <- tibble(x = seq(-10, 10, length.out = 100)) %>% 
+  mutate(y = dnorm(x, mean = 0, sd = 3.4),
+         z = ifelse(x >= 8 | x <= -8, "Extremists", ""))
+
+ggplot(sim, aes(x = x, y = y)) +
+  geom_area(fill = "dodgerblue1") +
+  gghighlight(abs(x) < 7) +
+  theme_flynn() +
+  theme(axis.text = element_blank()) +
+  labs(x= "Policy preferences",
+       y = "Number of individuals in society")
+
+```
+
+
+---
+# Tactics
+
+Nature of the attacks
+
+- Often seemingly random
+
+- Small-scale (bombings, vehicles, shootings, knives, etc.)
+
+- Fatalities are typically low
+
+- Intended to instill fear
+
+
+
+
+
+---
+class: center, middle
+
+
+```{r deaths-attacks}
+# Terrorist attacks and deaths
+terror.base <- fread(here("../../../Data Files/START Data/globalterrorismdb_0616dist.csv"))
+
+terror.deaths.attacks <- terror.base %>% 
+  group_by(iyear) %>% 
+  dplyr::summarise(deaths = sum(nkill, na.rm = TRUE), attacks = n_distinct(eventid, na.rm = TRUE)) %>% 
+  mutate(rate = deaths/attacks) %>% 
+  dplyr::rename(c("Rate" = "rate", "Deaths" = "deaths", "Attacks" = "attacks")) %>% 
+  melt(id = c("iyear")) %>% 
+  dplyr::rename(c("Category" = "variable")) 
+  
+ggplot(terror.deaths.attacks %>% filter(Category != "Rate"), aes(x = iyear, y = value, group = Category, colour = Category)) +
+  geom_line() +
+  theme_flynn() +
+  viridis::scale_color_viridis(option = "magma", discrete = TRUE, begin = 0.3, end = 0.9) +
+  scale_x_continuous(breaks = seq(1970, 2015, 5)) +
+  labs(x = "Year",
+       y = "Count",
+       title = "Terrorist deaths and terrorist attacks, 1970-2015",
+       subtitle = "Note that there are far more attacks than deaths",
+       caption = "Data obtained from Data obtained from the Study of Terrorism and Responses to Terrorism (START) Database: http://www.start.umd.edu/")
+  
+
+```
+
+
+
+---
+class: center, middle
+
+```{r death-rate}
+
+# Death Rate per attack
+ggplot(terror.deaths.attacks %>% filter(Category == "Rate"), aes(x = iyear, y = value)) +
+  geom_line() +
+  theme_flynn() +
+  viridis::scale_color_viridis(option = "magma", discrete = TRUE, begin = 0.3, end = 0.9) +
+  scale_x_continuous(breaks = seq(1970, 2015, 5)) +
+  labs(x = "Year",
+       y = "Deaths per attack",
+       title = "Deaths per terrorist attack, 1970-2015",
+       subtitle = "Your average terrorist attack doesn't actually kill that many people",
+       caption = "Data obtained from Data obtained from the Study of Terrorism and Responses to Terrorism (START) Database: http://www.start.umd.edu/")
+
+```
+
+
+
+---
+class: center, middle
+
+```{r other-causes-of-death}
+suicides <- fread(here("../../../Data Files/US Government Files/CDC/suicidedata.csv")) %>% 
+  filter(!is.na(Year)) %>% 
+  dplyr::select(Year, Deaths) %>% 
+  mutate(Cause = "Suicide")
+  
+  
+guns <- fread(here("../../../Data Files/US Government Files/CDC/gun_deaths.csv")) %>% 
+  filter(!is.na(Year)) %>% 
+  dplyr::select(Year, Deaths) %>% 
+  mutate(Cause = "Firearm Homicide")
+
+
+drunk.driving <- read.delim(here("../../../Data Files/US Government Files/DOT/alcoholdeaths.txt"), skip = 2) %>%  
+  dplyr::rename("Year" = "X", "Deaths" = "X.7") %>% 
+  dplyr::select(Year,Deaths) %>% 
+  mutate(Cause = "Drunk Driving")
+  
+  
+terrorism <- fread(here("../../../Data Files/START Data/globalterrorismdb_0616dist.csv")) %>% 
+  dplyr::select("iyear", "nkill", "nkillus", "nwoundus") %>%  
+  group_by(iyear) %>% 
+  dplyr::summarise(killed = sum(nkillus, na.rm = TRUE), wounded = sum(nwoundus, na.rm = TRUE)) %>% 
+  mutate(Deaths = killed+wounded) %>% 
+  dplyr::rename("Year" = "iyear") %>% 
+  dplyr::select("Year","Deaths") %>% 
+  mutate(Cause = "Terrorism")
+
+  
+combined <- rbind(terrorism, drunk.driving, guns, suicides) 
+
+# Deaths from terrorism and other causes
+ggplot(data = combined, aes(x = Year, y = Deaths, group = Cause, colour = Cause)) +
+  geom_line(size = .8) +
+  annotate("text", x = 1984, y = 2500, label = "Rajneeshi bioterror \n attack", size = 2.5) +
+  annotate("text", x = 1995, y = 2500, label = "Oklahoma City \n bombing", size = 2.5) +
+  annotate("text", x = 2001, y = 5500, label = "September 11 \n attacks", size = 2.5) +
+  annotate("text", x = 2013, y = 2500, label = "Boston Marathon \n bombing", size = 2.5) +
+  theme_flynn() +
+  scale_x_continuous(breaks = seq(1970, 2015, 5)) +
+  viridis::scale_color_viridis(discrete = TRUE, option = "magma", begin = 0.1, end = 0.9) +
+  labs(title = "Select causes of deaths among US citizens, 1970-2015",
+       subtitle = "Terrorism receives outsized media attention compared to its prevalence",
+       caption = "Terrorism data obtained from Global Terrorism Database: https://www.start.umd.edu/gtd/. Note that this includes fatalities and casualties. \n Drunk driving fatalities obtained from US NHTSA: https://www-fars.nhtsa.dot.gov/Trends/TrendsAlcohol.aspx. \n Suicide and gun homicide data obtained from Fatal Injury Reports, National, Regional and State, 1981–2015: https://webappa.cdc.gov/sasweb/ncipc/mortrate.html.")
+
+```
+
+
+
+
+---
+class: center, middle
+
+```{r organizations ranked by attacks}
+# Terrorist attack types by group
+terror.groups <- terror.base %>% 
+  group_by(gname) %>% 
+  dplyr::summarise(totalkills = sum(nkill, na.rm = TRUE), totalattacks = n_distinct(eventid, na.rm = TRUE), totalsuicide = sum(suicide, na.rm = TRUE)) %>% 
+  mutate(deathrate = totalkills/totalattacks,
+         suiciderate = (totalsuicide/totalattacks)*100)
+
+# Total attacks by group
+ggplot(data = subset(terror.groups, totalattacks > 1000 & gname != "Unknown"), aes(y = totalattacks, x = reorder(gname, totalattacks))) +
+  geom_bar(stat = "identity", fill = ghibli::ghibli_palettes$MarnieLight1[[3]]) +
+  coord_flip() +
+  theme_flynn() +
+  scale_y_continuous(breaks = seq(0,5000,1000), expand = c(0, 1)) +
+  scale_color_brewer(palette = "Set1") +
+  theme(plot.title.position = "plot") +
+  labs(x = "",
+       y = "Attacks",
+       title = "Organizations ranked by total number of attacks, 1970-2015",
+       subtitle = "Many of these groups are probably familiar, but which ones do you not recognize?",
+       caption = "Only groups with over 1,000 attacks shown. \n Data obtained from Data obtained from the Study of Terrorism and Responses to Terrorism (START) Database: http://www.start.umd.edu/")
+
+```
+
+
+
+---
+class: center, middle
+
+```{r}
+ggplot(data = subset(terror.groups, totalkills > 2000 & gname != "Unknown"), aes(y = totalkills, x = reorder(gname, totalkills))) +
+  geom_bar(stat = "identity", fill = ghibli::ghibli_palettes$MarnieMedium1[[3]]) +
+  coord_flip() +
+  theme_flynn() +
+  theme(plot.title.position = "plot") +
+  scale_y_continuous(breaks = seq(0,25000,5000), expand = c(0, 1)) +
+  labs(x = "",
+       y = "Deaths",
+       title = "Organizations ranked by total number of victims killed, 1970-2015",
+       subtitle = "Many of these groups are probably familiar, but which ones do you not recognize?",
+       caption = "Only groups with over 1,000 attacks shown. \n Data obtained from Data obtained from the Study of Terrorism and Responses to Terrorism (START) Database: http://www.start.umd.edu/")
+
+
+```
+
+
+
+
+---
+class: center, middle
+
+```{r deaths per attack by group}
+# Terrorist organizations by death rate
+ggplot(data = subset(terror.groups, totalattacks > 1000 & gname != "Unknown"), aes(y = deathrate, x = reorder(gname, deathrate))) +
+  geom_bar(stat = "identity", fill = ghibli::ghibli_palettes$PonyoLight[1]) +
+  coord_flip() +
+  theme_flynn() +
+  scale_y_continuous(breaks = seq(0,10,2), expand = c(0,0)) +
+  scale_color_brewer(palette = "Set1") +
+  theme(plot.title.position = "plot" ) +
+  labs(x = "",
+       y = "Death Rate",
+       title = "Organizations ranked by average number of deaths per attack, 1970-2015",
+       subtitle = "Many of these groups are probably familiar, but which ones do you not recognize?",
+       caption = "Only groups with over 1,000 attacks shown. \n Data obtained from Data obtained from the Study of Terrorism and Responses to Terrorism (START) Database: http://www.start.umd.edu/")
+```
+
+
+---
+# Tactics
+
+Suicide attacks
+
+- Are suicide attacks "irrational"?
+
+- Individual-level considerations
+
+- Group-level considerations
+
+
+
+---
+class: center, middle
+
+```{r}
+ggplot(data = subset(terror.groups, totalsuicide > 10 & gname != "Unknown"), aes(y = totalsuicide, x = reorder(gname, totalsuicide))) +
+  geom_bar(stat = "identity", fill = ghibli::ghibli_palettes$LaputaDark[[7]]) +
+  coord_flip() +
+  theme_flynn() +
+  scale_y_continuous(expand = c(0,0)) +
+  theme(plot.title.position = "plot" ) +
+  labs(x = "",
+       y = "Count",
+       title = "Most active organizations and relative emphasis on suicide attacks, 1970-2015",
+       subtitle = "There's a lot of variation in the use of suicide terror attacks",
+       caption = "Only groups with over 10 total suicide attacks shown and ranked by total number of suicide attacks. \n Data obtained from Data obtained from the Study of Terrorism and Responses to Terrorism (START) Database: http://www.start.umd.edu/")
+```
+
+---
+class: center, middle
+
+```{r}
+ggplot(data = subset(terror.groups, totalsuicide > 10 & gname != "Unknown"), aes(y = suiciderate, x = reorder(gname, totalsuicide))) +
+  geom_bar(stat = "identity", fill = ghibli::ghibli_palettes$TotoroMedium[[3]]) +
+  coord_flip() +
+  theme_flynn() +
+  scale_y_continuous(expand = c(0,0)) +
+  scale_color_brewer(palette = "Set1") +
+  theme(plot.title.position = "plot" ) +
+  labs(x = "",
+       y = "Percent",
+       title = "Organizations and emphasis on suicide terror attacks, 1970-2015",
+       subtitle = "Groups that use suicide attacks do with with varying levels of emphasis",
+       caption = "Only groups with over 10 total suicide attacks shown and ranked by total number of suicide attacks. \n Data obtained from Data obtained from the Study of Terrorism and Responses to Terrorism (START) Database: http://www.start.umd.edu/")
+```
+
+
+
+---
+class: center, middle
+
+```{r}
+#Suicide attacks over time
+suicide.time <- terror.base %>% 
+  group_by(iyear, suicide)  %>% 
+  dplyr::summarise(attacks = n_distinct(eventid, na.rm = TRUE), deaths = sum(nkill, na.rm = TRUE)) %>% 
+  group_by(iyear) %>% 
+  mutate(total.attacks = sum(attacks),
+         total.suicide = sum(suicide),
+         perc.suicide = ifelse(suicide == 1, ((attacks/total.attacks)*100), NA),
+         perc.suicide = ifelse(is.na(perc.suicide), 0, perc.suicide),
+         `Type` = ifelse(suicide == 1, "Suicide", "Conventional")) 
+
+suicide.percent <- suicide.time %>% 
+  group_by(iyear) %>% 
+  dplyr::summarise(perc.suicide = max(perc.suicide, na.rm = TRUE))
+
+ggplot(data = suicide.time) +
+  geom_bar(aes(x = iyear, y = attacks, group = Type, fill = Type), position = "stack", stat = "identity") +
+  geom_text(data = suicide.percent, aes(x = iyear, y = -350, label = paste(round(perc.suicide, digits = 1),"%")), size = 1.8, angle = 45) +
+  viridis::scale_fill_viridis(discrete = TRUE, begin = 0.2, end = 0.8, option = "magma") +
+  scale_x_continuous(breaks = seq(1970, 2016, 5), limits = c(1970,2016)) +
+  scale_y_continuous(breaks = seq(0,18000, 3000), limits = c(-350,18000)) +
+  labs(x = "Year",
+       y = "Attacks",
+       title = "Terrorist attacks by type, 1970-2015",
+       subtitle = "Suicide attacks are relatively uncommon historically") +
+  theme_flynn() 
+  
+```
+
+
+
+
+---
+class: center, middle, inverse
+
+# Goals
+
+
+
+---
+# Goals
+
+Example: al Qaeda
+
+- Why does al Qaeda attack people? Western targets in particular?
+
+- Because they hate freedom"?
+
+- No
+
+
+
+---
+# Goals
+
+al Qaeda / Osama bin Laden's grievances
+
+- Opposes Christian armies deploy to the hold land
+
+- Views Saudi regime as corrupt, repressive, and false advocate of Sharia law
+
+- Alleges that US receives favorable oil prices, leading to low wages, poor service provision for common Saudis, and poor overall quality of life
+
+- Lots more
+
+
+
+
