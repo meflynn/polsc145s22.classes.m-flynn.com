@@ -18,3 +18,5 @@ Lectures will be archived here *after* they are given.
 4. [The Bargaining Model of War](lectures/polsc145-bargaining-model.html)
 
 5. [Domestic Politics and War](lectures/polsc145-domestic-politics-war.html)
+
+6. [International Security Institutions](lectures/polsc145-alliances.html)
