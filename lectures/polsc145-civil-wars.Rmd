@@ -455,9 +455,9 @@ class: center, middle, inverse
 ---
 class: center, middle
 
-```{r, fig.cap="Sudan and South Sudan."}
+```{r, fig.cap="Sudan and South Sudan.", out.width="60%"}
 
-knitr::include_graphics("../../../media/South Sudan Oil Fields.gif", error = FALSE)
+knitr::include_graphics("https://ichef.bbci.co.uk/news/464/mcs/media/images/58096000/gif/_58096920_sudan_oil464.gif", error = FALSE)
 ```
 
 
@@ -605,8 +605,8 @@ Example: Afghanistan
 ]
 
 .pull-right[
-```{r, out.width="100%", fig.cap="A US soldier stands in a field of poppies in Afghanistan."}
-knitr::include_graphics("../../../media/Poppies.jpg", error = FALSE)
+```{r, out.width="100%", fig.cap="US and Afghan security personnel patrol in a field of poppies in Afghanistan."}
+knitr::include_graphics("https://ichef.bbci.co.uk/news/976/cpsprodpb/E1BD/production/_106598775_soldiers_976alamy.jpg", error = FALSE)
 ```
 ]
 
@@ -823,6 +823,6 @@ Strategies
 ---
 class: center, middle
 
-```{r Kim Phuc Photograph, out.width="80%", fig.cap="South Vietnamese forces follow after terrified children, including 90year-old Kim Phuc, center, as they run down Route 1 near Trang Bang after an aerial attack on suspected Vietcong hiding places on June 8, 1972. Photo taken by Associated Press photographer Nick Ut. South Vietnamese military dropped napalm on a village, mistaking fleeing civilians for insurgents."}
-knitr::include_graphics("../../../media/Napalm Girl Vietnam.jpg", error = FALSE)
+```{r Kim Phuc Photograph, out.width="80%", fig.cap="South Vietnamese forces follow after terrified children, including 9-year-old Kim Phuc, center, as they run down Route 1 near Trang Bang after an aerial attack on suspected Vietcong hiding places on June 8, 1972. Photo taken by Associated Press photographer Nick Ut. South Vietnamese military dropped napalm on a village, mistaking fleeing civilians for insurgents."}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/en/b/ba/The_Terror_of_War.jpg", error = FALSE)
 ```

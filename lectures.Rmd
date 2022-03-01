@@ -20,3 +20,5 @@ Lectures will be archived here *after* they are given.
 5. [Domestic Politics and War](lectures/polsc145-domestic-politics-war.html)
 
 6. [International Security Institutions](lectures/polsc145-alliances.html)
+
+7. [Civil Wars](lectures/polsc145-civil-wars.html)
