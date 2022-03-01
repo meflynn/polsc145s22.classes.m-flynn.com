@@ -455,7 +455,7 @@ class: center, middle, inverse
 ---
 class: center, middle
 
-```{r, fig.cap="Sudan and South Sudan.", out.width="60%"}
+```{r, fig.cap="Sudan and South Sudan.", out.width="50%"}
 
 knitr::include_graphics("https://ichef.bbci.co.uk/news/464/mcs/media/images/58096000/gif/_58096920_sudan_oil464.gif", error = FALSE)
 ```
@@ -798,7 +798,7 @@ The West Side Boys
 
 .pull-right[
 ```{r, out.width="100%"}
-knitr::include_graphics("../../../media/West Side Boys.jpg", error = FALSE)
+knitr::include_graphics("https://i.dailymail.co.uk/i/pix/scaled/2010/08/29/article-0-0AF44AA7000005DC-40_308x185.jpg", error = FALSE)
 ```
 ]
 
