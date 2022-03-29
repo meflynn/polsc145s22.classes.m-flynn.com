@@ -26,3 +26,5 @@ Lectures will be archived here *after* they are given.
 8. [Terrorism](lectures/polsc145-terrorism.html)
 
 9. [Trade](lectures/polsc145-trade.html)
+
+10. [Finance](lectures/polsc145-finance.html)
