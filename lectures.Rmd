@@ -28,3 +28,5 @@ Lectures will be archived here *after* they are given.
 9. [Trade](lectures/polsc145-trade.html)
 
 10. [Finance](lectures/polsc145-finance.html)
+
+11. [Monetary Policy](lectures/polsc145-monetary-policy.html)
