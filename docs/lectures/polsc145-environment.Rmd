@@ -1,0 +1,711 @@
+---
+title: "World Politics"
+subtitle: "Environmental Politics"
+author: "Michael E. Flynn"
+institute: "Kansas State University"
+date: "`r Sys.Date()`"
+header-includes:
+  - \usepackage{tikz}
+  - \usepackage{pgfplots}
+output:
+  xaringan::moon_reader:
+    css: ["default", "lecture_theme.css"]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      ratio: 16:9
+      countIncrementalSlides: false
+      titleSlideClass: [middle, left, inverse]
+---
+  
+```{r setup, include = FALSE, echo=FALSE, warning=FALSE}
+#remotes::install_github("gadenbuie/xaringanExtra")
+
+library(ggplot2)
+library(data.table)
+library(peacesciencer)
+library(kableExtra)
+library(tidyverse)
+library(janitor)
+library(here)
+library(kableExtra)
+library(ggpattern)
+library(ghibli)
+library(ggforce)
+library(patchwork)
+library(scales)
+library(rmapshaper)
+library(sf)
+library(sp)
+library(tmap)
+library(raster)
+library(broom)
+library(xaringanExtra)
+library(gghighlight)
+library(tidyquant)
+
+xaringanExtra::use_scribble()
+xaringanExtra::use_editable(expires = 365)
+
+knitr::opts_chunk$set(comment = '', dpi = 400, fig.width = 8, fig.height = 5, warning = FALSE, echo = FALSE, message = FALSE)
+
+sysfonts::font_add_google("Oswald", family = "oswald")
+showtext::showtext_auto()
+
+# Windows and Mac seem to process the fotn differently
+if (Sys.info()[[1]] == "Windows"){
+  
+  basesize <- 35
+  
+} else {
+  
+  basesize <-  11
+  
+}
+
+update_geom_defaults("text", list(size = 8, family = "oswald", fontface = "plain", lineheight = 0.2))
+
+
+# Regular plot theme
+theme_flynn <- function(){ 
+  
+  theme_linedraw(base_size = basesize, base_family = "oswald") %+replace% 
+    
+    theme(plot.title = element_text(face = "bold", size = basesize * 1.3, hjust = 0, margin = margin(t = 0, b = 0.2, l = 0, r = 0, unit = "cm")),
+          plot.subtitle = element_text(size = basesize, hjust = 0, margin = margin(t = 0.0, b = 0.2, unit = "cm")),
+          plot.caption = element_text(face = "italic", size = basesize * 0.6, hjust = 1, lineheight = 0.3, margin = margin(t = 0.2, unit = "cm")),
+          panel.border = element_rect(fill = NA, size = 0.2),
+          strip.background = element_rect(fill = "gray80", color = "black", size = 0.2),
+          strip.text = element_text(size = basesize, color = "black", face = "bold", margin = margin(t = 0.2, b = 0.2, l = 0.2, r = 0.2, unit = "cm")),
+          panel.background = element_rect(size = 0.2),
+          panel.grid.major = element_line(color = "gray70", size = 0.15),
+          panel.grid.minor = element_line(color = "gray90", size = 0.1),
+          axis.title = element_text(face = "bold", size = basesize),
+          axis.title.y = element_text(angle = 90, margin = margin(t = 0, r = 0.2, b = 0, l = 0, unit = "cm")),
+          axis.title.x = element_text(margin = margin(t = 0.2, r = 0, b = 0, l = 0, unit = "cm")),
+          axis.ticks = element_line(size = 0.1),
+          axis.ticks.length = unit(0.1, "cm"),
+          legend.title = element_text(size = basesize, face = "bold", hjust = 0, margin = margin(t = 0, b = -0.3, l = 0, r = 0, unit = "cm")),
+          legend.text = element_text(size = basesize, hjust = 0, margin = margin(t = 0, b = 0, l = -0.5, r = 0, unit = "cm")),
+          legend.box.spacing =  unit(0.2, "cm"),
+          plot.margin = margin(0.3, 0.3, 0.3, 0.3, unit = "cm"))
+}
+
+#install.packages("RefManageR")
+
+#library(RefManageR)
+#library(bibtex)
+#BibOptions(check.entries = FALSE,
+#           bib.style = "authoryear", # Bibliography style
+#           max.names = 3, # Max author names displayed in bibliography
+#           sorting = "nyt", #Name, year, title sorting
+#           cite.style = "authoryear", # citation style
+#           style = "markdown",
+#           hyperlink = FALSE,
+#           dashed = FALSE)
+
+#myBib <- ReadBib(here::here("../../classrefs.bib", check = FALSE))
+
+```
+# Lecture Overview
+
+1. What are the issues?
+
+2. Why is cooperation so difficult?
+
+3. The environment and security issues
+
+
+---
+# Key Questions
+
+1. What is the current state of the international environmental and climate change regimes?
+
+2. Why is it difficult for states and people to cooperate on climate change? What are the sources of conflict?
+
+3. What are some of the key frameworks or mental models we can use to help us understand the politics of environmental issues?
+
+3. How can institutions change the incentives of actors re pollution?
+
+
+---
+class: center, middle
+
+```{r}
+
+data.temp.anom <- read.csv(here::here("../../../Data Files/NOAA Data/1880-2016.csv"), skip = 3) %>% 
+  mutate(group = ifelse(Value > 0, "Positive", "Negative"))
+
+ggplot(data = data.temp.anom, aes(x = Year, y = Value)) +
+  geom_hline(yintercept = 0, colour = "red") +
+  geom_line() +
+  geom_smooth(span = 1) +
+  theme_flynn() +
+  scale_x_continuous(breaks = seq(1880, 2020, 20)) +
+  scale_y_continuous(breaks = seq(-0.5, 1, .25)) +
+  labs(title = "Global surface and ocean temperature anomalies, 1880-2016",
+       subtitle = "Temperature anomalies have been consistently positive since the 1980s",
+       caption = "Anomalies relative to the average for the 1900-2000 period average.
+       Data obtained from: NOAA National Centers for Environmental Information, Climate at a Glance: Global Time Series, published November 2016
+       Retrieved on December 1, 2016 from http://www.ncdc.noaa.gov/cag/")
+```
+
+
+
+
+---
+class: center, middle
+
+```{r}
+
+data.temp.anom <- read_csv(here("../../../Data Files/NOAA Data/1880-2016.csv"), skip = 3) %>% 
+  mutate(group = ifelse(Value > 0, "Positive", "Negative"))
+
+data.temp <- readxl::read_xls(here("../../../Data Files/US Government Files/EPA/vostok.1999.temp.dat.xls"), skip = 0)
+colnames(data.temp)[2] <- "time"
+colnames(data.temp)[4] <- "temp"
+data.temp <- data.temp %>% 
+  mutate(time = as.numeric(0 - time),
+         value = as.numeric(temp),
+         group = as.factor("Temp")) %>% 
+  subset(select = c("time", "value", "group"))
+
+
+# Time variable had to be converted from factor to numeric
+# Have to use paste function
+data.ice <- read_csv(here("../../../Data Files/US Government Files/EPA/ghg-concentrations_fig-1.csv"), skip = 7)
+colnames(data.ice)[1] <- "time"
+data.ice <- data.ice %>% 
+  mutate(co2 = apply(., 1, max, na.rm = TRUE),
+         time = as.numeric(paste(time)),
+         value = as.numeric(co2),
+         group = as.factor("CO2")) %>% 
+  subset(select = c("time", "group", "value"))
+
+data.combined <- rbind(data.ice, data.temp)
+
+
+# The second scale was tricky. You have to reverse what you do for the rescaling in the geom_line section
+# Also note that, since you multiply by 10 BEFORE adding 250, you have to divide by 10 and subtract 25
+ggplot() +
+  geom_line(data = subset(data.combined, group == "CO2"), aes(x = time, y = value, group = group, colour = group)) +
+  geom_line(data = subset(data.combined, group == "Temp"), aes(x = time, y = ((value * 10) + 250), group = group, colour = group), alpha = .6) +
+  geom_hline(yintercept = 250) +
+  scale_y_continuous(breaks = seq(150, 400, 50), limits = c(150, 400), sec.axis = sec_axis(~./10 - 25, name = "Temperature Anomaly (°C)", breaks = seq(-10, 16, 2))) +
+  scale_x_continuous(breaks = seq(-800000, 0, 100000), labels = scales::comma) +
+  theme_flynn() +
+  theme(legend.position = "bottom",
+        panel.grid.major = element_line(colour = "gray70", size = .1),
+        panel.grid.minor = element_line(colour = "gray80", size = .1)) +
+  scale_color_brewer(palette = "Set1") +
+  labs(colour = "Measure",
+       title = "Global temperature anamoly and atmospheric CO2 levels",
+       subtitle = "CO2 levels and temperature anomalies track one another closely over the last 400,000 years",
+       y = "CO2 (ppm)",
+       x = "Time",
+       caption = "Ice core temperature data obtained from:
+       http://cdiac.ess-dive.lbl.gov/ftp/trends/temp/vostok/vostok.1999.temp.dat
+       CO2 data obtained from: https://www.epa.gov/sites/production/files/2016-08/ghg-concentrations_fig-1.csv
+       Note: Temperature data ends 2000 years prior to present day.") 
+
+
+
+
+```
+
+
+
+
+
+
+---
+# The Issues?
+.pull-left[
+Pollution
+
+- Air, water, land, etc.
+
+- Sometimes related to global warming, but not always
+
+To right: A woman in Beijing wears covers her face to filter air pollution.
+]
+
+.pull-right[
+```{r}
+knitr::include_graphics("https://www.thestar.com/content/dam/thestar/news/world/2017/01/19/beijing-spending-27-billion-to-clean-up-air-pollution/china-pollution.jpg")
+```
+]
+
+
+
+
+---
+class: center, middle
+```{r, out.width="95%", fig.cap="Snapshot of global air quality station readings, April 20, 2022. https://waqi.info/#/c/0.483/23.936/2.3z"}
+
+knitr::include_graphics(here("lectures/aqi-snapshot.png"), error = FALSE)
+
+```
+
+
+
+---
+class: center, middle
+
+```{r, out.width="95%", fig.cap="Photo of the Great Pacific Garbage Patch."}
+
+knitr::include_graphics("https://imageio.forbes.com/blogs-images/scottsnowden/files/2019/05/GreatPacificGarbagePatch.jpg?fit=bounds&format=jpg&width=960")
+```
+
+
+
+---
+class: center, middle
+
+```{r, out.width="95%", fig.cap="Photo of a sperm whale that died with 220 pounds of debris in its stomach. https://www.nytimes.com/2019/12/02/world/europe/harris-beached-whale.html"}
+
+knitr::include_graphics("https://static01.nyt.com/images/2019/12/02/multimedia/02xp-whale/02xp-whale-superJumbo.jpg")
+```
+
+
+
+---
+# The Issues?
+
+.pull-left[
+Acid rain
+
+- Industrial emissions of sulfur dioxide and nitrogen oxides blend with moisture in the air
+
+- Increases the acidity of rain, snow, fog, and clouds
+
+- Kills fish, insects, amphibians, bacteria, and vegetation
+
+To right: Photo of forested area affected by acid rain
+]
+
+.pull-right[
+```{r, fig.align="center", out.width="100%"}
+knitr::include_graphics("https://i.natgeofe.com/n/5f8a1fd6-7f21-43ff-bf03-0ba17158b3c5/133_16x9.jpg?w=1200")
+```
+]
+
+
+
+
+---
+# The Issues?
+
+.pull-left[
+Overconsumption
+
+- Over-consumption of renewable natural resources
+
+- Consumption exceeds rate of renewal
+
+- Includes fish, terrestrial game, and animals killed for trophies or traditional medicinal remedies (elephants, rhinos), but also includes plant life. 
+
+To right: Atlantic Cod
+]
+
+.pull-right[
+```{r, fig.align="center", out.width="100%"}
+knitr::include_graphics("https://media.fisheries.noaa.gov/styles/full_width/s3/dam-migration/1280_y56f53xcrf3h.jpg?itok=T2iEWdbp")
+```
+]
+
+
+
+
+---
+# The Issues?
+
+.pull-left[
+Depleted uranium munitions
+
+- Higher density than lead
+
+- Used for armor piercing rounds
+
+- Concerns about health and environmental effects
+
+To right: A-10 Warthog firing machine guns
+]
+
+.pull-right[
+```{r, fig.align="center", out.width="100%"}
+knitr::include_graphics("https://www.historynet.com/wp-content/uploads/2014/09/A-10-warthog-flying-tiger-scaled.jpg")
+```
+]
+
+
+
+
+
+---
+# The Issues?
+
+.pull-left[
+Military Bases
+
+- Lots of munitions and chemicals
+
+- One massive industrial accident
+
+- Chemicals from daily operations often contaminate soil or water supplies
+
+- Old munitions may remain unexploded, harming people years later
+
+To right: US Naval base at Pearl Harbor where fuel stored at Red Hill storage facility supplies have contaminated Hawaii's drinking water supplies.
+]
+
+.pull-right[
+```{r, fig.align="center", out.width="100%"}
+knitr::include_graphics("https://static01.nyt.com/images/2021/12/10/lens/10xp-hawaii-water1/10xp-hawaii-water1-videoSixteenByNineJumbo1600.jpg")
+```
+]
+
+
+
+
+
+---
+class: center, middle, inverse
+
+# Why is Cooperation Difficult?
+
+
+
+
+---
+class: left, top
+
+# Why is Cooperation Difficult?
+
+Many reasons:
+
+- Coordinating behavior between multiple countries and billions of people is hard
+
+- Costs of environmental protection are not evenly distributed across individuals, industries, or countries
+
+- Benefits of better protections are often diffuse.
+
+
+
+
+---
+class: left, top
+
+# Why is Cooperation Difficult?
+
+How do we conceptualize environmental issues? What mental models can help us?
+
+We can use concepts we've seen before!
+
+Key concepts:
+
+ - Public goods and Private goods
+
+ - Common pool resources (CPRs): Resources that everyone can access. Examples include fisheries, hunting on public land, etc.
+
+ - Negative externalities 
+ 
+ 
+```{r}
+
+types <- tribble(~` `, ~`Excludable`, ~`Nonexcludable`,
+                 "Rival",  "Private Goods", "Common Pool Resources",
+                 "Nonrival", "Club Goods", "Public Goods") %>% 
+  kbl(caption = "Table 13.1 from FLS", align = "lcc") %>% 
+  kable_styling(position = "center") %>% 
+  column_spec(1, color = "white", background = "#512888", bold = TRUE, width = "3cm") %>%
+  column_spec(2, width = "7cm") %>% 
+  column_spec(3, width = "7cm") %>% 
+  row_spec(0, color = "white", background = "#512888", bold = TRUE) 
+
+types
+  
+
+```
+ 
+ 
+ 
+---
+# Why is Cooperation Difficult?
+
+Collective action problem:
+
+- Assume that we all prefer a cleaner environment
+
+- There are individual costs to pursuing this goal
+
+- Gains from your individual contribution are minimal
+
+- Why not enjoy the good, but not pay for it?
+
+
+
+
+---
+# Why is Cooperation Difficult?
+
+.pull-left[
+.medium[
+Example: Hudson River in New York
+
+- General Electric (GE) dumped massive amounts of PCBs and TCEs into Hudson River
+
+- PCBs have contaminated area drinking water, soil, etc.
+
+- These chemicals have been linked to cancer, birth defects and developmental difficulties, liver damage, kidney damage, as well as nervous system disorders
+
+- State tax dollars in excess of $50 million have been spent on cleanup
+
+To right: NY State Department of Environmental Conservation sign declaring catch and release fishing restrictions due to pollution
+]
+]
+
+
+.pull-right[
+```{r, fig.align="center"}
+knitr::include_graphics("https://www.northcountrypublicradio.org/news/images/toxic_fish_2019.jpg")
+```
+]
+
+
+
+
+---
+# Why is Cooperation Difficult?
+
+Example: Acid Rain 
+
+- Source: Power plants and industry in Midwest and Great Lakes states 
+
+- Industrial emissions of sulfur dioxide and nitrogen oxides blend with moisture in the air
+
+- Emissions carried into Adirondack Mountains in NY and Canada where acid rain became problematic
+
+- Increases the acidity of rain, snow, fog, and clouds
+
+- Kills fish, insects, amphibians, bacteria, and vegetation
+
+
+
+
+---
+```{r}
+
+# Mapping sulfate levels in New York State
+lake.map <- read.csv(here("../../../Data Files/Adirondack Lake Survey/ALS_SUMMER_SURFACE_CHEM_1984-87.csv"), skip = 3, stringsAsFactors = FALSE)
+
+                     colnames(lake.map)[3] <- "Sample Date"
+colnames(lake.map)[6] <- "Sulfate"
+colnames(lake.map)[4] <- "long"
+colnames(lake.map)[5] <- "lat"
+
+lake.map <- lake.map %>%
+  group_by(PONDNAME, POND) %>% 
+  summarise(sulfate = mean(`Sulfate`, na.rm = TRUE), 
+            lat = mean(lat, na.rm = TRUE), 
+            long = mean(-long, na.rm = TRUE)) 
+
+
+map <- map_data("state", region = "new york")
+
+
+ggplot() +
+  geom_polygon(data = map, aes(x = long, y = lat, group = group), fill = "gray60") +
+  geom_point(data = lake.map, aes(x = long, y = lat, colour = sulfate), alpha = .5) +
+  theme_void() +
+  theme(plot.title = element_text(face = "bold"),
+        legend.title = element_text(face = "bold"), 
+        legend.position = c(0.9, 0.5)) +
+  coord_quickmap() +
+  scale_colour_distiller(type = "seq", palette = "Spectral", direction = -1, limits = c(0,25)) +
+  labs(title = "Sulfate levels in Adirondack lakes, 1984-1987",
+       colour = "Sulfate Level \n(mg/L)")
+
+```
+
+
+
+---
+class: center, middle
+
+```{r Adirondack suflate levels}
+
+# Note I had to rename a complicated column here. Basic rename didn't work, had to use col number.
+data <- read_csv(here("../../../Data Files/Adirondack Lake Survey/2016-1992_ALTM_WEB.csv"), skip = 11)
+colnames(data)[6] <- "Sample Date"
+colnames(data)[8] <- "Sulfate"
+colnames(data)[4] <- "Station"
+colnames(data)[5] <- "Depth"
+
+# The date conversation is tricky here
+# The format part has to match the existing format from the imported data (here it's a ".")
+# The sep line tells it what to convert the separator to
+data <- data %>% 
+  subset(`Station` == 1) %>% 
+  mutate(`Sample Date` = as.Date(`Sample Date`, format = "%Y.%m.%d", sep = "-", origin = "1970-01-01"))
+
+data.1 <- data %>% 
+  subset(select = c("Sample Date", "Sulfate"))
+
+data.2 <- read_csv(here("../../../Data Files/Adirondack Lake Survey/ALS_SUMMER_SURFACE_CHEM_1984-87.csv"), skip = 3)
+colnames(data.2)[3] <- "Sample Date"
+colnames(data.2)[6] <- "Sulfate"
+colnames(data.2)[4] <- "long"
+colnames(data.2)[5] <- "lat"
+data.2 <- data.2 %>% 
+  subset(select = c("Sample Date", "Sulfate")) %>% 
+  mutate(`Sample Date` = as.Date(`Sample Date`, format = "%m/%d/%y", sep = "-", origin = "1970-01-01"))
+
+data.combined <- rbind(data.1, data.2)
+
+
+# Combined Point data
+ggplot(data = data.combined, aes(x = `Sample Date`, y = Sulfate)) +
+  geom_point(alpha = .2) +
+  geom_smooth(method = "lm", formula = y ~ splines::bs(x, 3), se = FALSE) +
+  geom_vline(xintercept = as.Date("1990-11-15"), colour = "red") +
+  annotate("text", x = as.Date("1992-01-01"), y = 16, label = "1990 Clean Air Act \nammendments signed", hjust = 0) +
+  theme_flynn() +
+  labs(title = "Sulfate levels in Adirondack lakes, 1984-2016",
+       subtitle = "Public policy can help to mitigate or even reverse problems resulting from pollution",
+       y = "Sulfate Concentration (mg/L)",
+       caption = "Data obtained from the Adirondack Lakes Survey Corporation: \n http://www.adirondacklakessurvey.org/data/complete/1992-2016_ALTM_Chemistry.zip \nhttp://www.adirondacklakessurvey.org/data/sumsurf/sumsurf_chem/ALS_Summer_surface_chem_1984-87.zip \nGraph depicts surface sample values only.") +
+  scale_x_date(breaks = seq(as.Date("1984-01-01"), as.Date("2017-01-01"), by = "4 years"), 
+                            labels = date_format("%b %Y"),
+               limits = c(as.Date("1984-01-01"), as.Date("2017-01-01")))
+
+
+```
+
+
+
+---
+class: left, top
+
+# Why Is Cooperation Difficult?
+
+Environmental regulation can be costly
+
+- Creates winners and losers (much like trade protection!)
+
+- Costs of regulation tend to be highly concentrated
+
+- Benefits are widely dispersed (we all enjoy a cleaner environment)
+
+- Opponents of regulatory policies enjoy advantages in overcoming collective action problems
+
+--
+
+Scientific uncertainty (i.e. model prediction error)
+
+- Predictions from scientific models become increasingly uncertain over large time ranges
+
+- Uncertainty is exploited by different groups for political leverage
+
+
+
+
+---
+class: center, middle
+
+```{r}
+
+data.temp.anom <- read.csv(here::here("../../../Data Files/NOAA Data/1880-2016.csv"), skip = 3) %>% 
+  mutate(group = ifelse(Value > 0, "Positive", "Negative"))
+
+ggplot(data = data.temp.anom, aes(x = Year, y = Value)) +
+    annotate("rect", xmin = 1997, xmax = 2014, ymin = -Inf, ymax = Inf, fill = "green", alpha = 0.3) +
+  geom_hline(yintercept = 0, colour = "red") +
+  geom_bar(stat = "identity", aes(fill = Value<0), show.legend = FALSE) +
+  annotate("text", x = 1992, y = 0.80, label = "1997") +
+  annotate("text", x = 2008, y = 0.80, label = "2014") +
+  theme_flynn() +
+  scale_x_continuous(breaks = seq(1880, 2020, 20)) +
+  scale_y_continuous(breaks = seq(-0.5, 1, .25)) +
+  scale_fill_manual(values = c("firebrick", "lightblue")) +
+  labs(title = "Global surface and ocean temperature anomalies, 1880-2016",
+       subtitle = "Temperature anomalies have been consistently positive since the 1980s",
+       caption = "Anomalies relative to the average for the 1900-2000 period average.
+       Data obtained from: NOAA National Centers for Environmental Information, Climate at a Glance: Global Time Series, published November 2016
+       Retrieved on December 1, 2016 from http://www.ncdc.noaa.gov/cag/")
+```
+
+
+
+---
+class: left, top
+
+# Why Is Cooperation Difficult?
+
+International sources conflict
+
+- Developing countries argue that environmental regulation is biased in that they impose unfair costs on developing states
+
+- Western countries were able to develop without worrying about environmental issues and are responsible for the largest quantities of emissions
+
+- Developed countries are also better able (more capacity) to combat climate change
+
+- Wealthier countries responsible for greater share of global emissions
+
+
+
+---
+class: center, middle
+
+
+```{r}
+#WDI::WDIsearch("emissions")
+
+group <- c("High income", "Middle income", "Low income")
+
+emissions <- WDI::WDI("EN.ATM.CO2E.PC", country = "all") %>% 
+  filter(country %in% group) %>% 
+  mutate(country = factor(country, levels = group))
+
+ggplot(emissions, aes(x = year, y = EN.ATM.CO2E.PC, fill = country)) +
+  geom_area(position = "stack", color = "black", size = 0.1) +
+  theme_flynn() +
+  viridis::scale_fill_viridis(option = "magma", discrete = TRUE, begin = 0.2, end = 0.9) +
+  scale_x_continuous(breaks = seq(1960, 2020, 10)) +
+  labs(x = "Year",
+       y = "Metric tons",
+       title = "CO2 emissions by income group, 1960-2014",
+       subtitle = "How does the distribution fo wealth and emissions affect responsibility to reduce emissions?")
+```
+
+
+
+---
+class: left, top
+
+# Why Is Cooperation Difficult?
+
+There have been successes
+
+- Ozone
+
+- Acid rain
+
+- Whaling
+
+
+---
+class: left, top
+
+# Why Is Cooperation Difficult?
+
+
+Private-public solutions
+
+Example: Cap and trade
+
+- Sets a cap on total output / emissions of a given pollutant
+
+- Companies can sell “credits” to other companies for pollution that they don’t produce
+
+- This incentivizes cleaner technologies, as companies can profit from reduced emissions

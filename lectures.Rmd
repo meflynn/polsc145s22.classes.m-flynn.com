@@ -34,3 +34,5 @@ Lectures will be archived here *after* they are given.
 12. [Development](lectures/polsc145-development.html)
 
 13. [Human Rights](lectures/polsc145-human-rights.html)
+
+14. [Environment](lectures/polsc145-environment.html)
