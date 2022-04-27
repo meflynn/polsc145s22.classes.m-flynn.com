@@ -241,9 +241,9 @@ knitr::include_graphics("https://www.thestar.com/content/dam/thestar/news/world/
 
 ---
 class: center, middle
-```{r, out.width="95%", fig.cap="Snapshot of global air quality station readings, April 20, 2022. https://waqi.info/#/c/0.483/23.936/2.3z"}
+```{r aqi, out.width="95%", fig.cap="Snapshot of global air quality station readings, April 20, 2022."}
 
-knitr::include_graphics(here("lectures/aqi-snapshot.png"), error = FALSE)
+knitr::include_graphics("aqi-snapshot.png", error = FALSE)
 
 ```
 
@@ -709,3 +709,99 @@ Example: Cap and trade
 - Companies can sell “credits” to other companies for pollution that they don’t produce
 
 - This incentivizes cleaner technologies, as companies can profit from reduced emissions
+
+
+
+---
+class: left, top
+
+# Why Is Cooperation Difficult?
+
+Conflict
+
+- Will climate change lead to increased armed conflict?
+
+- Yes? No? Maybe?
+
+- Direct vs indirect causal pathways?
+
+  - Direct: Effects felt through competition over increasingly scarce resources?
+  - Indirect: Climate change increases severity and variability of shocks, thereby affecting migration, economic interests, natural resources, etc.
+  
+.pull-left[
+```{r}
+library(dagitty)
+library(ggdag)
+
+d1 <- dagitty::dagitty('dag{
+                       "Climate Change" [exposure]
+                       "Conflict" [outcome]
+                       
+                       "Climate Change" [pos="0,0"]
+                       "Conflict" [pos="1,0"]
+                       
+                       "Climate Change" -> "Conflict"
+                       }') %>% 
+  tidy_dagitty()
+
+
+
+ggplot(d1 , aes(x = x, xend = xend, y = y, yend = yend)) +
+  geom_dag_point(aes(color = name), show.legend = FALSE, size = 20) +
+  geom_dag_edges() +  
+  geom_dag_label_repel(aes(label = name), color = "black", size = 10, segment.size = 2, box.padding = 2, point.padding = 2, nudge_y = 10) +
+  theme_dag() +
+  viridis::scale_color_viridis(discrete = TRUE, begin = 0.1, end = 0.9)
+
+```
+]
+
+.pull-right[
+```{r}
+library(dagitty)
+library(ggdag)
+
+d1 <- dagitty::dagitty('dag{
+                       "Climate Change" [exposure]
+                       "Conflict" [outcome]
+                       
+                       "Climate Change" [pos="0,0"]
+                       "Conflict" [pos="1,0"]
+                       "Migration" [pos="0.5,0"]
+                       
+                       "Climate Change" -> "Migration" -> "Conflict"
+                       }') %>% 
+  tidy_dagitty()
+
+
+
+ggplot(d1 , aes(x = x, xend = xend, y = y, yend = yend)) +
+  geom_dag_point(aes(color = name), show.legend = FALSE, size = 20) +
+  geom_dag_edges() +  
+  geom_dag_label_repel(aes(label = name), color = "black", size = 10, segment.size = 2, box.padding = 2, point.padding = 2, nudge_y = 10) +
+  theme_dag() +
+  viridis::scale_color_viridis(discrete = TRUE, begin = 0.1, end = 0.9)
+
+```
+]
+
+
+
+
+---
+class: center, middle
+
+```{r}
+
+data <- data.frame(x = seq(-10, 10, 1)) %>% 
+  mutate(y = 0.5*x + 5*x^2)
+
+ggplot(data, aes(x = x, y = y)) +
+  geom_line(color = "lightblue", size = 2) +
+  theme_flynn() +
+  theme(axis.text = element_blank()) +
+  labs(x = "-          Precipitation Deviation          +",
+       y = "Conflict",
+       title = "Research shows that deviations in rainfall can affect social conflict")
+
+```
