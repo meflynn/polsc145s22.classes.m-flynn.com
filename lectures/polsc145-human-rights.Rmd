@@ -237,15 +237,15 @@ UNDHR followed up by several treaties
 class: center, middle
 
 ```{r, fig.align="center", out.width="80%"}
-knitr::include_graphics(here::here("images/Worpol3_Art_JPEG/ch12/WORPOL3_Table12.01.01.jpg"))
+knitr::include_graphics("WORPOL3_Table12.01.01.jpg", error = FALSE)
 ```
 
 
 ---
 class: center, middle
 
-```{r, fig.align="center", out.width="90%"}
-knitr::include_graphics(here::here("images/Worpol3_Art_JPEG/ch12/WORPOL3_Table12.01.02.jpg"))
+```{r, fig.align="center", out.width="80%"}
+knitr::include_graphics("WORPOL3_Table12.01.02.jpg", error = FALSE)
 ```
 
 
