@@ -37,4 +37,4 @@ Lectures will be archived here *after* they are given.
 
 14. [Environment](lectures/polsc145-environment.html)
 
-15. [Environment](lectures/polsc145-future-challenges.html)
+15. [Future Challenges](lectures/polsc145-future-challenges.html)
