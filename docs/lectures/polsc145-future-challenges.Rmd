@@ -63,7 +63,7 @@ if (Sys.info()[[1]] == "Windows"){
   
 }
 
-update_geom_defaults("text", list(size = 10, family = "oswald", fontface = "plain", lineheight = 0.2))
+update_geom_defaults("text", list(size = 14, family = "oswald", fontface = "plain", lineheight = 0.2))
 
 
 # Regular plot theme
@@ -182,7 +182,7 @@ ggplot() +
   geom_sf(data = map, aes(group = name, geometry = geometry)) +
   geom_point(data = bases, aes(x = lon, y = lat), color = "darkblue", alpha = 0.7) +
   theme_void() +
-  theme(text = element_text(family = "oswald", face = "bold")) +
+  theme(text = element_text(family = "oswald", face = "bold", size = 35)) +
   labs(title = "US military facilities around the world, 1950-2015")
 
 
@@ -231,7 +231,7 @@ class: center, middle
 
 ```{r}
 
-nuclearpowers <- c("United States", "United Kingdom", "Russia", "China", "France", "Pakistan", "India", "North Korea", "Israel")
+nuclearpowers <- c("United States", "United Kingdom", "Russia", "China", "France", "Pakistan", "India", "Dem. Rep. Korea", "Israel")
 
 map <- rnaturalearth::ne_countries(returnclass = "sf") %>% 
   mutate(nuclear = ifelse(name %in% nuclearpowers, "Yes", "No")) %>% 
@@ -241,9 +241,9 @@ ggplot() +
   geom_sf(data = map, aes(geometry = geometry, fill = nuclear), color = "black", size = .1) +
   viridis::scale_fill_viridis(discrete = TRUE, begin = 0.25, end = 0.85) +
   theme_void() +
-  theme(text = element_text(family = "oswald", face = "bold")) +
+  theme(text = element_text(family = "oswald", face = "bold", size = 35)) +
   labs(title = "States possessing nuclear weapons",
-       fill = "Possesses\nNuclear Weapons")
+       fill = "Nuclear Weapons")
 
 
 ```
@@ -268,7 +268,7 @@ capabilities <- peacesciencer::cow_nmc %>%
 
 ggplot(capabilities %>% filter(year == 2015), aes(x = exp(wbgdp2011est), y = cinc)) +
   geom_point(alpha = 0.75, shape = 21, fill = "orange", size = 3) +
-  ggrepel::geom_label_repel(aes(label = statename)) +
+  ggrepel::geom_label_repel(aes(label = statename), size = 12) +
   theme_flynn() +
   scale_x_continuous(labels = scales::dollar_format()) +
   labs(x = "World Bank GDP Estimate",
@@ -288,7 +288,7 @@ class: center, middle
 
 ggplot(capabilities %>% filter(year == 2015), aes(x = exp(wbgdp2011est), y = milex)) +
   geom_point(alpha = 0.75, shape = 21, fill = "orange", size = 3) +
-  ggrepel::geom_label_repel(aes(label = statename)) +
+  ggrepel::geom_label_repel(aes(label = statename), size = 12) +
   theme_flynn() +
   scale_x_continuous(labels = scales::dollar_format()) +
   scale_y_continuous(labels = scales::dollar_format()) +
